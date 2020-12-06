@@ -1,0 +1,122 @@
+// plain symbols
+
+terminal         LPAR, COMMA, RPAR, SEMI;
+terminal         NOT, AND, OR;
+terminal         PLUS, MINUS, TIMES, DIV;
+terminal         LT, LE, GT, GE;
+terminal         ASSIGN, EQ, NE;
+
+terminal Integer INT;
+terminal Boolean BOOL;
+terminal Float   FLOAT;
+terminal String  STRING;
+terminal         VOID;
+
+terminal Integer ID;
+//terminal         PROC;
+//terminal         COLON;
+//terminal         CORP;
+
+//terminal         IF;
+//terminal         THEN;
+//terminal         ELIF;
+//terminal         ELSE;
+//terminal         FI;
+
+//terminal         WHILE;
+//terminal         DO;
+//terminal         OD;
+
+//terminal         READ;
+//terminal         WRITE;
+
+terminal         NULL;
+terminal         TRUE;
+terminal         FALSE;
+terminal         INT_CONST;
+terminal         FLOAT_CONST;
+terminal         STRING_CONST;
+
+
+nonterminal Program;
+nonterminal VarDeclList;
+//nonterminal ProcList;
+nonterminal VarDecl;
+nonterminal Type;
+nonterminal IdListInit;
+//nonterminal Proc;
+//nonterminal ResultTypeList;
+//nonterminal ReturnExprs;
+nonterminal ExprList;
+nonterminal Expr;
+//nonterminal ParamDeclList;
+//nonterminal ParDecl;
+//nonterminal IdList;
+//nonterminal ResultType;
+//nonterminal StatList;
+//nonterminal Stat;
+//nonterminal IfStat;
+//nonterminal ElifList;
+//nonterminal Elif;
+//nonterminal Else;
+//nonterminal WhileStat;
+//nonterminal ReadlnStat;
+//nonterminal WriteStat;
+//nonterminal AssignStat;
+nonterminal CallProc;
+
+
+precedence left OR;
+precedence left AND;
+
+precedence left EQ, NE;
+precedence left LT, LE, GT, GE;
+
+precedence left PLUS, MINUS;
+precedence left TIMES, DIV;
+
+precedence left NOT;
+
+Program ::= VarDeclList;
+
+VarDeclList ::= VarDecl VarDeclList
+              | /*empty*/;
+VarDecl ::= Type IdListInit SEMI;
+IdListInit ::= ID
+             | IdListInit COMMA ID
+             | ID ASSIGN Expr
+             | IdListInit COMMA ID ASSIGN Expr;
+
+Type ::= INT
+       | BOOL
+       | FLOAT
+       | STRING;
+
+
+Expr ::= NULL
+       | TRUE
+       | FALSE
+       | INT_CONST
+       | FLOAT_CONST
+       | STRING_CONST
+       | ID
+       | CallProc
+       | Expr PLUS Expr
+       | Expr MINUS Expr
+       | Expr TIMES Expr
+       | Expr DIV Expr
+       | Expr AND Expr
+       | Expr OR Expr
+       | Expr GT Expr
+       | Expr GE Expr
+       | Expr LT Expr
+       | Expr LE Expr
+       | Expr EQ Expr  //{: RESULT = new Double(1/p.doubleValue()); :}
+       | Expr NE Expr
+       | MINUS Expr
+       | NOT Expr;
+
+CallProc ::= ID LPAR ExprList RPAR
+           | ID LPAR RPAR;
+ExprList ::= Expr
+	       | Expr COMMA ExprList;

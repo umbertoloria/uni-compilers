@@ -1,0 +1,163 @@
+terminal Integer INT;
+terminal Boolean BOOL;
+terminal Float   FLOAT;
+terminal String  STRING;
+terminal         VOID;
+
+terminal         SEMI;
+terminal Integer ID;
+terminal         COMMA;
+terminal         ASSIGN;
+terminal         PROC;
+terminal         LPAR;
+terminal         RPAR;
+terminal         COLON;
+terminal         CORP;
+
+terminal         IF;
+terminal         THEN;
+terminal         ELIF;
+terminal         ELSE;
+terminal         FI;
+
+terminal         WHILE;
+terminal         DO;
+terminal         OD;
+
+terminal         READ;
+terminal         WRITE;
+
+terminal         NULL;
+terminal         TRUE;
+terminal         FALSE;
+terminal         INT_CONST;
+terminal         FLOAT_CONST;
+terminal         STRING_CONST;
+
+terminal         PLUS;
+terminal         MINUS;
+terminal         TIMES;
+terminal         DIV;
+terminal         AND;
+terminal         OR;
+terminal         GT;
+terminal         GE;
+terminal         LT;
+terminal         LE;
+terminal         EQ;
+terminal         NE;
+terminal         NOT;
+
+nonterminal Program;
+nonterminal VarDeclList;
+nonterminal ProcList;
+nonterminal VarDecl;
+nonterminal Type;
+nonterminal IdListInit;
+nonterminal Proc;
+nonterminal ResultTypeList;
+nonterminal ReturnExprs;
+nonterminal ExprList;
+nonterminal Expr;
+nonterminal ParamDeclList;
+nonterminal ParDecl;
+nonterminal IdList;
+nonterminal ResultType;
+nonterminal StatList;
+nonterminal Stat;
+nonterminal IfStat;
+nonterminal ElifList;
+nonterminal Elif;
+nonterminal Else;
+nonterminal WhileStat;
+nonterminal ReadlnStat;
+nonterminal WriteStat;
+nonterminal AssignStat;
+nonterminal CallProc;
+
+Program ::= VarDeclList ProcList;
+
+VarDeclList ::= VarDecl VarDeclList
+              | /*empty*/;
+VarDecl ::= Type IdListInit SEMI;
+IdListInit ::= ID
+             | IdListInit COMMA ID
+             | ID ASSIGN Expr
+             | IdListInit COMMA ID ASSIGN Expr;
+
+
+ProcList ::= Proc
+           | Proc ProcList;
+
+Proc ::= PROC ID LPAR ParamDeclList RPAR ResultTypeList COLON VarDeclList StatList ReturnExprs CORP SEMI
+	   | PROC ID LPAR               RPAR ResultTypeList COLON VarDeclList StatList ReturnExprs CORP SEMI;
+
+//
+ParamDeclList ::= ParDecl
+                | ParamDeclList SEMI ParDecl;
+ParDecl ::= Type IdList;
+IdList ::= ID
+         | IdList COMMA ID;
+Type ::= INT
+       | BOOL
+       | FLOAT
+       | STRING;
+//
+
+ResultTypeList ::= ResultType
+                 | ResultType COMMA ResultTypeList;
+ResultType ::= Type
+             | VOID;
+
+
+StatList ::= Stat
+           | Stat StatList;
+Stat ::= IfStat SEMI
+       | WhileStat SEMI
+       | ReadlnStat SEMI
+       | WriteStat SEMI
+       | AssignStat SEMI
+       | CallProc SEMI
+       | /* empty */;
+
+IfStat ::= IF Expr THEN StatList ElifList Else FI;
+ElifList ::= Elif ElifList
+           | /* empty */;
+Elif ::= ELIF Expr THEN StatList;
+Else ::= ELSE StatList
+       | /* empty */;
+WhileStat ::= WHILE StatList Expr DO StatList OD
+            | WHILE Expr DO StatList OD;
+ReadlnStat ::= READ LPAR IdList RPAR;
+WriteStat ::=  WRITE LPAR ExprList RPAR;
+AssignStat ::= IdList ASSIGN  ExprList;
+CallProc ::= ID LPAR ExprList RPAR
+           | ID LPAR RPAR;
+
+ReturnExprs::= ExprList
+	         | /* empty */;
+ExprList ::= Expr
+	       | Expr COMMA ExprList;
+Expr ::= NULL
+       | TRUE
+       | FALSE
+       | INT_CONST
+       | FLOAT_CONST
+       | STRING_CONST
+       | ID
+       | CallProc
+       | Expr PLUS Expr
+       | Expr MINUS Expr
+       | Expr TIMES Expr
+       | Expr DIV Expr
+       | Expr AND Expr
+       | Expr OR Expr
+       | Expr GT Expr
+       | Expr GE Expr
+       | Expr LT Expr
+       | Expr LE Expr
+       | Expr EQ Expr  //{: RESULT = new Double(1/p.doubleValue()); :}
+       | Expr NE Expr
+       | MINUS Expr
+       | NOT Expr;
+
