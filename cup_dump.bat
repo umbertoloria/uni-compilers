@@ -1,0 +1,1 @@
+java -jar C:\CUP\java-cup-11b.jar -dump -destdir src srcjflexcup\toy.cup 2> dump.txt

@@ -12,9 +12,9 @@ letter = [a-zA-Z]
 id = {letter}({letter}|_)*
 
 digit = [0-9]
-integer = -?{digit}+
-real = {digit}*\.{digit}*
-string = \"[(\\\").]*\"
+integer = 0|[1-9][0-9]*
+real = integer\.[0-9]*[1-9]
+string = \".*\"
 
 %%
 // Now for the actual tokens and assocated actions
@@ -42,8 +42,9 @@ string = \"[(\\\").]*\"
 ">=" {return new Symbol(sym.GE); }
 
 ":=" {return new Symbol(sym.ASSIGN); }
-"==" {return new Symbol(sym.EQ); }
-"!=" {return new Symbol(sym.NE); }
+"->" {return new Symbol(sym.RETURN); }
+"=" {return new Symbol(sym.EQ); }
+"<>" {return new Symbol(sym.NE); }
 
 // type/statment symbols
 "int" {return new Symbol(sym.INT); }
@@ -61,7 +62,7 @@ string = \"[(\\\").]*\"
 "while" {return new Symbol(sym.WHILE); }
 "do" {return new Symbol(sym.DO); }
 "od" {return new Symbol(sym.OD); }
-"read" {return new Symbol(sym.READ); }
+"readln" {return new Symbol(sym.READLN); }
 "write" {return new Symbol(sym.WRITE); }
 
 // value/id symbols

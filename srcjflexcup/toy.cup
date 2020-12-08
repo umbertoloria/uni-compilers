@@ -1,9 +1,9 @@
 // plain symbols
 terminal LPAR, COMMA, RPAR, SEMI, COLON;
 terminal NOT, AND, OR;
-terminal PLUS, MINUS, TIMES, DIV;
+terminal PLUS, MINUS, TIMES, DIV, UMINUS;
 terminal LT, LE, GT, GE;
-terminal ASSIGN, EQ, NE;
+terminal ASSIGN, RETURN, EQ, NE;
 
 // type/statment symbols
 terminal INT, BOOL, FLOAT, STRING;
@@ -11,7 +11,7 @@ terminal VOID;
 terminal PROC, CORP;
 terminal IF, THEN, ELIF, ELSE, FI;
 terminal WHILE, DO, OD;
-terminal READ, WRITE;
+terminal READLN, WRITE;
 
 // value/id symbols
 terminal         NULL, TRUE, FALSE;
@@ -36,14 +36,16 @@ nonterminal ReturnExprs;
 nonterminal StatList, Stat;
 nonterminal IfStat, ElifList, Elif, Else;
 nonterminal WhileStat;
-nonterminal ReadStat;
+nonterminal ReadlnStat;
 nonterminal WriteStat;
 nonterminal AssignStat;
 
+precedence left ID;
 precedence left AND, OR;
 precedence left LT, LE, GT, GE, EQ, NE;
 precedence left TIMES, DIV, PLUS, MINUS;
 precedence left NOT;
+precedence left UMINUS;
 
 Program ::= VarDeclList ProcList;
 
@@ -61,7 +63,8 @@ Expr ::= NULL | TRUE | FALSE | INT_CONST | FLOAT_CONST | STRING_CONST | ID
        | Expr LT Expr | Expr LE Expr | Expr GT Expr | Expr GE Expr
        | Expr EQ Expr  //{: RESULT = new Double(1/p.doubleValue()); :}
        | Expr NE Expr
-       | MINUS Expr;
+       | UMINUS INT_CONST {: :} %prec UMINUS
+       | UMINUS FLOAT_CONST {: :} %prec UMINUS;
 
 CallProc ::= ID LPAR ExprList RPAR
            | ID LPAR          RPAR;
@@ -69,27 +72,27 @@ ExprList ::= Expr COMMA ExprList | Expr;
 
 // ProcList
 ProcList ::= Proc ProcList | Proc;
-Proc ::= PROC ID LPAR ParamDeclList RPAR ResultTypeList COLON VarDeclList StatList ReturnExprs CORP SEMI
-       | PROC ID LPAR               RPAR ResultTypeList COLON VarDeclList StatList ReturnExprs CORP SEMI;
+Proc ::= PROC ID LPAR ParamDeclList RPAR ResultTypeList COLON VarDeclList StatList RETURN ReturnExprs CORP SEMI
+       | PROC ID LPAR ParamDeclList RPAR ResultTypeList COLON VarDeclList          RETURN ReturnExprs CORP SEMI
+       | PROC ID LPAR               RPAR ResultTypeList COLON VarDeclList StatList RETURN ReturnExprs CORP SEMI
+       | PROC ID LPAR               RPAR ResultTypeList COLON VarDeclList          RETURN ReturnExprs CORP SEMI;
 ParamDeclList ::= ParamDeclList SEMI ParDecl | ParDecl;
 ParDecl ::= Type IdList;
 IdList ::= IdList COMMA ID | ID;
 
 ResultTypeList ::= ResultType COMMA ResultTypeList | ResultType;
 ResultType ::= Type | VOID;
-ReturnExprs ::=  ExprList | /* empty */;
+ReturnExprs ::= ExprList | /* empty */;
 
 StatList ::= Stat StatList | Stat;
 Stat ::= IfStat SEMI | WhileStat SEMI | AssignStat SEMI
-       | CallProc SEMI | ReadStat SEMI | WriteStat SEMI | /* empty */;
+       | CallProc SEMI | ReadlnStat SEMI | WriteStat SEMI;
 IfStat   ::= IF Expr THEN StatList ElifList Else FI;
 ElifList ::= Elif ElifList | /* empty */;
 Elif     ::= ELIF Expr THEN StatList;
 Else     ::= ELSE StatList | /* empty */;
-WhileStat ::= WHILE StatList Expr DO StatList OD
-            | WHILE Expr DO StatList OD;
-ReadStat ::= READ LPAR IdList RPAR;
+WhileStat ::= WHILE StatList RETURN Expr DO StatList OD
+            | WHILE                 Expr DO StatList OD;
+ReadlnStat ::= READLN LPAR IdList RPAR;
 WriteStat  ::= WRITE LPAR ExprList RPAR;
 AssignStat ::= IdList ASSIGN ExprList;
-CallProc ::= ID LPAR ExprList RPAR
-           | ID LPAR          RPAR;

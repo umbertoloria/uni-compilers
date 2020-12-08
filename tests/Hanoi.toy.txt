@@ -3,7 +3,6 @@
  */
 
 proc printPeg(int peg)void:
-
     if peg = 1 then
         write("left");
     elif peg = 2 then
@@ -11,6 +10,7 @@ proc printPeg(int peg)void:
     else
         write("right");
     fi;
+    ->
 corp;
 
 proc hanoi(int n, fromPeg, usingPeg, toPeg)void:
@@ -24,6 +24,8 @@ proc hanoi(int n, fromPeg, usingPeg, toPeg)void:
         write(" peg.\n");
         hanoi(n - 1, usingPeg, fromPeg, toPeg);
     fi;
+
+    ->
 corp;
 
 proc main()void:
@@ -32,4 +34,6 @@ proc main()void:
     write("How many pegs? ");
     readln(n);
     hanoi(n, 1, 2, 3);
+
+    ->
 corp;
