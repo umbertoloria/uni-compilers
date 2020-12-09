@@ -69,8 +69,8 @@ string = \".*\"
 "null" {return new Symbol(sym.NULL); }
 "true" {return new Symbol(sym.TRUE); }
 "false" {return new Symbol(sym.FALSE); }
-{integer} {return new Symbol(sym.INT_CONST, yytext()); }
-{real} {return new Symbol(sym.FLOAT_CONST, yytext()); }
+{integer} {return new Symbol(sym.INT_CONST, Integer.parseInt(yytext())); }
+{real} {return new Symbol(sym.FLOAT_CONST, Float.parseFloat(yytext())); }
 {string} {return new Symbol(sym.STRING_CONST, yytext()); }
 {id} {return new Symbol(sym.ID, yytext()); }
 
