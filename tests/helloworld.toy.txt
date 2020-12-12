@@ -1,0 +1,17 @@
+int n := PI -1, x, y := 7;
+float y := 5, z;
+proc main(int a, b; float c; int x)int, float, void:
+    int result;
+
+    readln(result);
+
+    if result = 0 then
+        write("0\"-Zero");
+    elif result > 0 then
+        write("Positive");
+    else
+        write("Negative");
+    fi;
+
+    -> 0
+corp;

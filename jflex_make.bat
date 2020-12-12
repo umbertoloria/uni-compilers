@@ -1,1 +1,1 @@
-C:\JFLEX\bin\jflex -d src srcjflexcup\toy.flex
+C:\JFLEX\bin\jflex -d src\app\gen srcjflexcup\toy.flex

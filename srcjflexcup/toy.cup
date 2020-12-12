@@ -1,4 +1,11 @@
+package app.gen;
+import java.util.List;
 import java.util.LinkedList;
+import app.Node;
+import app.node.*;
+import app.node.binop.*;
+import app.node.expr.*;
+import app.node.stat.*;
 
 // plain symbols
 terminal LPAR, COMMA, RPAR, SEMI, COLON;
@@ -49,88 +56,88 @@ precedence left TIMES, DIV, PLUS, MINUS;
 precedence left NOT;
 precedence left UMINUS;
 
-Program ::= VarDeclList:vds ProcList:ps {: RESULT = new Node("ProgramOP", vds, ps); :};
+Program ::= VarDeclList:vds ProcList:ps {: RESULT = new ProgramOP((LinkedList<VarDeclOP>) vds, (List<ProcOP>) ps); :};
 
 // VarDeclList
-VarDeclList ::= VarDecl:vd VarDeclList:vds {: if (vds == null) { vds = new LinkedList(); } ((LinkedList) vds).addFirst(vd); RESULT = vds; :}
+VarDeclList ::= VarDecl:vd VarDeclList:vds {: if (vds == null) { vds = new LinkedList<VarDeclOP>(); } ((LinkedList<VarDeclOP>) vds).addFirst((VarDeclOP) vd); RESULT = vds; :}
               | /*empty*/                  {: RESULT = null; :};
-VarDecl ::= Type:t IdListInit:is SEMI {: RESULT = new Node("VarDeclOP", t, is); :};
-Type ::= INT {: RESULT = "int"; :}     | BOOL {: RESULT = "bool"; :}
-       | FLOAT {: RESULT = "float"; :} | STRING {: RESULT = "string"; :};
-IdListInit ::=                     ID:i               {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(new Node("IdListInitOP", i, null)); :}
-             |                     ID:i ASSIGN Expr:e {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(new Node("IdListInitOP", i, e)); :}
-             | IdListInit:is COMMA ID:i               {: ((LinkedList) is).add(new Node("IdListInitOP", i, null)); RESULT = is; :}
-             | IdListInit:is COMMA ID:i ASSIGN Expr:e {: ((LinkedList) is).add(new Node("IdListInitOP", i, e)); RESULT = is; :};
+VarDecl ::= Type:t IdListInit:is SEMI {: RESULT = new VarDeclOP((TypeNode) t, (IdInitOP) is); :};
+Type ::= INT {: RESULT = TypeNode.INT; :}     | BOOL {: RESULT = TypeNode.BOOL; :}
+       | FLOAT {: RESULT = TypeNode.FLOAT; :} | STRING {: RESULT = TypeNode.STRING; :};
+IdListInit ::=                     ID:i               {: var list = new LinkedList<IdInitNode>(); list.add(new IdInitNode(new Id(i), null)); RESULT = new IdInitOP(list); :}
+             |                     ID:i ASSIGN Expr:e {: var list = new LinkedList<IdInitNode>(); list.add(new IdInitNode(new Id(i), (ExprNode) e)); RESULT = new IdInitOP(list); :}
+             | IdListInit:is COMMA ID:i               {: ((IdInitOP) is).getIdInits().add(new IdInitNode(new Id(i), null)); RESULT = is; :}
+             | IdListInit:is COMMA ID:i ASSIGN Expr:e {: ((IdInitOP) is).getIdInits().add(new IdInitNode(new Id(i), (ExprNode) e)); RESULT = is; :};
 
-Expr ::= NULL           {: RESULT = new Node("Null"); :}
-       | TRUE           {: RESULT = new Node("Bool", true); :}
-       | FALSE          {: RESULT = new Node("Bool", false); :}
-       | INT_CONST:i    {: RESULT = new Node("IntConst", i); :}
-       | FLOAT_CONST:f  {: RESULT = new Node("FloatConst", f); :}
-       | STRING_CONST:s {: RESULT = new Node("StringConst", s); :}
-       | ID:i           {: RESULT = new Node("Id", i); :}
-       | CallProc:cp {: RESULT = new Node("Expr", cp); :}
-       | Expr:e1 PLUS Expr:e2  {: RESULT = new Node("PlusOP", e1, e2); :}
-       | Expr:e1 MINUS Expr:e2 {: RESULT = new Node("MinusOP", e1, e2); :}
-       | Expr:e1 TIMES Expr:e2 {: RESULT = new Node("TimesOP", e1, e2); :}
-       | Expr:e1 DIV Expr:e2   {: RESULT = new Node("DivOP", e1, e2); :}
-       | Expr:e1 AND Expr:e2 {: RESULT = new Node("AndOP", e1, e2); :}
-       | Expr:e1 OR Expr:e2  {: RESULT = new Node("OrOP", e1, e2); :}
-       | NOT Expr:e          {: RESULT = new Node("NotOP", e); :}
-       | Expr:e1 LT Expr:e2 {: RESULT = new Node("LessThanOP", e1, e2); :}
-       | Expr:e1 LE Expr:e2 {: RESULT = new Node("LessEqualsOP", e1, e2); :}
-       | Expr:e1 GT Expr:e2 {: RESULT = new Node("GreaterThanOP", e1, e2); :}
-       | Expr:e1 GE Expr:e2 {: RESULT = new Node("GreaterEqualsOP", e1, e2); :}
-       | Expr:e1 EQ Expr:e2 {: RESULT = new Node("EqualsOP", e1, e2); :}
-       | Expr:e1 NE Expr:e2 {: RESULT = new Node("NotEqualsOP", e1, e2); :}
-       | UMINUS INT_CONST:e   {: RESULT = new Node("UMinusOP", -e); :} %prec UMINUS
-       | UMINUS FLOAT_CONST:e {: RESULT = new Node("UMinusOP", -e); :}   %prec UMINUS;
+Expr ::= NULL           {: RESULT = new Null(); :}
+       | TRUE           {: RESULT = new True(); :}
+       | FALSE          {: RESULT = new False(); :}
+       | INT_CONST:i    {: RESULT = new IntConst(i); :}
+       | FLOAT_CONST:f  {: RESULT = new FloatConst(f); :}
+       | STRING_CONST:s {: RESULT = new StringConst(s); :}
+       | ID:i           {: RESULT = new Id(i); :}
+       | CallProc:cp {: RESULT = cp; :}
+       | Expr:e1 PLUS Expr:e2  {: RESULT = new PlusOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 MINUS Expr:e2 {: RESULT = new MinusOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 TIMES Expr:e2 {: RESULT = new TimesOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 DIV Expr:e2   {: RESULT = new DivOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 AND Expr:e2 {: RESULT = new AndOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 OR Expr:e2  {: RESULT = new OrOP((ExprNode) e1, (ExprNode) e2); :}
+       | NOT Expr:e          {: RESULT = new NotOP((ExprNode) e); :}
+       | Expr:e1 LT Expr:e2 {: RESULT = new LTOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 LE Expr:e2 {: RESULT = new LEOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 GT Expr:e2 {: RESULT = new GTOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 GE Expr:e2 {: RESULT = new GEOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 EQ Expr:e2 {: RESULT = new EQOP((ExprNode) e1, (ExprNode) e2); :}
+       | Expr:e1 NE Expr:e2 {: RESULT = new NotOP(new EQOP((ExprNode) e1, (ExprNode) e2)); :}
+       | UMINUS INT_CONST:e   {: RESULT = new UMinusOP(new IntConst(-e)); :} %prec UMINUS
+       | UMINUS FLOAT_CONST:e {: RESULT = new UMinusOP(new FloatConst(-e)); :}   %prec UMINUS;
 
-CallProc ::= ID:i LPAR ExprList:es RPAR {: RESULT = new Node("CallProcOP", i, es); :}
-           | ID:i LPAR             RPAR {: RESULT = new Node("CallProcOP", i, null); :};
-ExprList ::= Expr:e COMMA ExprList:es {: ((LinkedList) es).addFirst(e); RESULT = es; :}
-           | Expr:e                   {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(e); :};
+CallProc ::= ID:i LPAR ExprList:es RPAR {: RESULT = new CallProcOP(new Id(i), (List<ExprNode>) es); :}
+           | ID:i LPAR             RPAR {: RESULT = new CallProcOP(new Id(i), null); :};
+ExprList ::= Expr:e COMMA ExprList:es {: ((LinkedList<ExprNode>) es).addFirst((ExprNode) e); RESULT = es; :}
+           | Expr:e                   {: RESULT = new LinkedList<ExprNode>(); ((LinkedList<ExprNode>) RESULT).add((ExprNode) e); :};
 
 // ProcList
-ProcList ::= Proc:p ProcList:ps {: ((LinkedList) ps).addFirst(p); RESULT = ps; :}
-           | Proc:p             {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(p); :};
+ProcList ::= Proc:p ProcList:ps {: ((LinkedList<ProcOP>) ps).addFirst((ProcOP) p); RESULT = ps; :}
+           | Proc:p             {: RESULT = new LinkedList<ProcOP>(); ((LinkedList<ProcOP>) RESULT).add((ProcOP) p); :};
 Proc ::= PROC ID:i LPAR ParamDeclList:pds RPAR ResultTypeList:rts COLON VarDeclList:vds StatList:ss RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new Node("ProcOP", i, pds, rts, vds, ss, res); :}
+         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR ParamDeclList:pds RPAR ResultTypeList:rts COLON VarDeclList:vds             RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new Node("ProcOP", i, pds, rts, vds, null, res); :}
+         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR                   RPAR ResultTypeList:rts COLON VarDeclList:vds StatList:ss RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new Node("ProcOP", i, null, rts, vds, ss, res); :}
+         {: RESULT = new ProcOP(new Id(i), null, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR                   RPAR ResultTypeList:rts COLON VarDeclList:vds             RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new Node("ProcOP", i, null, rts, vds, null, res); :};
+         {: RESULT = new ProcOP(new Id(i), null, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :};
 ParamDeclList ::= ParamDeclList:pds SEMI ParDecl:pd {: ((LinkedList) pds).add(pd); RESULT = pds; :}
                 | ParDecl:pd                        {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(pd); :};
-ParDecl ::= Type:t IdList:is {: RESULT = new Node("ParDecl", t, is); :};
-IdList ::= IdList:is COMMA ID:i {: ((LinkedList) is).add(i); RESULT = is; :}
-         | ID:i                 {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(i); :};
+ParDecl ::= Type:t IdList:is {: RESULT = new ParDeclOP((TypeNode) t, (List<Id>) is); :};
+IdList ::= IdList:is COMMA ID:i {: ((LinkedList<Id>) is).add(new Id(i)); RESULT = is; :}
+         | ID:i                 {: RESULT = new LinkedList<Id>(); ((LinkedList<Id>) RESULT).add(new Id(i)); :};
 
-ResultTypeList ::= ResultType:rt COMMA ResultTypeList:rts {: RESULT = rts; :}
-                 | ResultType:rt                          {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(rt); :};
-ResultType ::= Type:t {: RESULT = t; :}
-             | VOID   {: RESULT = "void"; :};
+ResultTypeList ::= ResultType:rt COMMA ResultTypeList:rts {: ((LinkedList<ResultTypeNode>) rts).addFirst((ResultTypeNode) rt); RESULT = rts; :}
+                 | ResultType:rt                          {: RESULT = new LinkedList<ResultTypeNode>(); ((LinkedList<ResultTypeNode>) RESULT).add((ResultTypeNode) rt); :};
+ResultType ::= Type:t {: RESULT = new ResultTypeNode((TypeNode) t); :}
+             | VOID   {: RESULT = new ResultTypeNode(); :};
 ReturnExprs ::= ExprList:es {: RESULT = es; :}
               | /* empty */ {: RESULT = null; :};
 
-StatList ::= Stat:s StatList:ss {: ((LinkedList) ss).addFirst(s); RESULT = ss; :}
-           | Stat:s             {: RESULT = new LinkedList(); ((LinkedList) RESULT).add(s); :};
+StatList ::= Stat:s StatList:ss {: ((LinkedList<StatNode>) ((BodyOP) ss).getStmts()).addFirst((StatNode) s); RESULT = ss; :}
+           | Stat:s             {: var list = new LinkedList<StatNode>(); ((LinkedList<StatNode>) list).add((StatNode) s); RESULT = new BodyOP(list); :};
 Stat ::= IfStat:is SEMI     {: RESULT = is; :}
        | WhileStat:ws SEMI  {: RESULT = ws; :}
        | AssignStat:as SEMI {: RESULT = as; :}
-       | CallProc:cp SEMI   {: RESULT = cp; :}
+       | CallProc:cp SEMI   {: RESULT = new CallProcOPAdapter((CallProcOP) cp); :}
        | ReadlnStat:rs SEMI {: RESULT = rs; :}
        | WriteStat:ws SEMI  {: RESULT = ws; :};
-IfStat   ::= IF Expr:e1 THEN StatList:ss ElifList:es Else:e2 FI {: RESULT = new Node("IfOP", e1, ss, es, e2); :};
-ElifList ::= Elif:e ElifList:es {: if (es == null) { es = new LinkedList(); } ((LinkedList) es).addFirst(e); RESULT = es; :}
+IfStat   ::= IF Expr:e THEN StatList:ss1 ElifList:el Else:ss2 FI {: RESULT = new IfOP((ExprNode) e, (BodyOP) ss1, (LinkedList<ElifOP>) el, (BodyOP) ss2); :};
+ElifList ::= Elif:e ElifList:es {: if (es == null) { es = new LinkedList<ElifOP>(); } ((LinkedList<ElifOP>) es).addFirst((ElifOP) e); RESULT = es; :}
            | /* empty */        {: RESULT = null; :};
-Elif     ::= ELIF Expr:e THEN StatList:ss {: RESULT = new Node("ElifOP", e, ss); :};
-Else     ::= ELSE StatList:ss {: RESULT = new Node("ElseOP", ss); :}
+Elif     ::= ELIF Expr:e THEN StatList:ss {: RESULT = new ElifOP((ExprNode) e, (BodyOP) ss); :};
+Else     ::= ELSE StatList:ss {: RESULT = ss; :}
            | /* empty */      {: RESULT = null; :};
-WhileStat ::= WHILE StatList:ss1 RETURN Expr:e DO StatList:ss2 OD {: RESULT = new Node("WhileOP", ss1, e, ss2); :}
-            | WHILE                     Expr:e DO StatList:ss  OD {: RESULT = new Node("WhileOP", null, e, ss); :};
-ReadlnStat ::= READLN LPAR IdList:is RPAR {: RESULT = new Node("ReadOP", is); :};
-WriteStat  ::= WRITE LPAR ExprList:es RPAR {: RESULT = new Node("WriteOP", es); :};
-AssignStat ::= IdList:is ASSIGN ExprList:es {: RESULT = new Node("AssignOP", is, es); :};
+WhileStat ::= WHILE StatList:ss1 RETURN Expr:e DO StatList:ss2 OD {: RESULT = new WhileOP((BodyOP) ss1, (ExprNode) e, (BodyOP) ss2); :}
+            | WHILE                     Expr:e DO StatList:ss  OD {: RESULT = new WhileOP(null, (ExprNode) e, (BodyOP) ss); :};
+ReadlnStat ::= READLN LPAR IdList:is RPAR {: RESULT = new ReadlnOP((LinkedList<Id>) is); :};
+WriteStat  ::= WRITE LPAR ExprList:es RPAR {: RESULT = new WriteOP((LinkedList<ExprNode>) es); :};
+AssignStat ::= IdList:is ASSIGN ExprList:es {: RESULT = new AssignOP((LinkedList<Id>) is, (LinkedList<ExprNode>) es); :};

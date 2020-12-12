@@ -1,8 +1,9 @@
+package app.gen;
 import java_cup.runtime.Symbol; //This is how we pass tokens to the parser
 %%
 // Declarations for JFlex
 %unicode // We wish to read text files
-
+%public
 %cup // Declare that we expect to use Java CUP
 // Abbreviations for regular expressions
 whitespace = [ \r\n\t\f]
@@ -14,11 +15,13 @@ id = {letter}({letter}|_)*
 digit = [0-9]
 integer = 0|[1-9][0-9]*
 real = integer\.[0-9]*[1-9]
-string = \".*\"
+string = \"([^\\\"]|\\.)*\"
+comment = "/*"(.|[\r\n])*?"*/"
 
 %%
 // Now for the actual tokens and assocated actions
 {whitespace} { /* ignore */ }
+{comment}    { /* ignore */ }
 
 // plain symbols
 "(" {return new Symbol(sym.LPAR); }
