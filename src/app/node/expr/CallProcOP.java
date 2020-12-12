@@ -16,6 +16,14 @@ public class CallProcOP extends ExprNode {
 		this.exprs = exprs;
 	}
 
+	public Id getProcId() {
+		return procId;
+	}
+
+	public List<ExprNode> getExprs() {
+		return exprs;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "CallProcOP");
 		System.out.println("    ".repeat(level + 1) + "Procedure Id: " + procId);

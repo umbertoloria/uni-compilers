@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ProgramOp>
+	<Procs>
+		<ProcOp>
+			<Id name="printPeg"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="int"/>
+					<Ids>
+						<Id name="peg"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="void"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<BodyOp>
+					<IfOp>
+						<EQOp>
+							<Id name="peg"/>
+							<IntConst const="1"/>
+						</EQOp>
+						<BodyOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="left"/>
+								</ExprList>
+							</WriteOp>
+						</BodyOp>
+						<Elifs>
+							<ElifOp>
+								<EQOp>
+									<Id name="peg"/>
+									<IntConst const="2"/>
+								</EQOp>
+								<BodyOp>
+									<WriteOp>
+										<ExprList>
+											<StringConst const="center"/>
+										</ExprList>
+									</WriteOp>
+								</BodyOp>
+							</ElifOp>
+						</Elifs>
+						<BodyOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="right"/>
+								</ExprList>
+							</WriteOp>
+						</BodyOp>
+					</IfOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="hanoi"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="int"/>
+					<Ids>
+						<Id name="n"/>
+						<Id name="fromPeg"/>
+						<Id name="usingPeg"/>
+						<Id name="toPeg"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="void"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<BodyOp>
+					<IfOp>
+						<NotOp>
+							<EQOp>
+								<Id name="n"/>
+								<IntConst const="0"/>
+							</EQOp>
+						</NotOp>
+						<BodyOp>
+							<CallProcOp>
+								<Id name="hanoi"/>
+								<ExprList>
+									<MinusOp>
+										<Id name="n"/>
+										<IntConst const="1"/>
+									</MinusOp>
+									<Id name="fromPeg"/>
+									<Id name="toPeg"/>
+									<Id name="usingPeg"/>
+								</ExprList>
+							</CallProcOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="Move disk from "/>
+								</ExprList>
+							</WriteOp>
+							<CallProcOp>
+								<Id name="printPeg"/>
+								<ExprList>
+									<Id name="fromPeg"/>
+								</ExprList>
+							</CallProcOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const=" peg to "/>
+								</ExprList>
+							</WriteOp>
+							<CallProcOp>
+								<Id name="printPeg"/>
+								<ExprList>
+									<Id name="toPeg"/>
+								</ExprList>
+							</CallProcOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const=" peg.\n"/>
+								</ExprList>
+							</WriteOp>
+							<CallProcOp>
+								<Id name="hanoi"/>
+								<ExprList>
+									<MinusOp>
+										<Id name="n"/>
+										<IntConst const="1"/>
+									</MinusOp>
+									<Id name="usingPeg"/>
+									<Id name="fromPeg"/>
+									<Id name="toPeg"/>
+								</ExprList>
+							</CallProcOp>
+						</BodyOp>
+					</IfOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="main"/>
+			<ReturnTypes>
+				<ReturnType type="void"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="n"/>
+								<IntConst const="0"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<BodyOp>
+					<WriteOp>
+						<ExprList>
+							<StringConst const="How many pegs? "/>
+						</ExprList>
+					</WriteOp>
+					<ReadlnOp>
+						<Ids>
+							<Id name="n"/>
+						</Ids>
+					</ReadlnOp>
+					<CallProcOp>
+						<Id name="hanoi"/>
+						<ExprList>
+							<Id name="n"/>
+							<IntConst const="1"/>
+							<IntConst const="2"/>
+							<IntConst const="3"/>
+						</ExprList>
+					</CallProcOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+	</Procs>
+</ProgramOp>

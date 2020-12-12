@@ -14,6 +14,10 @@ public class BodyOP extends StatNode {
 		prepend(stmt);
 	}
 
+	public LinkedList<StatNode> getStmts() {
+		return stmts;
+	}
+
 	public BodyOP prepend(StatNode stmt) {
 		if (stmt == null) {
 			throw new IllegalStateException();

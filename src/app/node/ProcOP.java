@@ -24,6 +24,22 @@ public class ProcOP extends Node {
 		}
 	}
 
+	public Id getId() {
+		return id;
+	}
+
+	public List<ParDeclOP> getParDecls() {
+		return parDecls;
+	}
+
+	public List<ResultTypeNode> getReturnTypes() {
+		return returnTypes;
+	}
+
+	public ProcBodyOP getProcBody() {
+		return procBody;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ProcOP := " + id);
 		System.out.println("    ".repeat(level + 1) + "ParDeclOP list");

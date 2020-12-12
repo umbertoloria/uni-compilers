@@ -21,6 +21,22 @@ public class IfOP extends StatNode {
 		this.elseBody = elseBody;
 	}
 
+	public ExprNode getExpr() {
+		return expr;
+	}
+
+	public BodyOP getIfBody() {
+		return ifBody;
+	}
+
+	public List<ElifOP> getElifs() {
+		return elifs;
+	}
+
+	public BodyOP getElseBody() {
+		return elseBody;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "IfStatOP");
 		System.out.println("    ".repeat(level + 1) + "condition");

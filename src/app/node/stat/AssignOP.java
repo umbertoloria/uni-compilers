@@ -24,6 +24,14 @@ public class AssignOP extends StatNode {
 		}
 	}
 
+	public List<Id> getIds() {
+		return ids;
+	}
+
+	public List<ExprNode> getExprs() {
+		return exprs;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "AssignOP");
 		System.out.println("    ".repeat(level + 1) + "from " + ids.toString());

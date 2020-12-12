@@ -19,6 +19,18 @@ public class ProcBodyOP extends Node {
 		this.returnExpressions = returnExpressions;
 	}
 
+	public List<VarDeclOP> getVarDecls() {
+		return varDecls;
+	}
+
+	public BodyOP getBody() {
+		return body;
+	}
+
+	public List<ExprNode> getReturnExpressions() {
+		return returnExpressions;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ProcBodyOP");
 		System.out.println("    ".repeat(level + 1) + "VarDeclOP list");

@@ -74,7 +74,7 @@ comment = "/*"(.|[\r\n])*?"*/"
 "false" {return new Symbol(sym.FALSE); }
 {integer} {return new Symbol(sym.INT_CONST, Integer.parseInt(yytext())); }
 {real} {return new Symbol(sym.FLOAT_CONST, Float.parseFloat(yytext())); }
-{string} {return new Symbol(sym.STRING_CONST, yytext()); }
+{string} {String str = yytext(); return new Symbol(sym.STRING_CONST, str.substring(1, str.length() - 1));}
 {id} {return new Symbol(sym.ID, yytext()); }
 
 [^]           { throw new Error("\n\nIllegal character < "+ yytext()+" >\n"); }

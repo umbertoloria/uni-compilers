@@ -5,10 +5,14 @@ import app.visitor.INodeVisitor;
 
 public class Id extends ExprNode {
 
-	private String nome;
+	private String name;
 
-	public Id(String nome) {
-		this.nome = nome;
+	public Id(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@Override
@@ -17,7 +21,7 @@ public class Id extends ExprNode {
 	}
 
 	public String toString() {
-		return "<ID, " + nome + ">";
+		return "<ID, " + name + ">";
 	}
 
 }

@@ -14,6 +14,14 @@ public class IdInitOP extends Node {
 		this.expr = expr;
 	}
 
+	public Id getId() {
+		return id;
+	}
+
+	public ExprNode getExpr() {
+		return expr;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "IdInit");
 		System.out.println("    ".repeat(level + 1) + " variable");

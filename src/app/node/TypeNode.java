@@ -10,15 +10,19 @@ public class TypeNode extends Node {
 	public static final TypeNode BOOL = new TypeNode("bool");
 	public static final TypeNode STRING = new TypeNode("string");
 
-	private String type;
+	private String stringType;
 
-	private TypeNode(String type) {
-		this.type = type;
+	private TypeNode(String stringType) {
+		this.stringType = stringType;
+	}
+
+	public String getStringType() {
+		return stringType;
 	}
 
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "Type");
-		System.out.println("    ".repeat(level + 1) + type);
+		System.out.println("    ".repeat(level + 1) + stringType);
 	}
 
 	@Override
@@ -27,7 +31,7 @@ public class TypeNode extends Node {
 	}
 
 	public String toString() {
-		return type;
+		return stringType;
 	}
 
 }

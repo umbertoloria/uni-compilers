@@ -17,6 +17,10 @@ public class ReadlnOP extends StatNode {
 		}
 	}
 
+	public List<Id> getIds() {
+		return ids;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ReadlnOP " + ids.toString());
 	}

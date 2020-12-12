@@ -1,6 +1,0 @@
-string messaggio := "Chicco ha ", 5, " anni";
-
-proc main() void:
-    write(messaggio);
-    ->
-corp;

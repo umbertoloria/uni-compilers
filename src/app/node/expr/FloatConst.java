@@ -11,6 +11,10 @@ public class FloatConst extends ExprNode {
 		this.value = value;
 	}
 
+	public float getValue() {
+		return value;
+	}
+
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitFloatConst(this);

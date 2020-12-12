@@ -5,22 +5,23 @@ import app.visitor.INodeVisitor;
 
 public class ResultTypeNode extends Node {
 
-	private TypeNode type;
+	private String stringType;
 
 	public ResultTypeNode(TypeNode type) {
-		this.type = type;
+		this.stringType = type.getStringType();
 	}
 
 	public ResultTypeNode() {
+		this.stringType = "void";
+	}
+
+	public String getStringType() {
+		return stringType;
 	}
 
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ResultType");
-		if (type != null) {
-			type.visit(level + 1);
-		} else {
-			System.out.println("    ".repeat(level + 1) + "void");
-		}
+		System.out.println("    ".repeat(level + 1) + stringType);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class ResultTypeNode extends Node {
 	}
 
 	public String toString() {
-		return type != null ? type.toString() : "void";
+		return stringType;
 	}
 
 }

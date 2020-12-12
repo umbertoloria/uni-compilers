@@ -11,6 +11,10 @@ public class StringConst extends ExprNode {
 		this.str = str;
 	}
 
+	public String getStr() {
+		return str;
+	}
+
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitStringConst(this);

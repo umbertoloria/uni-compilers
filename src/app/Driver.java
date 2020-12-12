@@ -2,12 +2,14 @@ package app;
 
 import app.gen.Yylex;
 import app.gen.parser;
+import app.visitor.XmlNodeVisitor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
+import java.util.Scanner;
 
 public class Driver {
 
@@ -23,9 +25,23 @@ public class Driver {
 		}
 		parser p = new parser(lexer);
 		java_cup.runtime.Symbol res = p.parse();
-//		p.debug_parse();
 		Node root = (Node) res.value;
-		visit(root, 0);
+		XmlNodeVisitor xmlNodeVisitor = new XmlNodeVisitor();
+		root.accept(xmlNodeVisitor);
+		String astFilePath;
+		if (args.length == 1) {
+			astFilePath = args[0];
+			if (astFilePath.contains(".")) {
+				astFilePath = astFilePath.substring(0, astFilePath.lastIndexOf("."));
+			}
+			astFilePath += ".xml";
+		} else {
+			System.out.println("Insert destination path of the XML AST: ");
+			Scanner sc = new Scanner(System.in);
+			astFilePath = sc.nextLine();
+			sc.close();
+		}
+		xmlNodeVisitor.saveOnFile(astFilePath);
 	}
 
 	public static void visit(Object obj, int level) {

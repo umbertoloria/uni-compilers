@@ -11,6 +11,10 @@ public class IntConst extends ExprNode {
 		this.value = value;
 	}
 
+	public int getValue() {
+		return value;
+	}
+
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitIntConst(this);

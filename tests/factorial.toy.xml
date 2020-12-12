@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ProgramOp>
+	<VarDecls>
+		<VarDeclOp>
+			<Type type="int"/>
+			<IdInitOps>
+				<IdInitOp>
+					<Id name="n"/>
+					<IntConst const="0"/>
+				</IdInitOp>
+			</IdInitOps>
+		</VarDeclOp>
+	</VarDecls>
+	<Procs>
+		<ProcOp>
+			<Id name="factorial"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="int"/>
+					<Ids>
+						<Id name="n"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="int"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="result"/>
+								<IntConst const="0"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<ReturnExprList>
+					<Id name="result"/>
+				</ReturnExprList>
+				<BodyOp>
+					<IfOp>
+						<EQOp>
+							<Id name="n"/>
+							<IntConst const="0"/>
+						</EQOp>
+						<BodyOp>
+							<AssignOp>
+								<Ids>
+									<Id name="result"/>
+								</Ids>
+								<ExprList>
+									<IntConst const="1"/>
+								</ExprList>
+							</AssignOp>
+						</BodyOp>
+						<BodyOp>
+							<AssignOp>
+								<Ids>
+									<Id name="result"/>
+								</Ids>
+								<ExprList>
+									<TimesOp>
+										<Id name="n"/>
+										<CallProcOp>
+											<Id name="factorial"/>
+											<ExprList>
+												<MinusOp>
+													<Id name="n"/>
+													<IntConst const="1"/>
+												</MinusOp>
+											</ExprList>
+										</CallProcOp>
+									</TimesOp>
+								</ExprList>
+							</AssignOp>
+						</BodyOp>
+					</IfOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="main"/>
+			<ReturnTypes>
+				<ReturnType type="void"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<BodyOp>
+					<WhileOp>
+						<BodyOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="Enter n, or &gt;= 10 to exit: "/>
+								</ExprList>
+							</WriteOp>
+							<ReadlnOp>
+								<Ids>
+									<Id name="n"/>
+								</Ids>
+							</ReadlnOp>
+						</BodyOp>
+						<LTOp>
+							<Id name="n"/>
+							<IntConst const="10"/>
+						</LTOp>
+						<BodyOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="Factorial of "/>
+									<Id name="n"/>
+								</ExprList>
+							</WriteOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const=" is "/>
+									<CallProcOp>
+										<Id name="factorial"/>
+										<ExprList>
+											<Id name="n"/>
+										</ExprList>
+									</CallProcOp>
+									<StringConst const="\n"/>
+								</ExprList>
+							</WriteOp>
+						</BodyOp>
+					</WhileOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+	</Procs>
+</ProgramOp>

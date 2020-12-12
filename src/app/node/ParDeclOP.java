@@ -22,6 +22,14 @@ public class ParDeclOP extends Node {
 		}
 	}
 
+	public TypeNode getType() {
+		return type;
+	}
+
+	public List<Id> getIds() {
+		return ids;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ParDeclOP");
 		type.visit(level + 1);

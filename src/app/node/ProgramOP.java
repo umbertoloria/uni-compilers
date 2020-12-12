@@ -19,6 +19,14 @@ public class ProgramOP extends Node {
 		}
 	}
 
+	public List<VarDeclOP> getVarDecls() {
+		return varDecls;
+	}
+
+	public List<ProcOP> getProcs() {
+		return procs;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ProgramOP");
 		System.out.println("    ".repeat(level + 1) + "VarDeclOP list");

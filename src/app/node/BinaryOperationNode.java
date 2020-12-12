@@ -11,6 +11,18 @@ public abstract class BinaryOperationNode extends ExprNode {
 		this.op = op;
 	}
 
+	public String getOp() {
+		return op;
+	}
+
+	public ExprNode getA() {
+		return a;
+	}
+
+	public ExprNode getB() {
+		return b;
+	}
+
 	public void visit(int level) {
 		a.visit(level);
 		System.out.println("    ".repeat(level) + op);

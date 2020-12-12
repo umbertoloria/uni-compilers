@@ -11,6 +11,10 @@ public class NotOP extends ExprNode {
 		this.expr = expr;
 	}
 
+	public ExprNode getExpr() {
+		return expr;
+	}
+
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitNotOP(this);

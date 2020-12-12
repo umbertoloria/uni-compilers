@@ -19,6 +19,18 @@ public class WhileOP extends StatNode {
 		}
 	}
 
+	public BodyOP getPreStmts() {
+		return preStmts;
+	}
+
+	public ExprNode getExpr() {
+		return expr;
+	}
+
+	public BodyOP getIterStmts() {
+		return iterStmts;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "WhileOP");
 		if (preStmts != null) {

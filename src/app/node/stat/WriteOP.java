@@ -18,6 +18,10 @@ public class WriteOP extends StatNode {
 		}
 	}
 
+	public List<ExprNode> getExprs() {
+		return exprs;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "WriteOP");
 		System.out.println("    ".repeat(level + 1) + "expressions");

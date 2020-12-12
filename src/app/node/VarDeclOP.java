@@ -22,6 +22,14 @@ public class VarDeclOP extends Node {
 		}
 	}
 
+	public TypeNode getType() {
+		return type;
+	}
+
+	public List<IdInitOP> getIdInits() {
+		return idInits;
+	}
+
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "VarDeclOP");
 		type.visit(level + 1);

@@ -11,7 +11,21 @@ public class ElifOP extends StatNode {
 
 	public ElifOP(ExprNode expr, BodyOP body) {
 		this.expr = expr;
+		if (expr == null) {
+			throw new IllegalStateException();
+		}
 		this.body = body;
+		if (body == null) {
+			throw new IllegalStateException();
+		}
+	}
+
+	public ExprNode getExpr() {
+		return expr;
+	}
+
+	public BodyOP getBody() {
+		return body;
 	}
 
 	public void visit(int level) {
