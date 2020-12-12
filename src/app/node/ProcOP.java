@@ -3,6 +3,7 @@ package app.node;
 import app.Driver;
 import app.Node;
 import app.node.expr.Id;
+import app.visitor.INodeVisitor;
 
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class ProcOP extends Node {
 		System.out.println("    ".repeat(level + 1) + "Return types");
 		Driver.visit(returnTypes, level + 1);
 		procBody.visit(level + 1);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitProcOP(this);
 	}
 
 }

@@ -2,6 +2,7 @@ package app.node.stat;
 
 import app.node.ExprNode;
 import app.node.StatNode;
+import app.visitor.INodeVisitor;
 
 public class WhileOP extends StatNode {
 
@@ -28,6 +29,11 @@ public class WhileOP extends StatNode {
 		expr.visit(level + 2);
 		System.out.println("    ".repeat(level + 1) + "iterating statements");
 		iterStmts.visit(level + 1);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitWhileOP(this);
 	}
 
 }

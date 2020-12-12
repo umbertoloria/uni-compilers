@@ -1,6 +1,7 @@
 package app.node.expr;
 
 import app.node.ExprNode;
+import app.visitor.INodeVisitor;
 
 public class StringConst extends ExprNode {
 
@@ -8,6 +9,11 @@ public class StringConst extends ExprNode {
 
 	public StringConst(String str) {
 		this.str = str;
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitStringConst(this);
 	}
 
 	public String toString() {

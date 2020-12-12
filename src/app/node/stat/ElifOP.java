@@ -2,6 +2,7 @@ package app.node.stat;
 
 import app.node.ExprNode;
 import app.node.StatNode;
+import app.visitor.INodeVisitor;
 
 public class ElifOP extends StatNode {
 
@@ -18,6 +19,11 @@ public class ElifOP extends StatNode {
 		System.out.println("    ".repeat(level + 1) + "condition");
 		expr.visit(level + 2);
 		body.visit(level + 1);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitElifOP(this);
 	}
 
 }

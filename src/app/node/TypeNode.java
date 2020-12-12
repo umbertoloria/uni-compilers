@@ -1,6 +1,7 @@
 package app.node;
 
 import app.Node;
+import app.visitor.INodeVisitor;
 
 public class TypeNode extends Node {
 
@@ -18,6 +19,11 @@ public class TypeNode extends Node {
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "Type");
 		System.out.println("    ".repeat(level + 1) + type);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitTypeNode(this);
 	}
 
 	public String toString() {

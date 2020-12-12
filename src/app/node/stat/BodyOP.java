@@ -2,28 +2,35 @@ package app.node.stat;
 
 import app.Driver;
 import app.node.StatNode;
+import app.visitor.INodeVisitor;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public class BodyOP extends StatNode {
 
-	private List<StatNode> stmts;
+	private LinkedList<StatNode> stmts = new LinkedList<>();
 
-	public BodyOP(List<StatNode> stmts) {
-		this.stmts = stmts;
-		if (stmts == null || stmts.isEmpty()) {
-			throw new IllegalStateException();
-		}
+	public BodyOP(StatNode stmt) {
+		prepend(stmt);
 	}
 
-	public List<StatNode> getStmts() {
-		return stmts;
+	public BodyOP prepend(StatNode stmt) {
+		if (stmt == null) {
+			throw new IllegalStateException();
+		}
+		stmts.addFirst(stmt);
+		return this;
 	}
 
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "BodyOP");
 		System.out.println("    ".repeat(level + 1) + "statements");
 		Driver.visit(stmts, level + 2);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitBodyOP(this);
 	}
 
 }

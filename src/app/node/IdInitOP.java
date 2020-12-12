@@ -1,29 +1,32 @@
 package app.node;
 
-import app.Driver;
 import app.Node;
-
-import java.util.List;
+import app.node.expr.Id;
+import app.visitor.INodeVisitor;
 
 public class IdInitOP extends Node {
 
-	private List<IdInitNode> idInits;
+	private Id id;
+	private ExprNode expr;
 
-	public IdInitOP(List<IdInitNode> idInits) {
-		this.idInits = idInits;
-		if (idInits == null) {
-			throw new IllegalStateException();
-		}
-	}
-
-	public List<IdInitNode> getIdInits() {
-		return idInits;
+	public IdInitOP(Id id, ExprNode expr) {
+		this.id = id;
+		this.expr = expr;
 	}
 
 	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "IdInitOP");
-		System.out.println("    ".repeat(level + 1) + "IdInit list");
-		Driver.visit(idInits, level + 1);
+		System.out.println("    ".repeat(level) + "IdInit");
+		System.out.println("    ".repeat(level + 1) + " variable");
+		id.visit(level + 2);
+		if (expr != null) {
+			System.out.println("    ".repeat(level + 1) + " assign");
+			expr.visit(level + 2);
+		}
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitIdInitOP(this);
 	}
 
 }

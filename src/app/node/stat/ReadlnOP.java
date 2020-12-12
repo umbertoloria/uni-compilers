@@ -2,6 +2,7 @@ package app.node.stat;
 
 import app.node.StatNode;
 import app.node.expr.Id;
+import app.visitor.INodeVisitor;
 
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class ReadlnOP extends StatNode {
 
 	public void visit(int level) {
 		System.out.println("    ".repeat(level) + "ReadlnOP " + ids.toString());
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitReadlnOP(this);
 	}
 
 }

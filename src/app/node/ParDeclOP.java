@@ -2,6 +2,7 @@ package app.node;
 
 import app.Node;
 import app.node.expr.Id;
+import app.visitor.INodeVisitor;
 
 import java.util.List;
 
@@ -26,6 +27,11 @@ public class ParDeclOP extends Node {
 		type.visit(level + 1);
 		System.out.println("    ".repeat(level + 1) + "Ids");
 		System.out.println("    ".repeat(level + 2) + ids.toString());
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitParDeclOP(this);
 	}
 
 }

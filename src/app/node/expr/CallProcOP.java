@@ -2,6 +2,7 @@ package app.node.expr;
 
 import app.Driver;
 import app.node.ExprNode;
+import app.visitor.INodeVisitor;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class CallProcOP extends ExprNode {
 		System.out.println("    ".repeat(level + 1) + "Procedure Id: " + procId);
 		System.out.println("    ".repeat(level + 1) + "Expressions");
 		Driver.visit(exprs, level + 2);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitCallProcOP(this);
 	}
 
 }

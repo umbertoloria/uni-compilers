@@ -2,6 +2,7 @@ package app.node.stat;
 
 import app.node.StatNode;
 import app.node.expr.CallProcOP;
+import app.visitor.INodeVisitor;
 
 public class CallProcOPAdapter extends StatNode {
 
@@ -13,6 +14,11 @@ public class CallProcOPAdapter extends StatNode {
 
 	public void visit(int level) {
 		callProcOP.visit(level);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return callProcOP.accept(visitor);
 	}
 
 }

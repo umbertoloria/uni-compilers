@@ -1,6 +1,6 @@
 package app.node;
 
-public class BinaryOperationNode extends ExprNode {
+public abstract class BinaryOperationNode extends ExprNode {
 
 	private String op;
 	private ExprNode a, b;

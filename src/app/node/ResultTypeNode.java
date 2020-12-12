@@ -1,6 +1,7 @@
 package app.node;
 
 import app.Node;
+import app.visitor.INodeVisitor;
 
 public class ResultTypeNode extends Node {
 
@@ -20,6 +21,11 @@ public class ResultTypeNode extends Node {
 		} else {
 			System.out.println("    ".repeat(level + 1) + "void");
 		}
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitResultTypeNode(this);
 	}
 
 	public String toString() {

@@ -2,6 +2,7 @@ package app.node;
 
 import app.Driver;
 import app.Node;
+import app.visitor.INodeVisitor;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class ProgramOP extends Node {
 		Driver.visit(varDecls, level + 1);
 		System.out.println("    ".repeat(level + 1) + "ProcOP list");
 		Driver.visit(procs, level + 1);
+	}
+
+	@Override
+	public Object accept(INodeVisitor visitor) {
+		return visitor.visitProgramOP(this);
 	}
 
 }
