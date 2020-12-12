@@ -90,8 +90,8 @@ Expr ::= NULL           {: RESULT = new Null(); :}
        | Expr:e1 GE Expr:e2 {: RESULT = new GEOP((ExprNode) e1, (ExprNode) e2); :}
        | Expr:e1 EQ Expr:e2 {: RESULT = new EQOP((ExprNode) e1, (ExprNode) e2); :}
        | Expr:e1 NE Expr:e2 {: RESULT = new NotOP(new EQOP((ExprNode) e1, (ExprNode) e2)); :}
-       | UMINUS INT_CONST:e   {: RESULT = new UMinusOP(new IntConst(-e)); :}   %prec UMINUS
-       | UMINUS FLOAT_CONST:e {: RESULT = new UMinusOP(new FloatConst(-e)); :} %prec UMINUS;
+       | MINUS INT_CONST:e   {: RESULT = new UMinusOP(new IntConst(-e)); :}   %prec UMINUS
+       | MINUS FLOAT_CONST:e {: RESULT = new UMinusOP(new FloatConst(-e)); :} %prec UMINUS;
 
 CallProc ::= ID:i LPAR ExprList:es RPAR {: RESULT = new CallProcOP(new Id(i), (List<ExprNode>) es); :}
            | ID:i LPAR             RPAR {: RESULT = new CallProcOP(new Id(i), null); :};
