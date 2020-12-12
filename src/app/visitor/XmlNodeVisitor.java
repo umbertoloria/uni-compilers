@@ -167,7 +167,10 @@ public class XmlNodeVisitor implements INodeVisitor {
 				returnExprListElem.appendChild(retExprElem);
 			}
 		}
-		Element bodyElem = (Element) procBodyOP.getBody().accept(this);
+		Element bodyElem = null;
+		if (procBodyOP.getBody() != null) {
+			bodyElem = (Element) procBodyOP.getBody().accept(this);
+		}
 		// <ProcBodyOp>
 		Element procBodyOpElem = document.createElement("ProcBodyOp");
 		if (varDeclsElem != null) {
@@ -176,7 +179,9 @@ public class XmlNodeVisitor implements INodeVisitor {
 		if (returnExprListElem != null) {
 			procBodyOpElem.appendChild(returnExprListElem);
 		}
-		procBodyOpElem.appendChild(bodyElem);
+		if (bodyElem != null) {
+			procBodyOpElem.appendChild(bodyElem);
+		}
 		return procBodyOpElem;
 	}
 

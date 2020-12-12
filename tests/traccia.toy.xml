@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ProgramOp>
+	<VarDecls>
+		<VarDeclOp>
+			<Type type="bool"/>
+			<IdInitOps>
+				<IdInitOp>
+					<Id name="yesOrNo"/>
+					<True/>
+				</IdInitOp>
+			</IdInitOps>
+		</VarDeclOp>
+	</VarDecls>
+	<Procs>
+		<ProcOp>
+			<Id name="sum"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="float"/>
+					<Ids>
+						<Id name="x"/>
+						<Id name="y"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="float"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<ReturnExprList>
+					<PlusOp>
+						<Id name="x"/>
+						<Id name="y"/>
+					</PlusOp>
+				</ReturnExprList>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="diff"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="float"/>
+					<Ids>
+						<Id name="x"/>
+						<Id name="y"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="float"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<ReturnExprList>
+					<MinusOp>
+						<Id name="x"/>
+						<Id name="y"/>
+					</MinusOp>
+				</ReturnExprList>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="mul"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="float"/>
+					<Ids>
+						<Id name="x"/>
+						<Id name="y"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="float"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<ReturnExprList>
+					<TimesOp>
+						<Id name="x"/>
+						<Id name="y"/>
+					</TimesOp>
+				</ReturnExprList>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="div"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="float"/>
+					<Ids>
+						<Id name="x"/>
+						<Id name="y"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ReturnTypes>
+				<ReturnType type="float"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="result"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<ReturnExprList>
+					<Id name="result"/>
+				</ReturnExprList>
+				<BodyOp>
+					<IfOp>
+						<EQOp>
+							<Id name="y"/>
+							<IntConst const="0"/>
+						</EQOp>
+						<BodyOp>
+							<AssignOp>
+								<Ids>
+									<Id name="result"/>
+								</Ids>
+								<ExprList>
+									<IntConst const="0"/>
+								</ExprList>
+							</AssignOp>
+						</BodyOp>
+						<BodyOp>
+							<AssignOp>
+								<Ids>
+									<Id name="result"/>
+								</Ids>
+								<ExprList>
+									<DivOp>
+										<Id name="x"/>
+										<Id name="y"/>
+									</DivOp>
+								</ExprList>
+							</AssignOp>
+						</BodyOp>
+					</IfOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="main"/>
+			<ReturnTypes>
+				<ReturnType type="int"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="float"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="a"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="b"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="res"/>
+								<IntConst const="0"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="kind"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<ReturnExprList>
+					<IntConst const="0"/>
+				</ReturnExprList>
+				<BodyOp>
+					<WhileOp>
+						<Id name="yesOrNo"/>
+						<BodyOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="\n[1] Addizione\n"/>
+								</ExprList>
+							</WriteOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="[2] Sottrazione\n"/>
+								</ExprList>
+							</WriteOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="[3] Multiplicazione\n"/>
+								</ExprList>
+							</WriteOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="[4] Divisione\n\n&gt; "/>
+								</ExprList>
+							</WriteOp>
+							<ReadlnOp>
+								<Ids>
+									<Id name="kind"/>
+								</Ids>
+							</ReadlnOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="\nFornisci il primo numero: "/>
+								</ExprList>
+							</WriteOp>
+							<ReadlnOp>
+								<Ids>
+									<Id name="a"/>
+								</Ids>
+							</ReadlnOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="Fornisci il secondo numero: "/>
+								</ExprList>
+							</WriteOp>
+							<ReadlnOp>
+								<Ids>
+									<Id name="b"/>
+								</Ids>
+							</ReadlnOp>
+							<IfOp>
+								<EQOp>
+									<Id name="kind"/>
+									<IntConst const="1"/>
+								</EQOp>
+								<BodyOp>
+									<WriteOp>
+										<ExprList>
+											<StringConst const="Resultato: "/>
+											<CallProcOp>
+												<Id name="add"/>
+												<ExprList>
+													<Id name="a"/>
+													<Id name="b"/>
+												</ExprList>
+											</CallProcOp>
+										</ExprList>
+									</WriteOp>
+								</BodyOp>
+								<Elifs>
+									<ElifOp>
+										<EQOp>
+											<Id name="kind"/>
+											<IntConst const="2"/>
+										</EQOp>
+										<BodyOp>
+											<WriteOp>
+												<ExprList>
+													<StringConst const="Resultato: "/>
+													<CallProcOp>
+														<Id name="sub"/>
+														<ExprList>
+															<Id name="a"/>
+															<Id name="b"/>
+														</ExprList>
+													</CallProcOp>
+												</ExprList>
+											</WriteOp>
+										</BodyOp>
+									</ElifOp>
+									<ElifOp>
+										<EQOp>
+											<Id name="kind"/>
+											<IntConst const="3"/>
+										</EQOp>
+										<BodyOp>
+											<WriteOp>
+												<ExprList>
+													<StringConst const="Resultato: "/>
+													<CallProcOp>
+														<Id name="mul"/>
+														<ExprList>
+															<Id name="a"/>
+															<Id name="b"/>
+														</ExprList>
+													</CallProcOp>
+												</ExprList>
+											</WriteOp>
+										</BodyOp>
+									</ElifOp>
+									<ElifOp>
+										<EQOp>
+											<Id name="kind"/>
+											<IntConst const="4"/>
+										</EQOp>
+										<BodyOp>
+											<WriteOp>
+												<ExprList>
+													<StringConst const="Resultato: "/>
+													<CallProcOp>
+														<Id name="div"/>
+														<ExprList>
+															<Id name="a"/>
+															<Id name="b"/>
+														</ExprList>
+													</CallProcOp>
+												</ExprList>
+											</WriteOp>
+										</BodyOp>
+									</ElifOp>
+								</Elifs>
+							</IfOp>
+							<WriteOp>
+								<ExprList>
+									<StringConst const="\nVuoi continuare? (1 sì, 0 no): "/>
+								</ExprList>
+							</WriteOp>
+							<ReadlnOp>
+								<Ids>
+									<Id name="yesOrNo"/>
+								</Ids>
+							</ReadlnOp>
+						</BodyOp>
+					</WhileOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+	</Procs>
+</ProgramOp>
