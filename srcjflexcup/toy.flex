@@ -10,9 +10,8 @@ whitespace = [ \r\n\t\f]
 
 
 letter = [a-zA-Z]
-id = {letter}({letter}|_)*
-
 digit = [0-9]
+id = ({letter}|_)({letter}|{digit}|_)*
 integer = 0|[1-9][0-9]*
 real = integer\.[0-9]*[1-9]
 string = \"([^\\\"]|\\.)*\"
@@ -30,9 +29,9 @@ comment = "/*"(.|[\r\n])*?"*/"
 ";" {return new Symbol(sym.SEMI); }
 ":" {return new Symbol(sym.COLON); }
 
-"not" {return new Symbol(sym.NOT); }
-"and" {return new Symbol(sym.AND); }
-"or" {return new Symbol(sym.OR); }
+"!" {return new Symbol(sym.NOT); }
+"&&" {return new Symbol(sym.AND); }
+"||" {return new Symbol(sym.OR); }
 
 "+" {return new Symbol(sym.PLUS); }
 "-" {return new Symbol(sym.MINUS); }
