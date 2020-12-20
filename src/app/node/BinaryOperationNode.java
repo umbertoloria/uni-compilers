@@ -23,12 +23,6 @@ public abstract class BinaryOperationNode extends ExprNode {
 		return b;
 	}
 
-	public void visit(int level) {
-		a.visit(level);
-		System.out.println("    ".repeat(level) + op);
-		b.visit(level);
-	}
-
 	public String toString() {
 		return a + " " + op + " " + b;
 	}

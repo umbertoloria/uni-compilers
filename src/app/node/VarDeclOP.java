@@ -1,6 +1,5 @@
 package app.node;
 
-import app.Driver;
 import app.Node;
 import app.visitor.INodeVisitor;
 
@@ -28,13 +27,6 @@ public class VarDeclOP extends Node {
 
 	public List<IdInitOP> getIdInits() {
 		return idInits;
-	}
-
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "VarDeclOP");
-		type.visit(level + 1);
-		System.out.println("    ".repeat(level + 1) + "IdInitOP list");
-		Driver.visit(idInits, level + 1);
 	}
 
 	@Override

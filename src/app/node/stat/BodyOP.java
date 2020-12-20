@@ -1,6 +1,5 @@
 package app.node.stat;
 
-import app.Driver;
 import app.node.StatNode;
 import app.visitor.INodeVisitor;
 
@@ -24,12 +23,6 @@ public class BodyOP extends StatNode {
 		}
 		stmts.addFirst(stmt);
 		return this;
-	}
-
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "BodyOP");
-		System.out.println("    ".repeat(level + 1) + "statements");
-		Driver.visit(stmts, level + 2);
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.List;
 import java.util.Scanner;
 
 public class Driver {
@@ -42,23 +41,6 @@ public class Driver {
 			sc.close();
 		}
 		xmlNodeVisitor.saveOnFile(astFilePath);
-	}
-
-	public static void visit(Object obj, int level) {
-		if (obj instanceof Node) {
-			Node n = (Node) obj;
-			n.visit(level);
-		} else if (obj instanceof List) {
-			List l = (List) obj;
-			int i = 0;
-			for (Object o : l) {
-				System.out.println("    ".repeat(level) + "[" + i++ + "]");
-				visit(o, level + 1);
-			}
-		} else { // if (obj instanceof String) {
-			System.out.print("    ".repeat(level));
-			System.out.println(obj);
-		}
 	}
 
 }

@@ -12,10 +12,6 @@ public class CallProcOPAdapter extends StatNode {
 		this.callProcOP = callProcOP;
 	}
 
-	public void visit(int level) {
-		callProcOP.visit(level);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return callProcOP.accept(visitor);

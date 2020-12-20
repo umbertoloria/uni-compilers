@@ -24,13 +24,6 @@ public class CallProcOP extends ExprNode {
 		return exprs;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "CallProcOP");
-		System.out.println("    ".repeat(level + 1) + "Procedure Id: " + procId);
-		System.out.println("    ".repeat(level + 1) + "Expressions");
-		Driver.visit(exprs, level + 2);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitCallProcOP(this);

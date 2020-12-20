@@ -21,10 +21,6 @@ public class ReadlnOP extends StatNode {
 		return ids;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "ReadlnOP " + ids.toString());
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitReadlnOP(this);

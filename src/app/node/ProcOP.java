@@ -40,15 +40,6 @@ public class ProcOP extends Node {
 		return procBody;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "ProcOP := " + id);
-		System.out.println("    ".repeat(level + 1) + "ParDeclOP list");
-		Driver.visit(parDecls, level + 1);
-		System.out.println("    ".repeat(level + 1) + "Return types");
-		Driver.visit(returnTypes, level + 1);
-		procBody.visit(level + 1);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitProcOP(this);

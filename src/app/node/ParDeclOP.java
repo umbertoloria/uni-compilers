@@ -30,13 +30,6 @@ public class ParDeclOP extends Node {
 		return ids;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "ParDeclOP");
-		type.visit(level + 1);
-		System.out.println("    ".repeat(level + 1) + "Ids");
-		System.out.println("    ".repeat(level + 2) + ids.toString());
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitParDeclOP(this);

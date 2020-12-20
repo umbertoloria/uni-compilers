@@ -20,11 +20,6 @@ public class TypeNode extends Node {
 		return stringType;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "Type");
-		System.out.println("    ".repeat(level + 1) + stringType);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitTypeNode(this);

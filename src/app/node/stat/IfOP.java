@@ -1,6 +1,5 @@
 package app.node.stat;
 
-import app.Driver;
 import app.node.ExprNode;
 import app.node.StatNode;
 import app.visitor.INodeVisitor;
@@ -35,22 +34,6 @@ public class IfOP extends StatNode {
 
 	public BodyOP getElseBody() {
 		return elseBody;
-	}
-
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "IfStatOP");
-		System.out.println("    ".repeat(level + 1) + "condition");
-		expr.visit(level + 2);
-		System.out.println("    ".repeat(level + 1) + "If body");
-		ifBody.visit(level + 1);
-		if (elifs != null) {
-			System.out.println("    ".repeat(level + 1) + "ElifOP list");
-			Driver.visit(elifs, level + 1);
-		}
-		if (elseBody != null) {
-			System.out.println("    ".repeat(level + 1) + "Else body");
-			elseBody.visit(level + 1);
-		}
 	}
 
 	@Override

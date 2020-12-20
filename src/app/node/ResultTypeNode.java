@@ -19,11 +19,6 @@ public class ResultTypeNode extends Node {
 		return stringType;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "ResultType");
-		System.out.println("    ".repeat(level + 1) + stringType);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitResultTypeNode(this);

@@ -22,16 +22,6 @@ public class IdInitOP extends Node {
 		return expr;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "IdInit");
-		System.out.println("    ".repeat(level + 1) + " variable");
-		id.visit(level + 2);
-		if (expr != null) {
-			System.out.println("    ".repeat(level + 1) + " assign");
-			expr.visit(level + 2);
-		}
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitIdInitOP(this);

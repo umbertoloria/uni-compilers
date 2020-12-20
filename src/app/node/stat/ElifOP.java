@@ -28,13 +28,6 @@ public class ElifOP extends StatNode {
 		return body;
 	}
 
-	public void visit(int level) {
-		System.out.println("    ".repeat(level) + "ElifOP");
-		System.out.println("    ".repeat(level + 1) + "condition");
-		expr.visit(level + 2);
-		body.visit(level + 1);
-	}
-
 	@Override
 	public Object accept(INodeVisitor visitor) {
 		return visitor.visitElifOP(this);
