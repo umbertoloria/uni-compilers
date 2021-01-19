@@ -124,7 +124,9 @@ public class XmlNodeVisitor implements INodeVisitor {
 			procOpElem.appendChild(parDeclsElem);
 		}
 		procOpElem.appendChild(returnTypesElem);
-		procOpElem.appendChild(procBodyElem);
+		if (procBodyElem != null) {
+			procOpElem.appendChild(procBodyElem);
+		}
 		return procOpElem;
 	}
 
@@ -172,15 +174,20 @@ public class XmlNodeVisitor implements INodeVisitor {
 			bodyElem = (Element) procBodyOP.getBody().accept(this);
 		}
 		// <ProcBodyOp>
-		Element procBodyOpElem = document.createElement("ProcBodyOp");
-		if (varDeclsElem != null) {
-			procBodyOpElem.appendChild(varDeclsElem);
-		}
-		if (returnExprListElem != null) {
-			procBodyOpElem.appendChild(returnExprListElem);
-		}
-		if (bodyElem != null) {
-			procBodyOpElem.appendChild(bodyElem);
+		Element procBodyOpElem;
+		if (varDeclsElem != null || returnExprListElem != null || bodyElem != null) {
+			procBodyOpElem = document.createElement("ProcBodyOp");
+			if (varDeclsElem != null) {
+				procBodyOpElem.appendChild(varDeclsElem);
+			}
+			if (returnExprListElem != null) {
+				procBodyOpElem.appendChild(returnExprListElem);
+			}
+			if (bodyElem != null) {
+				procBodyOpElem.appendChild(bodyElem);
+			}
+		} else {
+			procBodyOpElem = null;
 		}
 		return procBodyOpElem;
 	}
