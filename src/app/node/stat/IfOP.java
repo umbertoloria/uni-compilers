@@ -15,7 +15,13 @@ public class IfOP extends StatNode {
 
 	public IfOP(ExprNode expr, BodyOP ifBody, List<ElifOP> elifs, BodyOP elseBody) {
 		this.expr = expr;
+		if (expr == null) {
+			throw new IllegalStateException();
+		}
 		this.ifBody = ifBody;
+		if (ifBody == null) {
+			throw new IllegalStateException();
+		}
 		this.elifs = elifs;
 		this.elseBody = elseBody;
 	}

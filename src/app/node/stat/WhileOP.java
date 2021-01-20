@@ -13,6 +13,9 @@ public class WhileOP extends StatNode {
 	public WhileOP(BodyOP preStmts, ExprNode expr, BodyOP iterStmts) {
 		this.preStmts = preStmts;
 		this.expr = expr;
+		if (expr == null) {
+			throw new IllegalStateException();
+		}
 		this.iterStmts = iterStmts;
 		if (iterStmts == null) {
 			throw new IllegalStateException();

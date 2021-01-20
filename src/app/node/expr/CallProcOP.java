@@ -12,6 +12,9 @@ public class CallProcOP extends ExprNode {
 
 	public CallProcOP(Id procId, List<ExprNode> exprs) {
 		this.procId = procId;
+		if (procId == null) {
+			throw new IllegalStateException();
+		}
 		this.exprs = exprs;
 	}
 

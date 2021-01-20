@@ -10,6 +10,9 @@ public class CallProcOPAdapter extends StatNode {
 
 	public CallProcOPAdapter(CallProcOP callProcOP) {
 		this.callProcOP = callProcOP;
+		if (callProcOP == null) {
+			throw new IllegalStateException();
+		}
 	}
 
 	@Override

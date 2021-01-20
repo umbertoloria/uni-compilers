@@ -14,6 +14,9 @@ public class TypeNode extends Node {
 
 	private TypeNode(String stringType) {
 		this.stringType = stringType;
+		if (stringType == null || stringType.isEmpty()) {
+			throw new IllegalStateException();
+		}
 	}
 
 	public String getStringType() {

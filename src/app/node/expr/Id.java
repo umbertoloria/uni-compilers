@@ -9,6 +9,9 @@ public class Id extends ExprNode {
 
 	public Id(String name) {
 		this.name = name;
+		if (name == null || name.isEmpty()) {
+			throw new IllegalStateException();
+		}
 	}
 
 	public String getName() {
