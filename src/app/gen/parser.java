@@ -495,7 +495,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // VarDecl ::= Type IdListInit SEMI 
+          case 4: // VarDecl ::= Type IdInitList SEMI 
             {
               Object RESULT =null;
 		int tleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -546,19 +546,19 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // IdListInit ::= ID 
+          case 9: // IdInitList ::= ID 
             {
               Object RESULT =null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 var list = new LinkedList<IdInitOP>(); list.add(new IdInitOP(new Id(i), null)); RESULT = list; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdListInit",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdInitList",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // IdListInit ::= ID ASSIGN Expr 
+          case 10: // IdInitList ::= ID ASSIGN Expr 
             {
               Object RESULT =null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -568,12 +568,12 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 var list = new LinkedList<IdInitOP>(); list.add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = list; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdListInit",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdInitList",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // IdListInit ::= IdListInit COMMA ID 
+          case 11: // IdInitList ::= IdInitList COMMA ID 
             {
               Object RESULT =null;
 		int isleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
@@ -583,12 +583,12 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), null)); RESULT = is; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdListInit",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdInitList",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // IdListInit ::= IdListInit COMMA ID ASSIGN Expr 
+          case 12: // IdInitList ::= IdInitList COMMA ID ASSIGN Expr 
             {
               Object RESULT =null;
 		int isleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
@@ -601,7 +601,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = is; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdListInit",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("IdInitList",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
@@ -1185,7 +1185,7 @@ class CUP$parser$actions {
           case 53: // ResultType ::= VOID 
             {
               Object RESULT =null;
-		 RESULT = new ResultTypeNode(); 
+		 RESULT = ResultTypeNode.VOID; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ResultType",14, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

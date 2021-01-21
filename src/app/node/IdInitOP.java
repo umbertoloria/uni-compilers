@@ -11,6 +11,9 @@ public class IdInitOP extends Node {
 
 	public IdInitOP(Id id, ExprNode expr) {
 		this.id = id;
+		if (id == null) {
+			throw new IllegalStateException();
+		}
 		this.expr = expr;
 	}
 

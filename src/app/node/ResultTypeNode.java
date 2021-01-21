@@ -5,13 +5,18 @@ import app.visitor.INodeVisitor;
 
 public class ResultTypeNode extends Node {
 
+	public static final ResultTypeNode VOID = new ResultTypeNode();
+
 	private String stringType;
 
 	public ResultTypeNode(TypeNode type) {
+		if (type == null) {
+			throw new IllegalStateException();
+		}
 		this.stringType = type.getStringType();
 	}
 
-	public ResultTypeNode() {
+	private ResultTypeNode() {
 		this.stringType = "void";
 	}
 

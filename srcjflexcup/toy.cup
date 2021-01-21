@@ -33,7 +33,7 @@ terminal String ID; // Integer?
 nonterminal Program;
 nonterminal VarDeclList, VarDecl;
 nonterminal Type;
-nonterminal IdListInit;
+nonterminal IdInitList;
 nonterminal ExprList, Expr;
 nonterminal CallProc;
 
@@ -61,13 +61,13 @@ Program ::= VarDeclList:vds ProcList:ps {: RESULT = new ProgramOP((List<VarDeclO
 // VarDeclList
 VarDeclList ::= VarDecl:vd VarDeclList:vds {: if (vds == null) { vds = new LinkedList<VarDeclOP>(); } ((List<VarDeclOP>) vds).add(0, (VarDeclOP) vd); RESULT = vds; :}
               | /*empty*/                  {: RESULT = null; :};
-VarDecl ::= Type:t IdListInit:is SEMI {: RESULT = new VarDeclOP((TypeNode) t, (List<IdInitOP>) is); :};
+VarDecl ::= Type:t IdInitList:is SEMI {: RESULT = new VarDeclOP((TypeNode) t, (List<IdInitOP>) is); :};
 Type ::= INT {: RESULT = TypeNode.INT; :}     | BOOL {: RESULT = TypeNode.BOOL; :}
        | FLOAT {: RESULT = TypeNode.FLOAT; :} | STRING {: RESULT = TypeNode.STRING; :};
-IdListInit ::=                     ID:i               {: var list = new LinkedList<IdInitOP>(); list.add(new IdInitOP(new Id(i), null)); RESULT = list; :}
+IdInitList ::=                     ID:i               {: var list = new LinkedList<IdInitOP>(); list.add(new IdInitOP(new Id(i), null)); RESULT = list; :}
              |                     ID:i ASSIGN Expr:e {: var list = new LinkedList<IdInitOP>(); list.add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = list; :}
-             | IdListInit:is COMMA ID:i               {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), null)); RESULT = is; :}
-             | IdListInit:is COMMA ID:i ASSIGN Expr:e {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = is; :};
+             | IdInitList:is COMMA ID:i               {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), null)); RESULT = is; :}
+             | IdInitList:is COMMA ID:i ASSIGN Expr:e {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = is; :};
 
 Expr ::= NULL           {: RESULT = new Null(); :}
        | TRUE           {: RESULT = new True(); :}
@@ -117,7 +117,7 @@ IdList ::= IdList:is COMMA ID:i {: ((List<Id>) is).add(new Id(i)); RESULT = is; 
 ResultTypeList ::= ResultType:rt COMMA ResultTypeList:rts {: ((List<ResultTypeNode>) rts).add(0, (ResultTypeNode) rt); RESULT = rts; :}
                  | ResultType:rt                          {: RESULT = new LinkedList<ResultTypeNode>(); ((List<ResultTypeNode>) RESULT).add((ResultTypeNode) rt); :};
 ResultType ::= Type:t {: RESULT = new ResultTypeNode((TypeNode) t); :}
-             | VOID   {: RESULT = new ResultTypeNode(); :};
+             | VOID   {: RESULT = ResultTypeNode.VOID; :};
 ReturnExprs ::= ExprList:es {: RESULT = es; :}
               | /* empty */ {: RESULT = null; :};
 

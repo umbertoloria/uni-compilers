@@ -14,10 +14,10 @@ public class AssignOP extends StatNode {
 
 	public AssignOP(List<Id> ids, List<ExprNode> exprs) {
 		this.ids = ids;
-		this.exprs = exprs;
 		if (ids == null || ids.isEmpty()) {
 			throw new IllegalStateException();
 		}
+		this.exprs = exprs;
 		if (exprs == null || exprs.isEmpty()) {
 			throw new IllegalStateException();
 		}
