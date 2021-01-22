@@ -2,7 +2,16 @@
 <ProgramOp>
 	<VarDecls>
 		<VarDeclOp>
-			<Type type="int"/>
+			<Type type="float"/>
+			<IdInitOps>
+				<IdInitOp>
+					<Id name="PI"/>
+					<FloatConst const="3.14159"/>
+				</IdInitOp>
+			</IdInitOps>
+		</VarDeclOp>
+		<VarDeclOp>
+			<Type type="float"/>
 			<IdInitOps>
 				<IdInitOp>
 					<Id name="n"/>
@@ -24,7 +33,7 @@
 			<Type type="float"/>
 			<IdInitOps>
 				<IdInitOp>
-					<Id name="y"/>
+					<Id name="y2"/>
 					<IntConst const="5"/>
 				</IdInitOp>
 				<IdInitOp>
@@ -58,9 +67,7 @@
 				</ParDeclOp>
 			</ParDecls>
 			<ReturnTypes>
-				<ReturnType type="int"/>
-				<ReturnType type="float"/>
-				<ReturnType type="void"/>
+				<ReturnType type="string"/>
 			</ReturnTypes>
 			<ProcBodyOp>
 				<VarDecls>

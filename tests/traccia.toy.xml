@@ -13,7 +13,7 @@
 	</VarDecls>
 	<Procs>
 		<ProcOp>
-			<Id name="sum"/>
+			<Id name="add"/>
 			<ParDecls>
 				<ParDeclOp>
 					<Type type="float"/>
@@ -28,15 +28,20 @@
 			</ReturnTypes>
 			<ProcBodyOp>
 				<ReturnExprList>
-					<PlusOp>
-						<Id name="x"/>
-						<Id name="y"/>
-					</PlusOp>
+					<CallProcOp>
+						<Id name="sub"/>
+						<ExprList>
+							<Id name="x"/>
+							<UMinusOp>
+								<Id name="y"/>
+							</UMinusOp>
+						</ExprList>
+					</CallProcOp>
 				</ReturnExprList>
 			</ProcBodyOp>
 		</ProcOp>
 		<ProcOp>
-			<Id name="diff"/>
+			<Id name="sub"/>
 			<ParDecls>
 				<ParDeclOp>
 					<Type type="float"/>
@@ -98,7 +103,7 @@
 			<ProcBodyOp>
 				<VarDecls>
 					<VarDeclOp>
-						<Type type="int"/>
+						<Type type="float"/>
 						<IdInitOps>
 							<IdInitOp>
 								<Id name="result"/>
@@ -121,7 +126,7 @@
 									<Id name="result"/>
 								</Ids>
 								<ExprList>
-									<IntConst const="0"/>
+									<FloatConst const="0.01"/>
 								</ExprList>
 							</AssignOp>
 						</BodyOp>
@@ -160,7 +165,6 @@
 							</IdInitOp>
 							<IdInitOp>
 								<Id name="res"/>
-								<IntConst const="0"/>
 							</IdInitOp>
 						</IdInitOps>
 					</VarDeclOp>

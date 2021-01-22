@@ -2,7 +2,10 @@ package app;
 
 import app.gen.Yylex;
 import app.gen.parser;
+import app.visitor.ScopingVisitor;
+import app.visitor.TypeCheckingVisitor;
 import app.visitor.XmlNodeVisitor;
+import app.visitor.scope.ScopingTable;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,11 +25,27 @@ public class Driver {
 			Reader keyboard = new BufferedReader(new InputStreamReader(System.in));
 			lexer = new Yylex(keyboard);
 		}
+		/*while (!lexer.yyatEOF()) {
+			Symbol token = lexer.next_token();
+			System.out.print(sym.terminalNames[token.sym]);
+			if (token.value != null)
+				System.out.println(" -> " + token.value);
+			else
+				System.out.println();
+		}*/
 		parser p = new parser(lexer);
 		java_cup.runtime.Symbol res = p.parse();
 		Node root = (Node) res.value;
 		XmlNodeVisitor xmlNodeVisitor = new XmlNodeVisitor();
 		root.accept(xmlNodeVisitor);
+
+		ScopingVisitor scopingVisitor = new ScopingVisitor();
+		ScopingTable rootScopingTable = (ScopingTable) root.accept(scopingVisitor);
+
+		TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor(rootScopingTable);
+		root.accept(typeCheckingVisitor);
+
+
 		String astFilePath;
 		if (args.length == 1) {
 			astFilePath = args[0];
