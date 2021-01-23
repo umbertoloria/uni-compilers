@@ -1,1 +1,196 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ProgramOp><VarDecls><VarDeclOp><Type type="string"/><IdInitOps><IdInitOp><Id name="nome"/><StringConst const="Michele"/></IdInitOp></IdInitOps></VarDeclOp></VarDecls><Procs><ProcOp><Id name="multAddDiff"/><ReturnTypes><Type type="int"/><Type type="int"/><Type type="int"/></ReturnTypes><ProcBodyOp><VarDecls><VarDeclOp><Type type="int"/><IdInitOps><IdInitOp><Id name="primo"/></IdInitOp><IdInitOp><Id name="secondo"/></IdInitOp><IdInitOp><Id name="mul"/></IdInitOp><IdInitOp><Id name="add"/></IdInitOp><IdInitOp><Id name="diff"/></IdInitOp></IdInitOps></VarDeclOp></VarDecls><ReturnExprList><Id name="mul"/><Id name="add"/><Id name="diff"/></ReturnExprList><BodyOp><WriteOp><ExprList><StringConst const="Inserire il primo argomento:\n"/></ExprList></WriteOp><ReadlnOp><Ids><Id name="primo"/></Ids></ReadlnOp><WriteOp><ExprList><StringConst const="Inserire il secondo argomento:\n"/></ExprList></WriteOp><ReadlnOp><Ids><Id name="secondo"/></Ids></ReadlnOp><AssignOp><Ids><Id name="mul"/><Id name="add"/><Id name="diff"/></Ids><ExprList><TimesOp><Id name="primo"/><Id name="secondo"/></TimesOp><PlusOp><Id name="primo"/><Id name="secondo"/></PlusOp><MinusOp><Id name="primo"/><Id name="secondo"/></MinusOp></ExprList></AssignOp></BodyOp></ProcBodyOp></ProcOp><ProcOp><Id name="writeNewLines"/><ParDecls><ParDeclOp><Type type="int"/><Ids><Id name="n"/></Ids></ParDeclOp></ParDecls><ProcBodyOp><BodyOp><WhileOp><GTOp><Id name="n"/><IntConst const="0"/></GTOp><IterStmts><BodyOp><WriteOp><ExprList><StringConst const="\n"/></ExprList></WriteOp><AssignOp><Ids><Id name="n"/></Ids><ExprList><MinusOp><Id name="n"/><IntConst const="1"/></MinusOp></ExprList></AssignOp></BodyOp></IterStmts></WhileOp></BodyOp></ProcBodyOp></ProcOp><ProcOp><Id name="main"/><ProcBodyOp><VarDecls><VarDeclOp><Type type="int"/><IdInitOps><IdInitOp><Id name="a"/></IdInitOp><IdInitOp><Id name="b"/></IdInitOp><IdInitOp><Id name="c"/><IntConst const="0"/></IdInitOp></IdInitOps></VarDeclOp></VarDecls><BodyOp><AssignOp><Ids><Id name="a"/><Id name="b"/><Id name="c"/></Ids><ExprList><CallProcOp><Id name="multAddDiff"/></CallProcOp></ExprList></AssignOp><WriteOp><ExprList><StringConst const="Ciao "/><Id name="nome"/></ExprList></WriteOp><CallProcOp><Id name="writeNewLines"/><ExprList><IntConst const="2"/></ExprList></CallProcOp><WriteOp><ExprList><StringConst const="I tuoi valori sono:\n"/><Id name="a"/><StringConst const=" per la moltiplicazione\n"/><Id name="b"/><StringConst const=" per la somma, e \n"/><Id name="c"/><StringConst const=" per la differenza"/></ExprList></WriteOp></BodyOp></ProcBodyOp></ProcOp></Procs></ProgramOp>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ProgramOp>
+	<VarDecls>
+		<VarDeclOp>
+			<Type type="string"/>
+			<IdInitOps>
+				<IdInitOp>
+					<Id name="nome"/>
+					<StringConst const="Michele"/>
+				</IdInitOp>
+			</IdInitOps>
+		</VarDeclOp>
+	</VarDecls>
+	<Procs>
+		<ProcOp>
+			<Id name="multAddDiff"/>
+			<ReturnTypes>
+				<Type type="int"/>
+				<Type type="int"/>
+				<Type type="int"/>
+			</ReturnTypes>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="primo"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="secondo"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="mul"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="add"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="diff"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<ReturnExprList>
+					<Id name="mul"/>
+					<Id name="add"/>
+					<Id name="diff"/>
+				</ReturnExprList>
+				<BodyOp>
+					<WriteOp>
+						<ExprList>
+							<StringConst const="Inserire il primo argomento:\n"/>
+						</ExprList>
+					</WriteOp>
+					<ReadlnOp>
+						<Ids>
+							<Id name="primo"/>
+						</Ids>
+					</ReadlnOp>
+					<WriteOp>
+						<ExprList>
+							<StringConst const="Inserire il secondo argomento:\n"/>
+						</ExprList>
+					</WriteOp>
+					<ReadlnOp>
+						<Ids>
+							<Id name="secondo"/>
+						</Ids>
+					</ReadlnOp>
+					<AssignOp>
+						<Ids>
+							<Id name="mul"/>
+							<Id name="add"/>
+							<Id name="diff"/>
+						</Ids>
+						<ExprList>
+							<TimesOp>
+								<Id name="primo"/>
+								<Id name="secondo"/>
+							</TimesOp>
+							<PlusOp>
+								<Id name="primo"/>
+								<Id name="secondo"/>
+							</PlusOp>
+							<MinusOp>
+								<Id name="primo"/>
+								<Id name="secondo"/>
+							</MinusOp>
+						</ExprList>
+					</AssignOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="writeNewLines"/>
+			<ParDecls>
+				<ParDeclOp>
+					<Type type="int"/>
+					<Ids>
+						<Id name="n"/>
+					</Ids>
+				</ParDeclOp>
+			</ParDecls>
+			<ProcBodyOp>
+				<BodyOp>
+					<WhileOp>
+						<GTOp>
+							<Id name="n"/>
+							<IntConst const="0"/>
+						</GTOp>
+						<IterStmts>
+							<BodyOp>
+								<WriteOp>
+									<ExprList>
+										<StringConst const="\n"/>
+									</ExprList>
+								</WriteOp>
+								<AssignOp>
+									<Ids>
+										<Id name="n"/>
+									</Ids>
+									<ExprList>
+										<MinusOp>
+											<Id name="n"/>
+											<IntConst const="1"/>
+										</MinusOp>
+									</ExprList>
+								</AssignOp>
+							</BodyOp>
+						</IterStmts>
+					</WhileOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+		<ProcOp>
+			<Id name="main"/>
+			<ProcBodyOp>
+				<VarDecls>
+					<VarDeclOp>
+						<Type type="int"/>
+						<IdInitOps>
+							<IdInitOp>
+								<Id name="a"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="b"/>
+							</IdInitOp>
+							<IdInitOp>
+								<Id name="c"/>
+								<IntConst const="0"/>
+							</IdInitOp>
+						</IdInitOps>
+					</VarDeclOp>
+				</VarDecls>
+				<BodyOp>
+					<AssignOp>
+						<Ids>
+							<Id name="a"/>
+							<Id name="b"/>
+							<Id name="c"/>
+						</Ids>
+						<ExprList>
+							<CallProcOp>
+								<Id name="multAddDiff"/>
+							</CallProcOp>
+						</ExprList>
+					</AssignOp>
+					<WriteOp>
+						<ExprList>
+							<StringConst const="Ciao "/>
+							<Id name="nome"/>
+						</ExprList>
+					</WriteOp>
+					<CallProcOp>
+						<Id name="writeNewLines"/>
+						<ExprList>
+							<IntConst const="2"/>
+						</ExprList>
+					</CallProcOp>
+					<WriteOp>
+						<ExprList>
+							<StringConst const="I tuoi valori sono:\n"/>
+							<Id name="a"/>
+							<StringConst const=" per la moltiplicazione\n"/>
+							<Id name="b"/>
+							<StringConst const=" per la somma, e \n"/>
+							<Id name="c"/>
+							<StringConst const=" per la differenza"/>
+						</ExprList>
+					</WriteOp>
+				</BodyOp>
+			</ProcBodyOp>
+		</ProcOp>
+	</Procs>
+</ProgramOp>

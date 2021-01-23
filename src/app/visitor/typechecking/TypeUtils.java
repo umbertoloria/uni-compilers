@@ -1,4 +1,4 @@
-package app.visitor;
+package app.visitor.typechecking;
 
 import app.node.TypeNode;
 

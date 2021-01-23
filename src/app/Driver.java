@@ -2,10 +2,10 @@ package app;
 
 import app.gen.Yylex;
 import app.gen.parser;
-import app.visitor.ScopingVisitor;
-import app.visitor.TypeCheckingVisitor;
-import app.visitor.XmlNodeVisitor;
-import app.visitor.scope.ScopingTable;
+import app.visitor.scoping.ScopingVisitor;
+import app.visitor.typechecking.TypeCheckingVisitor;
+import app.visitor.xmlgenerator.XmlNodeVisitor;
+import app.visitor.scoping.ScopingTable;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

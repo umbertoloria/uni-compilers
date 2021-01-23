@@ -1,4 +1,4 @@
-package app.visitor.scope;
+package app.visitor.scoping;
 
 import java.util.*;
 

@@ -1,10 +1,12 @@
-package app.visitor;
+package app.visitor.typechecking;
 
 import app.node.*;
 import app.node.binop.*;
 import app.node.expr.*;
 import app.node.stat.*;
-import app.visitor.scope.ScopingTable;
+import app.visitor.DFSBaseVisitor;
+import app.visitor.INodeVisitor;
+import app.visitor.scoping.ScopingTable;
 
 import java.util.stream.Collectors;
 

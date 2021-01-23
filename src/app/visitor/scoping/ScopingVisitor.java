@@ -1,9 +1,10 @@
-package app.visitor;
+package app.visitor.scoping;
 
 import app.node.*;
 import app.node.expr.CallProcOP;
 import app.node.expr.Id;
-import app.visitor.scope.ScopingTable;
+import app.visitor.DFSBaseVisitor;
+import app.visitor.INodeVisitor;
 
 public class ScopingVisitor extends DFSBaseVisitor implements INodeVisitor {
 

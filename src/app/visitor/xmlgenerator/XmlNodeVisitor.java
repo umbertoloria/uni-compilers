@@ -1,9 +1,10 @@
-package app.visitor;
+package app.visitor.xmlgenerator;
 
 import app.node.*;
 import app.node.binop.*;
 import app.node.expr.*;
 import app.node.stat.*;
+import app.visitor.INodeVisitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
