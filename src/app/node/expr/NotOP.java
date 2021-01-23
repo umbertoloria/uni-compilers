@@ -5,14 +5,10 @@ import app.visitor.INodeVisitor;
 
 public class NotOP extends ExprNode {
 
-	private ExprNode expr;
+	public final ExprNode expr;
 
 	public NotOP(ExprNode expr) {
 		this.expr = expr;
-	}
-
-	public ExprNode getExpr() {
-		return expr;
 	}
 
 	@Override

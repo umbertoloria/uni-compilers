@@ -16,6 +16,10 @@ proc factorial(int n)int:
     -> result
 corp;
 
+proc xx() int, int:
+    -> 1, 1
+corp;
+
 proc main()void:
 
     while

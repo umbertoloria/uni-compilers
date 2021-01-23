@@ -6,9 +6,9 @@ import app.visitor.INodeVisitor;
 
 public class WhileOP extends StatNode {
 
-	private BodyOP preStmts;
-	private ExprNode expr;
-	private BodyOP iterStmts;
+	public final BodyOP preStmts;
+	public final ExprNode expr;
+	public final BodyOP iterStmts;
 
 	public WhileOP(BodyOP preStmts, ExprNode expr, BodyOP iterStmts) {
 		this.preStmts = preStmts;
@@ -20,18 +20,6 @@ public class WhileOP extends StatNode {
 		if (iterStmts == null) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public BodyOP getPreStmts() {
-		return preStmts;
-	}
-
-	public ExprNode getExpr() {
-		return expr;
-	}
-
-	public BodyOP getIterStmts() {
-		return iterStmts;
 	}
 
 	@Override

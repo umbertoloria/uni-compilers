@@ -40,7 +40,7 @@ nonterminal CallProc;
 // ProcList
 nonterminal ProcList, Proc;
 nonterminal ParamDeclList, ParDecl, IdList;
-nonterminal ResultTypeList, ResultType;
+nonterminal ResultTypeList, TypeList;
 nonterminal ReturnExprs;
 nonterminal StatList, Stat;
 nonterminal IfStat, ElifList, Elif, Else;
@@ -101,23 +101,23 @@ ExprList ::= Expr:e COMMA ExprList:es {: ((List<ExprNode>) es).add(0, (ExprNode)
 ProcList ::= Proc:p ProcList:ps {: ((List<ProcOP>) ps).add(0, (ProcOP) p); RESULT = ps; :}
            | Proc:p             {: RESULT = new LinkedList<ProcOP>(); ((List<ProcOP>) RESULT).add((ProcOP) p); :};
 Proc ::= PROC ID:i LPAR ParamDeclList:pds RPAR ResultTypeList:rts COLON VarDeclList:vds StatList:ss RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
+         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<TypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR ParamDeclList:pds RPAR ResultTypeList:rts COLON VarDeclList:vds             RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :}
+         {: RESULT = new ProcOP(new Id(i), (List<ParDeclOP>) pds, (List<TypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR                   RPAR ResultTypeList:rts COLON VarDeclList:vds StatList:ss RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new ProcOP(new Id(i), null, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
+         {: RESULT = new ProcOP(new Id(i), null, (List<TypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, (BodyOP) ss, (List<ExprNode>) res)); :}
        | PROC ID:i LPAR                   RPAR ResultTypeList:rts COLON VarDeclList:vds             RETURN ReturnExprs:res CORP SEMI
-         {: RESULT = new ProcOP(new Id(i), null, (List<ResultTypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :};
+         {: RESULT = new ProcOP(new Id(i), null, (List<TypeNode>) rts, new ProcBodyOP((List<VarDeclOP>) vds, null, (List<ExprNode>) res)); :};
 ParamDeclList ::= ParamDeclList:pds SEMI ParDecl:pd {: ((List) pds).add(pd); RESULT = pds; :}
                 | ParDecl:pd                        {: RESULT = new LinkedList(); ((List) RESULT).add(pd); :};
 ParDecl ::= Type:t IdList:is {: RESULT = new ParDeclOP((TypeNode) t, (List<Id>) is); :};
 IdList ::= IdList:is COMMA ID:i {: ((List<Id>) is).add(new Id(i)); RESULT = is; :}
          | ID:i                 {: RESULT = new LinkedList<Id>(); ((List<Id>) RESULT).add(new Id(i)); :};
+ResultTypeList ::= TypeList:ts {: RESULT = ts; :}
+                 | VOID        {: RESULT = null; :};
+TypeList ::= Type:t COMMA TypeList:ts {: ((List<TypeNode>) ts).add(0, (TypeNode) t); RESULT = ts; :}
+           | Type:t                   {: RESULT = new LinkedList<TypeNode>(); ((List<TypeNode>) RESULT).add((TypeNode) t); :};
 
-ResultTypeList ::= ResultType:rt COMMA ResultTypeList:rts {: ((List<ResultTypeNode>) rts).add(0, (ResultTypeNode) rt); RESULT = rts; :}
-                 | ResultType:rt                          {: RESULT = new LinkedList<ResultTypeNode>(); ((List<ResultTypeNode>) RESULT).add((ResultTypeNode) rt); :};
-ResultType ::= Type:t {: RESULT = new ResultTypeNode((TypeNode) t); :}
-             | VOID   {: RESULT = ResultTypeNode.VOID; :};
 ReturnExprs ::= ExprList:es {: RESULT = es; :}
               | /* empty */ {: RESULT = null; :};
 

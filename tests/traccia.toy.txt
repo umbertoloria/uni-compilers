@@ -28,7 +28,7 @@ proc main() int:
     float a, b, res;
     int kind;
 
-    while yesOrNo do
+    while write("pre"); -> yesOrNo do
 
         write("\n[1] Addizione\n");
         write("[2] Sottrazione\n");

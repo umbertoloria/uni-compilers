@@ -7,14 +7,10 @@ import java.util.LinkedList;
 
 public class BodyOP extends StatNode {
 
-	private LinkedList<StatNode> stmts = new LinkedList<>();
+	public final LinkedList<StatNode> stmts = new LinkedList<>();
 
 	public BodyOP(StatNode stmt) {
 		prepend(stmt);
-	}
-
-	public LinkedList<StatNode> getStmts() {
-		return stmts;
 	}
 
 	public BodyOP prepend(StatNode stmt) {

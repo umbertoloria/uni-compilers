@@ -7,9 +7,7 @@ public class ScopingTable {
 	private final String scopeName;
 	private ScopingTable parent;
 
-	// FIXME: order is important?
-	private Map<String, ScopingTable> childrens = new HashMap<>();
-	private List<String> childrensNames = new LinkedList<>();
+	private Map<String, ScopingTable> childrens = new LinkedHashMap<>();
 
 	private Map<String, String> decls = new HashMap<>();
 	private Set<String> blacklistProcedures = new HashSet<>();
@@ -27,16 +25,14 @@ public class ScopingTable {
 		this.parent = parent;
 	}
 
-	/*public List<ScopingTable> getChildrens() {
-		return childrens;
-	}*/
-
-	public void appendChild(ScopingTable child) {
-		childrensNames.add(child.scopeName);
-		childrens.put(child.scopeName, child);
+	public ScopingTable createChild(String name) {
+		ScopingTable childScopingTable = new ScopingTable(name);
+		childScopingTable.setParent(this);
+		childrens.put(name, childScopingTable);
+		return childScopingTable;
 	}
 
-	// BL
+	// Scoping BL
 	public void declareVariable(String name, String type) {
 		// type does not contains "->"
 		if (decls.containsKey(name)) {
@@ -71,31 +67,40 @@ public class ScopingTable {
 
 	private boolean isUnreachable(String name) {
 		// TODO: forse si può ancora usare uno stack: quando chiudi uno scope fai galleggiare sopra la blacklist?
-		// ovviamente quando scendi non la fai scendere. Però è *sempre* vero che risolvendo le dipendenze nel padre, i
-		// figli che sono morti sarebbero soddifatti?
+		//  ovviamente quando scendi non la fai scendere. Però è *sempre* vero che risolvendo le dipendenze nel padre, i
+		//  figli che sono morti sarebbero soddifatti?
 		ScopingTable t = this;
-		while (t != null && (!t.decls.containsKey(name) || t.decls.get(name) == null))
+		while (t != null && !t.decls.containsKey(name))
 			t = t.getParent();
 		return t == null;
 	}
 
-	/*public void resolveUnmatchedUsages() {
-		for (String blacklistProcedure : blacklistProcedures) {
-			if (parent == null || parent.isUnreachable(blacklistProcedure)) {
-				throw new IllegalStateException("Dichiarazione mancante di '" + blacklistProcedure + "'");
-			}
-		}
-	}*/
-
 	public void resolveUnmatchedUsages() {
-		for (String childrensName : childrensNames) {
-			childrens.get(childrensName).resolveUnmatchedUsages();
+		for (String childrenName : childrens.keySet()) {
+			childrens.get(childrenName).resolveUnmatchedUsages();
 		}
 		for (String blacklistProcedure : blacklistProcedures) {
 			if (parent == null || parent.isUnreachable(blacklistProcedure)) {
 				throw new IllegalStateException("Dichiarazione mancante di '" + blacklistProcedure + "'");
 			}
 		}
+	}
+
+	// Type-checking BL
+	public String getTypeOfCloser(String name) {
+		ScopingTable t = this;
+		while (t != null && (!t.decls.containsKey(name) || t.decls.get(name) == null))
+			t = t.getParent();
+		if (t != null) {
+			return t.decls.get(name);
+		} else {
+			// TODO: non può succedere nella fase di Type-checking se tutto è andato bene in Scoping
+			throw new IllegalStateException();
+		}
+	}
+
+	public ScopingTable getScopingTableOf(String name) {
+		return childrens.get(name);
 	}
 
 	@Override
@@ -103,30 +108,4 @@ public class ScopingTable {
 		return scopeName;
 	}
 
-	// for TypeCheckingVisitor
-	public String getStringType_ofParents_Of(String name) {
-		// FIXME: sure not to check? I thing it's here right *because* of the existence of this variable
-		ScopingTable t = this;
-		while (t != null && (!t.decls.containsKey(name) || t.decls.get(name) == null))
-			t = t.getParent();
-		if (t != null) {
-			return t.decls.get(name);
-		} else {
-			// TODO: non può succedere nella fase di TypeChecking se tutto è andato bene in Scoping
-			throw new IllegalStateException();
-		}
-	}
-
-	public ScopingTable getChildByName(String name) {
-		// TODO: otherwise throw exception?
-		return childrens.get(name);
-	}
-
-	public ScopingTable createChild(String name) {
-		ScopingTable childScopingTable = new ScopingTable(name);
-		childScopingTable.setParent(this);
-		childrensNames.add(name);
-		childrens.put(name, childScopingTable);
-		return childScopingTable;
-	}
 }

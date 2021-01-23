@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ProgramOP extends Node {
 
-	private List<VarDeclOP> varDecls;
-	private List<ProcOP> procs;
+	public final List<VarDeclOP> varDecls;
+	public final List<ProcOP> procs;
 
 	public ProgramOP(List<VarDeclOP> varDecls, List<ProcOP> procs) {
 		this.varDecls = varDecls;
@@ -16,14 +16,6 @@ public class ProgramOP extends Node {
 		if (procs == null || procs.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public List<VarDeclOP> getVarDecls() {
-		return varDecls;
-	}
-
-	public List<ProcOP> getProcs() {
-		return procs;
 	}
 
 	@Override

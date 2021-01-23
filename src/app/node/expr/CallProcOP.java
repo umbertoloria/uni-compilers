@@ -7,8 +7,8 @@ import java.util.List;
 
 public class CallProcOP extends ExprNode {
 
-	private Id procId;
-	private List<ExprNode> exprs;
+	public final Id procId;
+	public final List<ExprNode> exprs;
 
 	public CallProcOP(Id procId, List<ExprNode> exprs) {
 		this.procId = procId;
@@ -16,14 +16,6 @@ public class CallProcOP extends ExprNode {
 			throw new IllegalStateException();
 		}
 		this.exprs = exprs;
-	}
-
-	public Id getProcId() {
-		return procId;
-	}
-
-	public List<ExprNode> getExprs() {
-		return exprs;
 	}
 
 	@Override

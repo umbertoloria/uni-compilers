@@ -14,7 +14,6 @@ public interface INodeVisitor {
 
 	Object visitProcOP(ProcOP procOP);
 	Object visitParDeclOP(ParDeclOP parDeclOP);
-	Object visitResultTypeNode(ResultTypeNode resultTypeNode);
 	Object visitProcBodyOP(ProcBodyOP procBodyOP);
 
 	Object visitBodyOP(BodyOP bodyOP);

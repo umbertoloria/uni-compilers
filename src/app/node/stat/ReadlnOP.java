@@ -8,17 +8,13 @@ import java.util.List;
 
 public class ReadlnOP extends StatNode {
 
-	private List<Id> ids;
+	public final List<Id> ids;
 
 	public ReadlnOP(List<Id> ids) {
 		this.ids = ids;
 		if (ids == null || ids.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public List<Id> getIds() {
-		return ids;
 	}
 
 	@Override

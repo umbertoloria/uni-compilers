@@ -6,8 +6,8 @@ import app.visitor.INodeVisitor;
 
 public class ElifOP extends StatNode {
 
-	private ExprNode expr;
-	private BodyOP body;
+	public final ExprNode expr;
+	public final BodyOP body;
 
 	public ElifOP(ExprNode expr, BodyOP body) {
 		this.expr = expr;
@@ -18,14 +18,6 @@ public class ElifOP extends StatNode {
 		if (body == null) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public ExprNode getExpr() {
-		return expr;
-	}
-
-	public BodyOP getBody() {
-		return body;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 int n := PI -1, x, y := 7;
 float y := 5, z;
-proc main(int a, b; float c; int x)int, float, void:
+proc main(int a, b; float c; int x)int, float:
     int result;
 
     readln(result);

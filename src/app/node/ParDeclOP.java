@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ParDeclOP extends Node {
 
-	private TypeNode type;
-	private List<Id> ids;
+	public final TypeNode type;
+	public final List<Id> ids;
 
 	public ParDeclOP(TypeNode type, List<Id> ids) {
 		this.type = type;
@@ -20,14 +20,6 @@ public class ParDeclOP extends Node {
 		if (ids == null || ids.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public TypeNode getType() {
-		return type;
-	}
-
-	public List<Id> getIds() {
-		return ids;
 	}
 
 	@Override

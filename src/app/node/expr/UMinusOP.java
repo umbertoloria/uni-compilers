@@ -5,14 +5,10 @@ import app.visitor.INodeVisitor;
 
 public class UMinusOP extends ExprNode {
 
-	private ExprNode expr;
+	public final ExprNode expr;
 
 	public UMinusOP(ExprNode expr) {
 		this.expr = expr;
-	}
-
-	public ExprNode getExpr() {
-		return expr;
 	}
 
 	@Override

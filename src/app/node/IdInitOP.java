@@ -6,8 +6,8 @@ import app.visitor.INodeVisitor;
 
 public class IdInitOP extends Node {
 
-	private Id id;
-	private ExprNode expr;
+	public final Id id;
+	public final ExprNode expr;
 
 	public IdInitOP(Id id, ExprNode expr) {
 		this.id = id;
@@ -15,14 +15,6 @@ public class IdInitOP extends Node {
 			throw new IllegalStateException();
 		}
 		this.expr = expr;
-	}
-
-	public Id getId() {
-		return id;
-	}
-
-	public ExprNode getExpr() {
-		return expr;
 	}
 
 	@Override

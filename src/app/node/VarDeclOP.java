@@ -7,8 +7,8 @@ import java.util.List;
 
 public class VarDeclOP extends Node {
 
-	private TypeNode type;
-	private List<IdInitOP> idInits;
+	public final TypeNode type;
+	public final List<IdInitOP> idInits;
 
 	public VarDeclOP(TypeNode type, List<IdInitOP> idInits) {
 		this.type = type;
@@ -19,14 +19,6 @@ public class VarDeclOP extends Node {
 		if (idInits == null || idInits.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public TypeNode getType() {
-		return type;
-	}
-
-	public List<IdInitOP> getIdInits() {
-		return idInits;
 	}
 
 	@Override

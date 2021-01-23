@@ -9,8 +9,8 @@ import java.util.List;
 
 public class AssignOP extends StatNode {
 
-	private List<Id> ids;
-	private List<ExprNode> exprs;
+	public final List<Id> ids;
+	public final List<ExprNode> exprs;
 
 	public AssignOP(List<Id> ids, List<ExprNode> exprs) {
 		this.ids = ids;
@@ -21,14 +21,6 @@ public class AssignOP extends StatNode {
 		if (exprs == null || exprs.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public List<Id> getIds() {
-		return ids;
-	}
-
-	public List<ExprNode> getExprs() {
-		return exprs;
 	}
 
 	@Override

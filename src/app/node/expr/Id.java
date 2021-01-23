@@ -5,17 +5,13 @@ import app.visitor.INodeVisitor;
 
 public class Id extends ExprNode {
 
-	private String name;
+	public final String name;
 
 	public Id(String name) {
 		this.name = name;
 		if (name == null || name.isEmpty()) {
 			throw new IllegalStateException();
 		}
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	@Override
