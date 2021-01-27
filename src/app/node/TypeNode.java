@@ -1,6 +1,5 @@
 package app.node;
 
-import app.Node;
 import app.visitor.INodeVisitor;
 
 public class TypeNode extends Node {

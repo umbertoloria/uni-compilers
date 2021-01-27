@@ -7,7 +7,7 @@ package app.gen;
 
 import java.util.List;
 import java.util.LinkedList;
-import app.Node;
+import app.node.Node;
 import app.node.*;
 import app.node.binop.*;
 import app.node.expr.*;

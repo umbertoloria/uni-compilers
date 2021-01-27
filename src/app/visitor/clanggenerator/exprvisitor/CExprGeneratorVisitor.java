@@ -6,7 +6,7 @@ import app.node.TypeNode;
 import app.node.binop.*;
 import app.node.expr.*;
 import app.visitor.ExclusiveNodeVisitor;
-import app.visitor.clanggenerator.CLangCodeEditor;
+import app.visitor.clanggenerator.ClangCodeEditor;
 import app.visitor.clanggenerator.TmpVarNameGenerator;
 
 import java.util.LinkedList;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 
-	private CLangCodeEditor cLangCodeEditor;
+	private ClangCodeEditor clangCodeEditor;
 	private TmpVarNameGenerator tmpVarNameGenerator;
 
-	public CExprGeneratorVisitor(CLangCodeEditor cLangCodeEditor, TmpVarNameGenerator tmpVarNameGenerator) {
-		this.cLangCodeEditor = cLangCodeEditor;
+	public CExprGeneratorVisitor(ClangCodeEditor clangCodeEditor, TmpVarNameGenerator tmpVarNameGenerator) {
+		this.clangCodeEditor = clangCodeEditor;
 		this.tmpVarNameGenerator = tmpVarNameGenerator;
 	}
 
@@ -93,7 +93,7 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 			if (callProcOP.type.contains(",")) {
 				String procName = callProcOP.procId.name;
 				String newVarName = tmpVarNameGenerator.newName(procName);
-				cLangCodeEditor.invokeWithResult(cStructType, newVarName, procName, cParamExprs);
+				clangCodeEditor.invokeWithResult(cStructType, newVarName, procName, cParamExprs);
 				int retExprsCount = callProcOP.type.split(",").length;
 				List<String> cRetExprs = new LinkedList<>();
 				for (int i = 0; i < retExprsCount; i++) {

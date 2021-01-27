@@ -5,6 +5,7 @@ import app.node.binop.*;
 import app.node.expr.*;
 import app.node.stat.*;
 import app.visitor.DFSBaseVisitor;
+import app.visitor.ErrorsManager;
 import app.visitor.scoping.ScopingTable;
 
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 
 	private ScopingTable scopingTable;
 	private TypeUtils typeUtils = new TypeUtils();
+	private ErrorsManager errorsManager = new ErrorsManager();
 
 	public TypeCheckingVisitor(ScopingTable scopingTable) {
 		this.scopingTable = scopingTable;
@@ -35,7 +37,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 		scopingTable = scopingTable.getScopingTableOf(procOP.id.name);
 		procOP.procBody.accept(this);
 		scopingTable = scopingTable.getParent();
-		// Type-matching formal and actual return expressions
+		// Type-matching tra espressioni formali e attuali
 		String procType = scopingTable.getTypeInCloserScopeGoingUp(procOP.id.name);
 		String formalRetExprType = procType.substring(procType.indexOf("->") + 2);
 		String actuRetExprTypes = "";
@@ -51,7 +53,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	public Void visitIfOP(IfOP ifOP) {
 		super.visitIfOP(ifOP);
 		if (!typeUtils.isBool(ifOP.expr.type)) {
-			throw new IllegalStateException("expression must be boolean");
+			errorsManager.typeMismatchInCondition(ifOP.expr.type);
 		}
 		return null;
 	}
@@ -60,7 +62,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	public Void visitElifOP(ElifOP elifOP) {
 		super.visitElifOP(elifOP);
 		if (!typeUtils.isBool(elifOP.expr.type)) {
-			throw new IllegalStateException("expression must be boolean");
+			errorsManager.typeMismatchInCondition(elifOP.expr.type);
 		}
 		return null;
 	}
@@ -69,7 +71,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	public Void visitWhileOP(WhileOP whileOP) {
 		super.visitWhileOP(whileOP);
 		if (!typeUtils.isBool(whileOP.expr.type)) {
-			throw new IllegalStateException("expression must be boolean");
+			errorsManager.typeMismatchInCondition(whileOP.expr.type);
 		}
 		return null;
 	}
@@ -77,7 +79,6 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	@Override
 	public Void visitAssignOP(AssignOP assignOP) {
 		super.visitAssignOP(assignOP);
-		// TODO: (i = 5) restituisce 5, una cosa a cui pensare...
 		String idsType = assignOP.ids.stream().map(id -> id.type).collect(Collectors.joining(","));
 		String exprsType = assignOP.exprs.stream().map(exprNode -> exprNode.type).collect(Collectors.joining(","));
 		typeUtils.assertCanAssign(exprsType, idsType);
@@ -216,26 +217,26 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 		return visitComparisionOperation(eqop);
 	}
 
-	// BOOLEAN BINARY OPERATIONS
-	private Void visitBooleanBinaryOperation(BinaryOperationNode bon) {
+	// BINARY BOOLEAN OPERATIONS
+	private Void visitBinaryBooleanOperation(BinaryOperationNode bon) {
 		bon.a.accept(this);
 		bon.b.accept(this);
 		if (typeUtils.isBool(bon.a.type) && typeUtils.isBool(bon.b.type)) {
 			bon.type = typeUtils.getBoolType();
-			return null;
 		} else {
-			throw new IllegalStateException("set some conversion tables...");
+			errorsManager.typeMismatchInBinaryBooleanOperation(bon.a.type, bon.b.type);
 		}
+		return null;
 	}
 
 	@Override
 	public Void visitAndOP(AndOP andOP) {
-		return visitBooleanBinaryOperation(andOP);
+		return visitBinaryBooleanOperation(andOP);
 	}
 
 	@Override
 	public Void visitOrOP(OrOP orOP) {
-		return visitBooleanBinaryOperation(orOP);
+		return visitBinaryBooleanOperation(orOP);
 	}
 
 	// BINARY ARITHMETIC OPERATIONS
@@ -243,7 +244,7 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 		bon.a.accept(this);
 		bon.b.accept(this);
 		if (!typeUtils.isNumber(bon.a.type) || !typeUtils.isNumber(bon.b.type)) {
-			throw new IllegalStateException("set some conversion tables...");
+			errorsManager.typeMismatchInBinaryArithmeticOperation(bon.a.type, bon.b.type);
 		} else if (typeUtils.isInt(bon.a.type) && typeUtils.isInt(bon.b.type)) {
 			bon.type = typeUtils.getIntType();
 		} else {

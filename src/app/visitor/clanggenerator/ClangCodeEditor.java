@@ -4,7 +4,7 @@ import app.node.TypeNode;
 
 import java.util.*;
 
-public class CLangCodeEditor {
+public class ClangCodeEditor {
 
 	public void putCLikeExpr(String line) {
 		code.append(line);
@@ -32,7 +32,7 @@ public class CLangCodeEditor {
 	private StringBuilder code = new StringBuilder();
 	private Set<String> declaredStructs = new HashSet<>();
 
-	public CLangCodeEditor() {
+	public ClangCodeEditor() {
 		stack.push(code);
 	}
 
@@ -100,7 +100,7 @@ public class CLangCodeEditor {
 			//     '    int t0;'
 			//     '    char* t1;'
 			//     '} int_string;'
-			code.append("typedef struct ").append(name).append(" {\n"); // MOVE THIS
+			code.append("typedef struct ").append(name).append(" {\n");
 			openBlock();
 			int varI = 0;
 			for (String cType : cTypes) {
@@ -194,8 +194,9 @@ public class CLangCodeEditor {
 	}
 
 	public void openDeclarationBlock(String cRetType, String name, List<String> cParamTypes, List<String> paramNames) {
-		if (cParamTypes.size() != paramNames.size())
+		if (cParamTypes.size() != paramNames.size()) {
 			throw new IllegalStateException();
+		}
 		code.append(cRetType).append(" ").append(name).append("(");
 		if (!paramNames.isEmpty()) {
 			Iterator<String> it1 = cParamTypes.iterator();

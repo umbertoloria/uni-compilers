@@ -2,8 +2,9 @@ package app;
 
 import app.gen.Yylex;
 import app.gen.parser;
+import app.node.Node;
 import app.visitor.ConstraintsVisitor;
-import app.visitor.clanggenerator.CLangVisitor;
+import app.visitor.clanggenerator.ClangVisitor;
 import app.visitor.scoping.ScopingTable;
 import app.visitor.scoping.ScopingVisitor;
 import app.visitor.typechecking.TypeCheckingVisitor;
@@ -69,9 +70,9 @@ public class Driver {
 		root.accept(xmlNodeVisitor1);
 		xmlNodeVisitor1.saveOnFile(astFilePath);
 
-		CLangVisitor cLangVisitor = new CLangVisitor(rootScopingTable.getAllNames());
-		root.accept(cLangVisitor);
-		cLangVisitor.saveOnFile(genFilePath);
+		ClangVisitor clangVisitor = new ClangVisitor(rootScopingTable.getAllNames());
+		root.accept(clangVisitor);
+		clangVisitor.saveOnFile(genFilePath);
 	}
 
 }

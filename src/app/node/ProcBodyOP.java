@@ -1,6 +1,5 @@
 package app.node;
 
-import app.Node;
 import app.node.stat.BodyOP;
 import app.visitor.INodeVisitor;
 

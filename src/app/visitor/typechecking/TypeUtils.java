@@ -1,6 +1,7 @@
 package app.visitor.typechecking;
 
 import app.node.TypeNode;
+import app.visitor.ErrorsManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +31,8 @@ public class TypeUtils {
 		boolCompTypes.add(TypeNode.BOOL.getStringType());
 		compatTypeSets.put(TypeNode.BOOL.getStringType(), boolCompTypes);
 	}
+
+	private ErrorsManager errorsManager = new ErrorsManager();
 
 	public String getIntType() {
 		return INT;
@@ -67,27 +70,10 @@ public class TypeUtils {
 		return isInt(type) || isFloat(type);
 	}
 
-	public boolean canAssign(String actualParamTypes, String formalParamTypes) {
-		if (formalParamTypes.isEmpty() || actualParamTypes.isEmpty()) {
-			return formalParamTypes.isEmpty() && actualParamTypes.isEmpty();
-		} else {
-			String[] actualTypes = actualParamTypes.split(",");
-			String[] formalTypes = formalParamTypes.split(",");
-			if (actualTypes.length != formalTypes.length) {
-				return false;
-			}
-			for (int i = 0; i < actualTypes.length; i++) {
-				if (!compatTypeSets.get(actualTypes[i]).contains(formalTypes[i])) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
 	public void assertCanCompare(String typeA, String typeB) {
-		if ((!isNumber(typeA) || !isNumber(typeB)) && (!isString(typeA) || !isString(typeB))) {
-			throw new IllegalStateException("Types '" + typeA + "' and '" + typeB + "' not suitable for comparison");
+		if (!(isNumber(typeA) && isNumber(typeB)) && !(isString(typeA) && isString(typeB))
+				&& !(isBool(typeA) && isBool(typeB))) {
+			errorsManager.typeMismatchInComparison(typeA, typeB);
 		}
 	}
 
@@ -97,49 +83,37 @@ public class TypeUtils {
 		} else if (isFloat(type)) {
 			return getFloatType();
 		} else {
-			throw new IllegalStateException("Type '" + type + "' not suitable for uminus");
+			errorsManager.typeMismatchInUminus(type);
+			return null;
 		}
 	}
 
 	public void assertCanNegate(String type) {
 		if (!isBool(type)) {
-			throw new IllegalStateException("Type '" + type + "' not suitable for negation");
+			errorsManager.typeMismatchInNegation(type);
 		}
 	}
 
 
-	public void assertCanAssign(String exprType, String idType) {
-		if (!exprType.isEmpty() || !idType.isEmpty()) {
-			if (!canAssign(exprType, idType)) {
-				throw new IllegalStateException("type mismatch");
-				// TODO: too generic message     ^^^^^^^^^^^^^
-			/*throw new IllegalStateException("Type mismatch in return '" + procOP.id.name
-					+ "' procedure: formal '" + formalRetExprStringTypes + "' " + "but actual '"
-					+ actualRetExprTypes + "'");*/
-			/*
-			if (!typeTable.canAssign(exprsType, idsType)) {
-				String idList = assignOP.ids.stream().map(id -> id.name).collect(Collectors.joining(","));
-				throw new IllegalStateException("Type mismatch in assignment: having '" + idList + "' left '" + idsType
-						+ "' but right '" + exprsType + "'");
-			}
-			*/
-			/*
-			if (!typeTable.canAssign(actuParamsType, formalParamsType)) {
-				throw new IllegalStateException("Badly typed invocation to '" + callProcOP.procId.name
-						+ "': expected '" + formalParamsType + "' but found '" + actuParamsType + "'");
-			}*/
-			/*
-			if (formalParamTypes == null || actualParamTypes == null) {
-				if (formalParamTypes != null || actualParamTypes != null) {
-					throw new IllegalStateException("Badly typed invocation to '" + callProcOP.procId.name
-							+ "': expected '" + formalParamTypes + "' but found '" + actualParamTypes + "'");
+	public void assertCanAssign(String actualParamTypes, String formalParamTypes) {
+		if (!actualParamTypes.isEmpty() || !formalParamTypes.isEmpty()) {
+			// Se almeno uno è non vuoto
+			if (!formalParamTypes.isEmpty() && !actualParamTypes.isEmpty()) {
+				// Se sono entrambi non vuoti
+				String[] actualTypes = actualParamTypes.split(",");
+				String[] formalTypes = formalParamTypes.split(",");
+				if (actualTypes.length != formalTypes.length) {
+					errorsManager.typeMismatchInAssign(actualParamTypes, formalParamTypes);
+				} else {
+					for (int i = 0; i < actualTypes.length; i++) {
+						if (!compatTypeSets.get(actualTypes[i]).contains(formalTypes[i])) {
+							errorsManager.typeMismatchInAssign(actualParamTypes, formalParamTypes);
+							break;
+						}
+					}
 				}
 			} else {
-				if (!formalParamTypes.canContain(actualParamTypes)) {
-					throw new IllegalStateException("Badly typed invocation to '" + callProcOP.procId.name
-							+ "': expected '" + formalParamTypes + "' but found '" + actualParamTypes + "'");
-				}
-			}*/
+				errorsManager.typeMismatchInAssign(actualParamTypes, formalParamTypes);
 			}
 		}
 	}

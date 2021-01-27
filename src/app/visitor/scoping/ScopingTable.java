@@ -1,5 +1,7 @@
 package app.visitor.scoping;
 
+import app.visitor.ErrorsManager;
+
 import java.util.*;
 
 public class ScopingTable {
@@ -11,6 +13,7 @@ public class ScopingTable {
 
 	private Map<String, String> decls = new HashMap<>();
 	private Set<String> blacklistProcedures = new HashSet<>();
+	private ErrorsManager errorsManager = new ErrorsManager();
 
 	public ScopingTable(String scopeName) {
 		this.scopeName = scopeName;
@@ -34,28 +37,28 @@ public class ScopingTable {
 
 	// Scoping BL
 	public void declareVariable(String name, String type) {
-		// type does not contains "->"
+		// 'type' non contiene '->'
 		if (decls.containsKey(name)) {
-			throw new IllegalStateException("Variabile '" + name + "' dichiarata con nome occupato");
+			errorsManager.occupiedVarName(name);
 		} else {
 			decls.put(name, type);
 		}
 	}
 
 	public void declareProcedure(String name, String type) {
-		// type contains "->"
+		// 'type' contiene '->'
 		if (decls.containsKey(name)) {
-			throw new IllegalStateException("Procedura '" + name + "' dichiarata con nome occupato");
+			errorsManager.occupiedProcName(name);
 		} else {
 			decls.put(name, type);
-			// try clean the procedures blacklist
+			// tenta di svuotare 'blacklistProcedures'
 			blacklistProcedures.remove(name);
 		}
 	}
 
 	public void useVariable(String name) {
 		if (isUnreachable(name)) {
-			throw new IllegalStateException("Variabile '" + name + "' non dichiarata");
+			errorsManager.undeclaredVariable(name);
 		}
 	}
 
@@ -81,7 +84,7 @@ public class ScopingTable {
 		}
 		for (String blacklistProcedure : blacklistProcedures) {
 			if (parent == null || parent.isUnreachable(blacklistProcedure)) {
-				throw new IllegalStateException("Dichiarazione mancante di '" + blacklistProcedure + "'");
+				errorsManager.undeclaredProcedure(blacklistProcedure);
 			}
 		}
 	}
@@ -100,7 +103,7 @@ public class ScopingTable {
 		return childrens.get(name);
 	}
 
-	// Code-generation BL
+	// Clang code-generation BL
 	public Set<String> getAllNames() {
 		Set<String> localSet = new HashSet<>(decls.keySet());
 		for (String childScopeName : childrens.keySet()) {
