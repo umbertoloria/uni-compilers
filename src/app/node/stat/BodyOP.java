@@ -22,7 +22,7 @@ public class BodyOP extends StatNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitBodyOP(this);
 	}
 

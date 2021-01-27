@@ -27,7 +27,7 @@ public class IfOP extends StatNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitIfOP(this);
 	}
 

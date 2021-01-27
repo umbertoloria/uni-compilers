@@ -1,0 +1,13 @@
+proc main() int:
+    string a := "ciao", b := "tutti";
+    if a < b then
+        write("a < b");
+    elif a <> b then
+        write("a == b");
+    elif a > b then
+        write("a > b");
+    else
+        write("dead code");
+    fi;
+    -> 0
+corp;

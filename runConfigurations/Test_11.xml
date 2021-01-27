@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Helloworld" type="Application" factoryName="Application">
+  <configuration default="false" name="Test 11" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.Driver" />
     <module name="esercitazione4" />
-    <option name="PROGRAM_PARAMETERS" value="tests/helloworld.toy.txt" />
+    <option name="PROGRAM_PARAMETERS" value="tests/test11.toy.txt" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

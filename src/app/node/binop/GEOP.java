@@ -11,7 +11,7 @@ public class GEOP extends BinaryOperationNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitGEOP(this);
 	}
 

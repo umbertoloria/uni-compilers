@@ -12,7 +12,7 @@ public class NotOP extends ExprNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitNotOP(this);
 	}
 

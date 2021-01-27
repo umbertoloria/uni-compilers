@@ -6,7 +6,7 @@ import app.visitor.INodeVisitor;
 public class True extends ExprNode {
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitTrue(this);
 	}
 

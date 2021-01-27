@@ -19,11 +19,9 @@ public class TypeUtils {
 		Set<String> intCompTypes = new HashSet<>();
 		intCompTypes.add(TypeNode.INT.getStringType());
 		intCompTypes.add(TypeNode.FLOAT.getStringType());
-		intCompTypes.add(TypeNode.STRING.getStringType());
 		compatTypeSets.put(TypeNode.INT.getStringType(), intCompTypes);
 		Set<String> floatCompTypes = new HashSet<>();
 		floatCompTypes.add(TypeNode.FLOAT.getStringType());
-		floatCompTypes.add(TypeNode.STRING.getStringType());
 		compatTypeSets.put(TypeNode.FLOAT.getStringType(), floatCompTypes);
 		Set<String> stringCompTypes = new HashSet<>();
 		stringCompTypes.add(TypeNode.STRING.getStringType());
@@ -70,7 +68,6 @@ public class TypeUtils {
 	}
 
 	public boolean canAssign(String actualParamTypes, String formalParamTypes) {
-		// TODO: tutti possono dare nullini? o solo CallProcOP
 		if (formalParamTypes.isEmpty() || actualParamTypes.isEmpty()) {
 			return formalParamTypes.isEmpty() && actualParamTypes.isEmpty();
 		} else {
@@ -112,7 +109,6 @@ public class TypeUtils {
 
 
 	public void assertCanAssign(String exprType, String idType) {
-		// TODO: però nell'AssignOP non è possibile "" e ""
 		if (!exprType.isEmpty() || !idType.isEmpty()) {
 			if (!canAssign(exprType, idType)) {
 				throw new IllegalStateException("type mismatch");
@@ -122,7 +118,6 @@ public class TypeUtils {
 					+ actualRetExprTypes + "'");*/
 			/*
 			if (!typeTable.canAssign(exprsType, idsType)) {
-				// TODO: implement compatibilities or implicit conversions (batched string type...)
 				String idList = assignOP.ids.stream().map(id -> id.name).collect(Collectors.joining(","));
 				throw new IllegalStateException("Type mismatch in assignment: having '" + idList + "' left '" + idsType
 						+ "' but right '" + exprsType + "'");
@@ -147,16 +142,6 @@ public class TypeUtils {
 			}*/
 			}
 		}
-	}
-
-	public void assertCanWrite(String type) {
-		// TODO: tutto convertibile in stringa o tutto *scrivibile*?
-		/*
-		if (!...(type)) {
-			// TODO: maybe not only strings? passare per conversioni oppure gestire il solo caso di conversione
-			//  implicita float->string (esempio) direttamente qui? Forse si può usare in altre parti?
-			throw new IllegalStateException("writing expressions must be strings");
-		}*/
 	}
 
 }

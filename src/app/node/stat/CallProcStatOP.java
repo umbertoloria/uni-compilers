@@ -4,11 +4,11 @@ import app.node.StatNode;
 import app.node.expr.CallProcOP;
 import app.visitor.INodeVisitor;
 
-public class CallProcOPAdapter extends StatNode {
+public class CallProcStatOP extends StatNode {
 
-	private CallProcOP callProcOP;
+	public final CallProcOP callProcOP;
 
-	public CallProcOPAdapter(CallProcOP callProcOP) {
+	public CallProcStatOP(CallProcOP callProcOP) {
 		this.callProcOP = callProcOP;
 		if (callProcOP == null) {
 			throw new IllegalStateException();
@@ -16,8 +16,8 @@ public class CallProcOPAdapter extends StatNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
-		return callProcOP.accept(visitor);
+	public <T> T accept(INodeVisitor<T> visitor) {
+		return visitor.visitCallProcStatOP(this);
 	}
 
 }

@@ -15,14 +15,25 @@ public class ProcOP extends Node {
 
 	public ProcOP(Id id, List<ParDeclOP> parDecls, List<TypeNode> returnTypes, ProcBodyOP procBody) {
 		this.id = id;
+		if (id == null) {
+			throw new IllegalStateException();
+		}
 		this.parDecls = parDecls;
 		this.returnTypes = returnTypes;
 		this.procBody = procBody;
+		if (procBody == null) {
+			throw new IllegalStateException();
+		}
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitProcOP(this);
+	}
+
+	@Override
+	public String toString() {
+		return "ProcOP{" + id.name + ", p=" + parDecls + ", r=" + returnTypes + "}";
 	}
 
 }

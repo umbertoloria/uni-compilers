@@ -24,7 +24,7 @@ public class AssignOP extends StatNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitAssignOP(this);
 	}
 

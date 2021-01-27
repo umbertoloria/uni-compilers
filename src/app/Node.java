@@ -4,6 +4,6 @@ import app.visitor.INodeVisitor;
 
 public abstract class Node {
 
-	public abstract Object accept(INodeVisitor visitor);
+	public abstract <T> T accept(INodeVisitor<T> visitor);
 
 }

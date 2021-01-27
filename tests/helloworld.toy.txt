@@ -1,19 +1,4 @@
-float PI := 3.14159;
-float n := PI -1, x, y := 7;
-float y2 := 5, z;
-
-proc main(int a, b; float c; int x) string:
-    int result;
-
-    readln(result);
-
-    if result = 0 then
-        write("0\"-Zero");
-    elif result > 0 then
-        write("Positive");
-    else
-        write("Negative");
-    fi;
-
+proc main() int:
+    write("Hello, world!\n");
     -> 0
 corp;

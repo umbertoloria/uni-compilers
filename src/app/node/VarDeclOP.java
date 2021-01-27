@@ -22,7 +22,7 @@ public class VarDeclOP extends Node {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitVarDeclOP(this);
 	}
 

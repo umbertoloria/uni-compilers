@@ -67,8 +67,8 @@ public class ScopingTable {
 
 	private boolean isUnreachable(String name) {
 		// TODO: forse si può ancora usare uno stack: quando chiudi uno scope fai galleggiare sopra la blacklist?
-		//  ovviamente quando scendi non la fai scendere. Però è *sempre* vero che risolvendo le dipendenze nel padre, i
-		//  figli che sono morti sarebbero soddifatti?
+		//  ovviamente quando scendi non la fai scendere. Però è *sempre* vero che risolvendo le dipendenze nel
+		//  padre, i figli che sono morti sarebbero soddifatti???
 		ScopingTable t = this;
 		while (t != null && !t.decls.containsKey(name))
 			t = t.getParent();
@@ -87,20 +87,27 @@ public class ScopingTable {
 	}
 
 	// Type-checking BL
-	public String getTypeOfCloser(String name) {
+	public String getTypeInCloserScopeGoingUp(String name) {
 		ScopingTable t = this;
 		while (t != null && (!t.decls.containsKey(name) || t.decls.get(name) == null))
 			t = t.getParent();
-		if (t != null) {
-			return t.decls.get(name);
-		} else {
-			// TODO: non può succedere nella fase di Type-checking se tutto è andato bene in Scoping
-			throw new IllegalStateException();
-		}
+		// 't' non può essere NULL perché 'name' proviene dall'AST, che è già stato controllato dallo scoping visitor
+		assert t != null;
+		return t.decls.get(name);
 	}
 
 	public ScopingTable getScopingTableOf(String name) {
 		return childrens.get(name);
+	}
+
+	// Code-generation BL
+	public Set<String> getAllNames() {
+		Set<String> localSet = new HashSet<>(decls.keySet());
+		for (String childScopeName : childrens.keySet()) {
+			Set<String> childNames = childrens.get(childScopeName).getAllNames();
+			localSet.addAll(childNames);
+		}
+		return localSet;
 	}
 
 	@Override

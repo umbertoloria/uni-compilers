@@ -5,18 +5,14 @@ import app.visitor.INodeVisitor;
 
 public class StringConst extends ExprNode {
 
-	private String str;
+	public final String str;
 
 	public StringConst(String str) {
 		this.str = str;
 	}
 
-	public String getStr() {
-		return str;
-	}
-
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitStringConst(this);
 	}
 

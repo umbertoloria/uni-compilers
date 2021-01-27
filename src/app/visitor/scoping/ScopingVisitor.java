@@ -4,9 +4,8 @@ import app.node.*;
 import app.node.expr.CallProcOP;
 import app.node.expr.Id;
 import app.visitor.DFSBaseVisitor;
-import app.visitor.INodeVisitor;
 
-public class ScopingVisitor extends DFSBaseVisitor implements INodeVisitor {
+public class ScopingVisitor extends DFSBaseVisitor<Object> {
 
 	private ScopingTable scopingTable;
 
@@ -21,6 +20,11 @@ public class ScopingVisitor extends DFSBaseVisitor implements INodeVisitor {
 	@Override
 	public Object visitVarDeclOP(VarDeclOP varDeclOP) {
 		for (IdInitOP idInit : varDeclOP.idInits) {
+			// Prima si valida 'expr' e poi si dichiara la variabile 'idInit.id.name' perché altrimenti potrebbe già
+			// essere usata da 'expr', il ché sarebbe un errore.
+			if (idInit.expr != null) {
+				idInit.expr.accept(this);
+			}
 			scopingTable.declareVariable(idInit.id.name, varDeclOP.type.getStringType());
 		}
 		return null;
@@ -52,9 +56,7 @@ public class ScopingVisitor extends DFSBaseVisitor implements INodeVisitor {
 				parDecl.accept(this);
 			}
 		}
-		if (procOP.procBody != null) {
-			procOP.procBody.accept(this);
-		}
+		procOP.procBody.accept(this);
 		scopingTable = scopingTable.getParent();
 		return null;
 	}

@@ -5,18 +5,14 @@ import app.visitor.INodeVisitor;
 
 public class IntConst extends ExprNode {
 
-	private int value;
+	public final int value;
 
 	public IntConst(int value) {
 		this.value = value;
 	}
 
-	public int getValue() {
-		return value;
-	}
-
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitIntConst(this);
 	}
 

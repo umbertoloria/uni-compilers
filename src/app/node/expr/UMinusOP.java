@@ -12,7 +12,7 @@ public class UMinusOP extends ExprNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitUMinusOP(this);
 	}
 

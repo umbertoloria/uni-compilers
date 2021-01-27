@@ -16,7 +16,7 @@ proc div(float x, y) float:
     float result;
 
     if y = 0 then
-        result := 0.01;
+        result := 0;
     else
         result := x / y;
     fi;

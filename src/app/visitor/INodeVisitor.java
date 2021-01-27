@@ -5,49 +5,50 @@ import app.node.binop.*;
 import app.node.expr.*;
 import app.node.stat.*;
 
-public interface INodeVisitor {
+public interface INodeVisitor<T> {
 
-	Object visitProgramOP(ProgramOP programOP);
-	Object visitVarDeclOP(VarDeclOP varDeclOP);
-	Object visitTypeNode(TypeNode typeNode);
-	Object visitIdInitOP(IdInitOP idInitOP);
+	T visitProgramOP(ProgramOP programOP);
+	T visitVarDeclOP(VarDeclOP varDeclOP);
+	T visitTypeNode(TypeNode typeNode);
+	T visitIdInitOP(IdInitOP idInitOP);
 
-	Object visitProcOP(ProcOP procOP);
-	Object visitParDeclOP(ParDeclOP parDeclOP);
-	Object visitProcBodyOP(ProcBodyOP procBodyOP);
+	T visitProcOP(ProcOP procOP);
+	T visitParDeclOP(ParDeclOP parDeclOP);
+	T visitProcBodyOP(ProcBodyOP procBodyOP);
 
-	Object visitBodyOP(BodyOP bodyOP);
-	Object visitIfOP(IfOP ifOP);
-	Object visitElifOP(ElifOP elifOP);
-	Object visitWhileOP(WhileOP whileOP);
-	Object visitAssignOP(AssignOP assignOP);
-	Object visitReadlnOP(ReadlnOP readlnOP);
-	Object visitWriteOP(WriteOP writeOP);
+	T visitBodyOP(BodyOP bodyOP);
+	T visitIfOP(IfOP ifOP);
+	T visitElifOP(ElifOP elifOP);
+	T visitWhileOP(WhileOP whileOP);
+	T visitAssignOP(AssignOP assignOP);
+	T visitReadlnOP(ReadlnOP readlnOP);
+	T visitWriteOP(WriteOP writeOP);
+	T visitCallProcStatOP(CallProcStatOP callProcStatOP);
 
-	Object visitId(Id id);
-	Object visitNull(Null aNull);
-	Object visitTrue(True aTrue);
-	Object visitFalse(False aFalse);
-	Object visitIntConst(IntConst intConst);
-	Object visitFloatConst(FloatConst floatConst);
-	Object visitStringConst(StringConst stringConst);
+	T visitId(Id id);
+	T visitNull(Null aNull);
+	T visitTrue(True aTrue);
+	T visitFalse(False aFalse);
+	T visitIntConst(IntConst intConst);
+	T visitFloatConst(FloatConst floatConst);
+	T visitStringConst(StringConst stringConst);
 
-	Object visitNotOP(NotOP notOP);
-	Object visitUMinusOP(UMinusOP uMinusOP);
-	Object visitCallProcOP(CallProcOP callProcOP);
+	T visitNotOP(NotOP notOP);
+	T visitUMinusOP(UMinusOP uMinusOP);
+	T visitCallProcOP(CallProcOP callProcOP);
 
-	Object visitLTOP(LTOP ltop);
-	Object visitLEOP(LEOP leop);
-	Object visitGTOP(GTOP gtop);
-	Object visitGEOP(GEOP geop);
-	Object visitEQOP(EQOP eqop);
+	T visitLTOP(LTOP ltop);
+	T visitLEOP(LEOP leop);
+	T visitGTOP(GTOP gtop);
+	T visitGEOP(GEOP geop);
+	T visitEQOP(EQOP eqop);
 
-	Object visitAndOP(AndOP andOP);
-	Object visitOrOP(OrOP orOP);
+	T visitAndOP(AndOP andOP);
+	T visitOrOP(OrOP orOP);
 
-	Object visitTimesOP(TimesOP timesOP);
-	Object visitDivOP(DivOP divOP);
-	Object visitPlusOP(PlusOP plusOP);
-	Object visitMinusOP(MinusOP minusOP);
+	T visitTimesOP(TimesOP timesOP);
+	T visitDivOP(DivOP divOP);
+	T visitPlusOP(PlusOP plusOP);
+	T visitMinusOP(MinusOP minusOP);
 
 }

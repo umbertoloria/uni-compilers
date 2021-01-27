@@ -2,10 +2,13 @@ package app;
 
 import app.gen.Yylex;
 import app.gen.parser;
+import app.visitor.ConstraintsVisitor;
+import app.visitor.clanggenerator.CLangVisitor;
+import app.visitor.scoping.ScopingTable;
 import app.visitor.scoping.ScopingVisitor;
 import app.visitor.typechecking.TypeCheckingVisitor;
 import app.visitor.xmlgenerator.XmlNodeVisitor;
-import app.visitor.scoping.ScopingTable;
+import java_cup.runtime.Symbol;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -34,10 +37,8 @@ public class Driver {
 				System.out.println();
 		}*/
 		parser p = new parser(lexer);
-		java_cup.runtime.Symbol res = p.parse();
+		Symbol res = p.parse();
 		Node root = (Node) res.value;
-		XmlNodeVisitor xmlNodeVisitor = new XmlNodeVisitor();
-		root.accept(xmlNodeVisitor);
 
 		ScopingVisitor scopingVisitor = new ScopingVisitor();
 		ScopingTable rootScopingTable = (ScopingTable) root.accept(scopingVisitor);
@@ -45,21 +46,32 @@ public class Driver {
 		TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor(rootScopingTable);
 		root.accept(typeCheckingVisitor);
 
+		ConstraintsVisitor constraintsVsitor = new ConstraintsVisitor(rootScopingTable);
+		root.accept(constraintsVsitor);
 
-		String astFilePath;
+		String astFilePath, genFilePath;
 		if (args.length == 1) {
 			astFilePath = args[0];
 			if (astFilePath.contains(".")) {
 				astFilePath = astFilePath.substring(0, astFilePath.lastIndexOf("."));
 			}
+			genFilePath = astFilePath + ".c";
 			astFilePath += ".xml";
 		} else {
 			System.out.println("Insert destination path of the XML AST: ");
 			Scanner sc = new Scanner(System.in);
 			astFilePath = sc.nextLine();
+			System.out.println("Insert destination path of the C code: ");
+			genFilePath = sc.nextLine();
 			sc.close();
 		}
-		xmlNodeVisitor.saveOnFile(astFilePath);
+		XmlNodeVisitor xmlNodeVisitor1 = new XmlNodeVisitor();
+		root.accept(xmlNodeVisitor1);
+		xmlNodeVisitor1.saveOnFile(astFilePath);
+
+		CLangVisitor cLangVisitor = new CLangVisitor(rootScopingTable.getAllNames());
+		root.accept(cLangVisitor);
+		cLangVisitor.saveOnFile(genFilePath);
 	}
 
 }

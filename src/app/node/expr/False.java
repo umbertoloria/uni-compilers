@@ -10,7 +10,7 @@ public class False extends ExprNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitFalse(this);
 	}
 

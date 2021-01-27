@@ -5,18 +5,14 @@ import app.visitor.INodeVisitor;
 
 public class FloatConst extends ExprNode {
 
-	private float value;
+	public final float value;
 
 	public FloatConst(float value) {
 		this.value = value;
 	}
 
-	public float getValue() {
-		return value;
-	}
-
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitFloatConst(this);
 	}
 

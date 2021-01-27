@@ -5,10 +5,10 @@ import app.node.binop.*;
 import app.node.expr.*;
 import app.node.stat.*;
 
-public class DFSBaseVisitor implements INodeVisitor {
+public class DFSBaseVisitor<T> implements INodeVisitor<T> {
 
 	@Override
-	public Object visitProgramOP(ProgramOP programOP) {
+	public T visitProgramOP(ProgramOP programOP) {
 		if (programOP.varDecls != null) {
 			for (VarDeclOP varDecl : programOP.varDecls) {
 				varDecl.accept(this);
@@ -21,7 +21,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitVarDeclOP(VarDeclOP varDeclOP) {
+	public T visitVarDeclOP(VarDeclOP varDeclOP) {
 		for (IdInitOP idInit : varDeclOP.idInits) {
 			if (idInit.expr != null) {
 				idInit.expr.accept(this);
@@ -31,17 +31,17 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitTypeNode(TypeNode typeNode) {
+	public T visitTypeNode(TypeNode typeNode) {
 		return null;
 	}
 
 	@Override
-	public Object visitIdInitOP(IdInitOP idInitOP) {
+	public T visitIdInitOP(IdInitOP idInitOP) {
 		return null;
 	}
 
 	@Override
-	public Object visitProcOP(ProcOP procOP) {
+	public T visitProcOP(ProcOP procOP) {
 		if (procOP.parDecls != null) {
 			for (ParDeclOP parDecl : procOP.parDecls) {
 				parDecl.accept(this);
@@ -52,19 +52,17 @@ public class DFSBaseVisitor implements INodeVisitor {
 				returnType.accept(this);
 			}
 		}
-		if (procOP.procBody != null) {
-			procOP.procBody.accept(this);
-		}
+		procOP.procBody.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitParDeclOP(ParDeclOP parDeclOP) {
+	public T visitParDeclOP(ParDeclOP parDeclOP) {
 		return null;
 	}
 
 	@Override
-	public Object visitProcBodyOP(ProcBodyOP procBodyOP) {
+	public T visitProcBodyOP(ProcBodyOP procBodyOP) {
 		if (procBodyOP.varDecls != null) {
 			for (VarDeclOP varDecl : procBodyOP.varDecls) {
 				varDecl.accept(this);
@@ -82,7 +80,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitBodyOP(BodyOP bodyOP) {
+	public T visitBodyOP(BodyOP bodyOP) {
 		for (StatNode stmt : bodyOP.stmts) {
 			stmt.accept(this);
 		}
@@ -90,7 +88,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitIfOP(IfOP ifOP) {
+	public T visitIfOP(IfOP ifOP) {
 		ifOP.expr.accept(this);
 		ifOP.ifBody.accept(this);
 		if (ifOP.elifs != null) {
@@ -105,14 +103,14 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitElifOP(ElifOP elifOP) {
+	public T visitElifOP(ElifOP elifOP) {
 		elifOP.expr.accept(this);
 		elifOP.body.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitWhileOP(WhileOP whileOP) {
+	public T visitWhileOP(WhileOP whileOP) {
 		if (whileOP.preStmts != null) {
 			whileOP.preStmts.accept(this);
 		}
@@ -122,7 +120,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitAssignOP(AssignOP assignOP) {
+	public T visitAssignOP(AssignOP assignOP) {
 		for (Id id : assignOP.ids) {
 			id.accept(this);
 		}
@@ -133,7 +131,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitReadlnOP(ReadlnOP readlnOP) {
+	public T visitReadlnOP(ReadlnOP readlnOP) {
 		for (Id id : readlnOP.ids) {
 			id.accept(this);
 		}
@@ -141,7 +139,7 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitWriteOP(WriteOP writeOP) {
+	public T visitWriteOP(WriteOP writeOP) {
 		for (ExprNode expr : writeOP.exprs) {
 			expr.accept(this);
 		}
@@ -149,55 +147,59 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitId(Id id) {
+	public T visitCallProcStatOP(CallProcStatOP callProcStatOP) {
+		return callProcStatOP.callProcOP.accept(this);
+	}
+
+	@Override
+	public T visitId(Id id) {
 		return null;
 	}
 
 	@Override
-	public Object visitNull(Null aNull) {
+	public T visitNull(Null aNull) {
 		return null;
 	}
 
 	@Override
-	public Object visitTrue(True aTrue) {
+	public T visitTrue(True aTrue) {
 		return null;
 	}
 
 	@Override
-	public Object visitFalse(False aFalse) {
+	public T visitFalse(False aFalse) {
 		return null;
 	}
 
 	@Override
-	public Object visitIntConst(IntConst intConst) {
+	public T visitIntConst(IntConst intConst) {
 		return null;
 	}
 
 	@Override
-	public Object visitFloatConst(FloatConst floatConst) {
+	public T visitFloatConst(FloatConst floatConst) {
 		return null;
 	}
 
 	@Override
-	public Object visitStringConst(StringConst stringConst) {
+	public T visitStringConst(StringConst stringConst) {
 		return null;
 	}
 
 	@Override
-	public Object visitNotOP(NotOP notOP) {
+	public T visitNotOP(NotOP notOP) {
 		notOP.expr.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitUMinusOP(UMinusOP uMinusOP) {
+	public T visitUMinusOP(UMinusOP uMinusOP) {
 		uMinusOP.expr.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitCallProcOP(CallProcOP callProcOP) {
-		// TODO: problema: a volte ID lo devi vedere, ma adesso no... poco coesa
+	public T visitCallProcOP(CallProcOP callProcOP) {
 		if (callProcOP.exprs != null) {
 			for (ExprNode expr : callProcOP.exprs) {
 				expr.accept(this);
@@ -207,77 +209,77 @@ public class DFSBaseVisitor implements INodeVisitor {
 	}
 
 	@Override
-	public Object visitLTOP(LTOP ltop) {
+	public T visitLTOP(LTOP ltop) {
 		ltop.a.accept(this);
 		ltop.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitLEOP(LEOP leop) {
+	public T visitLEOP(LEOP leop) {
 		leop.a.accept(this);
 		leop.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitGTOP(GTOP gtop) {
+	public T visitGTOP(GTOP gtop) {
 		gtop.a.accept(this);
 		gtop.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitGEOP(GEOP geop) {
+	public T visitGEOP(GEOP geop) {
 		geop.a.accept(this);
 		geop.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitEQOP(EQOP eqop) {
+	public T visitEQOP(EQOP eqop) {
 		eqop.a.accept(this);
 		eqop.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitAndOP(AndOP andOP) {
+	public T visitAndOP(AndOP andOP) {
 		andOP.a.accept(this);
 		andOP.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitOrOP(OrOP orOP) {
+	public T visitOrOP(OrOP orOP) {
 		orOP.a.accept(this);
 		orOP.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitTimesOP(TimesOP timesOP) {
+	public T visitTimesOP(TimesOP timesOP) {
 		timesOP.a.accept(this);
 		timesOP.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitDivOP(DivOP divOP) {
+	public T visitDivOP(DivOP divOP) {
 		divOP.a.accept(this);
 		divOP.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitPlusOP(PlusOP plusOP) {
+	public T visitPlusOP(PlusOP plusOP) {
 		plusOP.a.accept(this);
 		plusOP.b.accept(this);
 		return null;
 	}
 
 	@Override
-	public Object visitMinusOP(MinusOP minusOP) {
+	public T visitMinusOP(MinusOP minusOP) {
 		minusOP.a.accept(this);
 		minusOP.b.accept(this);
 		return null;

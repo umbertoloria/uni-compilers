@@ -1281,7 +1281,7 @@ class CUP$parser$actions {
 		int cpleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int cpright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object cp = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 RESULT = new CallProcOPAdapter((CallProcOP) cp); 
+		 RESULT = new CallProcStatOP((CallProcOP) cp); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Stat",17, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

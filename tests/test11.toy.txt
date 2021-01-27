@@ -1,0 +1,12 @@
+proc x(float a; int b; float c) string, string:
+    -> "inizio", "fine"
+corp;
+
+proc main() int:
+    int n := 1, k := 1;
+    float a, b;
+    string str1, str2;
+    a, str1, str2, b := n*k, x(1, k, n+k), 7;
+    write(str1, str2);
+    -> 0
+corp;

@@ -11,7 +11,7 @@ public class LEOP extends BinaryOperationNode {
 	}
 
 	@Override
-	public Object accept(INodeVisitor visitor) {
+	public <T> T accept(INodeVisitor<T> visitor) {
 		return visitor.visitLEOP(this);
 	}
 

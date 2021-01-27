@@ -126,7 +126,7 @@ StatList ::= Stat:s StatList:ss {: RESULT = ((BodyOP) ss).prepend((StatNode) s);
 Stat ::= IfStat:is SEMI     {: RESULT = is; :}
        | WhileStat:ws SEMI  {: RESULT = ws; :}
        | AssignStat:as SEMI {: RESULT = as; :}
-       | CallProc:cp SEMI   {: RESULT = new CallProcOPAdapter((CallProcOP) cp); :}
+       | CallProc:cp SEMI   {: RESULT = new CallProcStatOP((CallProcOP) cp); :}
        | ReadlnStat:rs SEMI {: RESULT = rs; :}
        | WriteStat:ws SEMI  {: RESULT = ws; :};
 IfStat   ::= IF Expr:e THEN StatList:ss1 ElifList:el Else:ss2 FI {: RESULT = new IfOP((ExprNode) e, (BodyOP) ss1, (List<ElifOP>) el, (BodyOP) ss2); :};

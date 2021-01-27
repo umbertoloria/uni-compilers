@@ -18,7 +18,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.List;
 
-public class XmlNodeVisitor implements INodeVisitor {
+public class XmlNodeVisitor implements INodeVisitor<Object> {
 
 	private Document document;
 
@@ -296,6 +296,22 @@ public class XmlNodeVisitor implements INodeVisitor {
 	}
 
 	@Override
+	public Object visitCallProcStatOP(CallProcStatOP callProcStatOP) {
+		Element idElem = (Element) callProcStatOP.callProcOP.procId.accept(this);
+		Element exprListElem = null;
+		if (callProcStatOP.callProcOP.exprs != null) {
+			exprListElem = getExprListElem(callProcStatOP.callProcOP.exprs);
+		}
+		// <CallProcStatOp>
+		Element procOpElem = document.createElement("CallProcStatOp");
+		procOpElem.appendChild(idElem);
+		if (exprListElem != null) {
+			procOpElem.appendChild(exprListElem);
+		}
+		return procOpElem;
+	}
+
+	@Override
 	public Object visitId(Id id) {
 		// <Id name="...">
 		Element idElem = document.createElement("Id");
@@ -325,7 +341,7 @@ public class XmlNodeVisitor implements INodeVisitor {
 	public Object visitIntConst(IntConst intConst) {
 		// <IntConst const="...">
 		Element intConstElem = document.createElement("IntConst");
-		intConstElem.setAttribute("const", "" + intConst.getValue());
+		intConstElem.setAttribute("const", "" + intConst.value);
 		return intConstElem;
 	}
 
@@ -333,7 +349,7 @@ public class XmlNodeVisitor implements INodeVisitor {
 	public Object visitFloatConst(FloatConst floatConst) {
 		// <FloatConst const="...">
 		Element intConstElem = document.createElement("FloatConst");
-		intConstElem.setAttribute("const", "" + floatConst.getValue());
+		intConstElem.setAttribute("const", "" + floatConst.type);
 		return intConstElem;
 	}
 
@@ -341,7 +357,7 @@ public class XmlNodeVisitor implements INodeVisitor {
 	public Object visitStringConst(StringConst stringConst) {
 		// <StringConst const="...">
 		Element intConstElem = document.createElement("StringConst");
-		intConstElem.setAttribute("const", "" + stringConst.getStr());
+		intConstElem.setAttribute("const", "" + stringConst.str);
 		return intConstElem;
 	}
 
