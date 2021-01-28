@@ -76,7 +76,7 @@ public class ErrorsManager {
 	}
 
 	private void exit() {
-		System.exit(0);
+		throw new RuntimeException();
 	}
 
 }
