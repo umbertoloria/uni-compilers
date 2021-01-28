@@ -2,7 +2,7 @@
   <configuration default="false" name="Traccia wrong" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.Driver" />
     <module name="esercitazione4" />
-    <option name="PROGRAM_PARAMETERS" value="tests/traccia_wrong.toy.txt" />
+    <option name="PROGRAM_PARAMETERS" value="tests/traccia_wrong.toy" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
