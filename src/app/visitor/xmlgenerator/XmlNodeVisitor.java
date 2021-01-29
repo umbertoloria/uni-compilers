@@ -343,7 +343,7 @@ public class XmlNodeVisitor implements INodeVisitor<Object> {
 	public Object visitFloatConst(FloatConst floatConst) {
 		// <FloatConst const="...">
 		Element intConstElem = document.createElement("FloatConst");
-		intConstElem.setAttribute("const", "" + floatConst.type);
+		intConstElem.setAttribute("const", "" + floatConst.value);
 		return intConstElem;
 	}
 
