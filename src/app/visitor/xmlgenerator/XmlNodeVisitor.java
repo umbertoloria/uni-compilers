@@ -320,12 +320,6 @@ public class XmlNodeVisitor implements INodeVisitor<Object> {
 	}
 
 	@Override
-	public Object visitNull(Null aNull) {
-		// <Null>
-		return document.createElement("Null");
-	}
-
-	@Override
 	public Object visitTrue(True aTrue) {
 		// <True>
 		return document.createElement("True");

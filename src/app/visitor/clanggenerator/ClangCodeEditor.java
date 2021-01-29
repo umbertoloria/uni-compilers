@@ -119,7 +119,6 @@ public class ClangCodeEditor {
 		else if (type.equals(TypeNode.FLOAT.getStringType()))
 			code.append("%f\", &");
 		else if (type.equals(TypeNode.BOOL.getStringType()))
-			// TODO: check only '0' or '1'
 			code.append("%d\", &");
 		else if (type.equals(TypeNode.STRING.getStringType()))
 			code.append("%s\", ");
@@ -136,7 +135,6 @@ public class ClangCodeEditor {
 			else if (type.equals(TypeNode.FLOAT.getStringType()))
 				code.append("%f");
 			else if (type.equals(TypeNode.BOOL.getStringType()))
-				// TODO: check only '0' or '1'
 				code.append("%d");
 			code.append("\", ").append(cExpr).append(");\n");
 		}

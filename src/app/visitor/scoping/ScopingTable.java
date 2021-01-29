@@ -69,9 +69,6 @@ public class ScopingTable {
 	}
 
 	private boolean isUnreachable(String name) {
-		// TODO: forse si può ancora usare uno stack: quando chiudi uno scope fai galleggiare sopra la blacklist?
-		//  ovviamente quando scendi non la fai scendere. Però è *sempre* vero che risolvendo le dipendenze nel
-		//  padre, i figli che sono morti sarebbero soddifatti???
 		ScopingTable t = this;
 		while (t != null && !t.decls.containsKey(name))
 			t = t.getParent();

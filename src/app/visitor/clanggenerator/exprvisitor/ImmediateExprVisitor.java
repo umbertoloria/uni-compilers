@@ -13,11 +13,6 @@ public class ImmediateExprVisitor extends ExclusiveNodeVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitNull(Null aNull) {
-		return true;
-	}
-
-	@Override
 	public Boolean visitTrue(True aTrue) {
 		return true;
 	}

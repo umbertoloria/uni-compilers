@@ -20,13 +20,16 @@ public class Driver {
 	public static void main(String[] args) {
 		for (String arg : args) {
 			try {
-				compile(arg);
 				System.out.println("Compiled '" + arg + "'");
+				compile(arg);
 			} catch (RuntimeException e) {
-				System.out.print("Semantic error in '" + arg + "' source file: ");
+				System.out.println("    semantic error in '" + arg + "' source file: " + e.getLocalizedMessage());
 			} catch (Exception e) {
-				System.out.println("Error in compiling '" + arg + "' source file");
-				System.err.println(e.getLocalizedMessage());
+				System.out.println("    exception in compiling '" + arg + "' source file");
+				System.out.println("        " + e.getLocalizedMessage());
+//			} catch (Error e) {
+//				System.out.println("    error in compiling '" + arg + "' source file");
+//				System.out.println("        " + e.getLocalizedMessage());
 			}
 		}
 	}
@@ -63,7 +66,9 @@ public class Driver {
 //		System.out.println("Type in program, hit Return, then Cmd-D (in MacOs) o Ctrl-D (in Windows)");
 //		Reader keyboard = new BufferedReader(new InputStreamReader(System.in));
 //		lexer = new Yylex(keyboard);
-//		while (!lexer.yyatEOF()) {
+		FileReader fileReader = new FileReader(sourcePath);
+		lexer = new Yylex(fileReader);
+//		while (!lexer.yyatEOF())
 //			Symbol token = lexer.next_token();
 //			System.out.print(sym.terminalNames[token.sym]);
 //			if (token.value != null)
@@ -71,8 +76,6 @@ public class Driver {
 //			else
 //				System.out.println();
 //		}
-		FileReader fileReader = new FileReader(sourcePath);
-		lexer = new Yylex(fileReader);
 		parser p = new parser(lexer);
 		Symbol res = p.parse();
 		return (ProgramOP) res.value;

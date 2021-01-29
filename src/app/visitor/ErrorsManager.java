@@ -3,80 +3,65 @@ package app.visitor;
 public class ErrorsManager {
 
 	public void typeMismatchInComparison(String typeA, String typeB) {
-		System.err.println("Types '" + typeA + "' and '" + typeB + "' not suitable for comparison: only numbers or " +
-				"strings or booleans can be compared");
-		exit();
+		throw new RuntimeException("Types '" + typeA + "' and '" + typeB + "' not suitable for comparison: only "
+				+ "numbers or strings or booleans can be compared");
 	}
 
 	public void typeMismatchInUminus(String type) {
-		System.err.println("Type '" + type + "' not suitable for uminus: it must be a number");
-		exit();
+		throw new RuntimeException("Type '" + type + "' not suitable for uminus: it must be a number");
 	}
 
 	public void typeMismatchInNegation(String type) {
-		System.err.println("Type '" + type + "' not suitable for negation: it must be boolean");
-		exit();
+		throw new RuntimeException("Type '" + type + "' not suitable for negation: it must be boolean");
 	}
 
 	public void typeMismatchInCondition(String type) {
-		System.err.println("One boolean expression is required in every conditional block: given '" + type + "'");
-		exit();
+		throw new RuntimeException("One boolean expression is required in every conditional block: given '" + type
+				+ "'");
 	}
 
 	public void typeMismatchInBinaryBooleanOperation(String typeA, String typeB) {
-		System.err.println("Two boolean expressions are required in every binary boolean operation: given '" + typeA
-				+ "' " + "and '" + typeB + "'");
-		exit();
+		throw new RuntimeException("Two boolean expressions are required in every binary boolean operation: given '"
+				+ typeA + "' " + "and '" + typeB + "'");
 	}
 
 	public void typeMismatchInBinaryArithmeticOperation(String typeA, String typeB) {
-		System.err.println("Two number expressions are required in every binary arithmetic operation: given '" + typeA
-				+ "' " + "and '" + typeB + "'");
-		exit();
+		throw new RuntimeException("Two number expressions are required in every binary arithmetic operation: given '"
+				+ typeA + "' and '" + typeB + "'");
 	}
 
 	public void typeMismatchInAssign(String actualTypes, String formalTypes) {
-		System.err.println("Invalid assignment: formal '" + formalTypes + "' but actual '" + actualTypes + "'");
-		exit();
+		throw new RuntimeException("Invalid assignment: formal '" + formalTypes + "' but actual '" + actualTypes +
+				"'");
 	}
 
 	public void invalidMain() {
-		System.err.println("The '" + ConstraintsVisitor.MAIN_NAME + "' procedure must return int and have no params");
-		exit();
+		throw new RuntimeException("The '" + ConstraintsVisitor.MAIN_NAME + "' procedure must return int and have no "
+				+ "params");
 	}
 
 	public void missingMain() {
-		System.err.println("The '" + ConstraintsVisitor.MAIN_NAME + "' procedure is required");
-		exit();
+		throw new RuntimeException("The '" + ConstraintsVisitor.MAIN_NAME + "' procedure is required");
 	}
 
 	public void callToMain() {
-		System.err.println("The '" + ConstraintsVisitor.MAIN_NAME + "' can never be called");
-		exit();
+		throw new RuntimeException("The '" + ConstraintsVisitor.MAIN_NAME + "' can never be called");
 	}
 
 	public void occupiedVarName(String varName) {
-		System.err.println("Variable name '" + varName + "' already taken");
-		exit();
+		throw new RuntimeException("Variable name '" + varName + "' already taken");
 	}
 
 	public void occupiedProcName(String procName) {
-		System.err.println("Procedure name '" + procName + "' already taken");
-		exit();
+		throw new RuntimeException("Procedure name '" + procName + "' already taken");
 	}
 
 	public void undeclaredVariable(String varName) {
-		System.err.println("Undeclared variable '" + varName + "'");
-		exit();
+		throw new RuntimeException("Undeclared variable '" + varName + "'");
 	}
 
 	public void undeclaredProcedure(String procName) {
-		System.err.println("Undeclared procedure '" + procName + "'");
-		exit();
-	}
-
-	private void exit() {
-		throw new RuntimeException();
+		throw new RuntimeException("Undeclared procedure '" + procName + "'");
 	}
 
 }

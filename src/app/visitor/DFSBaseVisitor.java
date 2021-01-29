@@ -157,11 +157,6 @@ public class DFSBaseVisitor<T> implements INodeVisitor<T> {
 	}
 
 	@Override
-	public T visitNull(Null aNull) {
-		return null;
-	}
-
-	@Override
 	public T visitTrue(True aTrue) {
 		return null;
 	}

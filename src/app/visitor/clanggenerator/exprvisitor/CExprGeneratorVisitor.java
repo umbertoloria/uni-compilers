@@ -34,11 +34,6 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 	}
 
 	@Override
-	public List<String> visitNull(Null aNull) {
-		throw new IllegalStateException("IDK");
-	}
-
-	@Override
 	public List<String> visitTrue(True aTrue) {
 		return getSingletonList("1");
 	}
@@ -77,12 +72,11 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 
 	@Override
 	public List<String> visitCallProcOP(CallProcOP callProcOP) {
-		// L'unica espressione Toy non sempre restituisce una sola espressione C equivalente è l'invocazione di una
+		// L'unica espressione Toy che non sempre restituisce una sola espressione C equivalente è l'invocazione di una
 		// procedura. Quando un'espressione Toy descrive una invocazione di procedura che restituisce più di un valore,
 		// bisogna necessariamente costruire del codice di servizio per realizzarla. Una espressione C non basta per
-		// modellare la restituzione di tutti questi valori. Ne verrà restituita una per ogni valore restituito.
+		// modellare la restituzione di tutti questi valori. Ne verrà costruita una per ogni valore restituito.
 		if (callProcOP.type.contains(",")) {
-			String cStructType = callProcOP.type.replace(",", "_");
 			List<String> cParamExprs = new LinkedList<>();
 			if (callProcOP.exprs != null) {
 				for (ExprNode exprNode : callProcOP.exprs) {
@@ -90,35 +84,17 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 					cParamExprs.addAll(cLocalExprs);
 				}
 			}
-			if (callProcOP.type.contains(",")) {
-				String procName = callProcOP.procId.name;
-				String newVarName = tmpVarNameGenerator.newName(procName);
-				clangCodeEditor.invokeWithResult(cStructType, newVarName, procName, cParamExprs);
-				int retExprsCount = callProcOP.type.split(",").length;
-				List<String> cRetExprs = new LinkedList<>();
-				for (int i = 0; i < retExprsCount; i++) {
-					cRetExprs.add(newVarName + ".t" + i);
-				}
-				return cRetExprs;
-			} else {
-				// TODO: secondo me stai sul filo del rasoio con questo if
-				List<String> cExprs = new LinkedList<>();
-				StringBuilder cExpr = new StringBuilder();
-				cExpr.append(callProcOP.procId.name);
-				cExpr.append("(");
-				if (!cParamExprs.isEmpty()) {
-					for (String cParamExpr : cParamExprs) {
-						cExpr.append(cParamExpr);
-						cExpr.append(", ");
-					}
-					cExpr.delete(cExpr.length() - 2, cExpr.length());
-				}
-				cExpr.append(")");
-				cExprs.add(cExpr.toString());
-				return cExprs;
+			String cStructType = callProcOP.type.replace(",", "_");
+			String procName = callProcOP.procId.name;
+			String newVarName = tmpVarNameGenerator.newName(procName);
+			clangCodeEditor.invokeWithResult(cStructType, newVarName, procName, cParamExprs);
+			int retExprsCount = callProcOP.type.split(",").length;
+			List<String> cRetExprs = new LinkedList<>();
+			for (int i = 0; i < retExprsCount; i++) {
+				cRetExprs.add(newVarName + ".t" + i);
 			}
+			return cRetExprs;
 		} else {
-			// FIXME: unify this if-else
 			StringBuilder code = new StringBuilder();
 			code.append(callProcOP.procId.name);
 			code.append("(");

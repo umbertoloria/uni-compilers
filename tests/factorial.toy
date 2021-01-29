@@ -12,6 +12,8 @@ proc factorial(int n) int:
     -> result
 corp;
 
+/* ignore this comment */
+
 proc main() int:
     int n;
     while

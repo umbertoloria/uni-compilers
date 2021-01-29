@@ -46,7 +46,6 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	}
 
 	private String legacySingleExpr(List<String> strs) {
-		// TODO: permettere l'unpacking anche nell'inizializzazione in Toy
 		return strs.get(0);
 	}
 

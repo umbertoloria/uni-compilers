@@ -88,11 +88,6 @@ public class ExclusiveNodeVisitor<T> implements INodeVisitor<T> {
 	}
 
 	@Override
-	public T visitNull(Null aNull) {
-		throw new IllegalStateException();
-	}
-
-	@Override
 	public T visitTrue(True aTrue) {
 		throw new IllegalStateException();
 	}

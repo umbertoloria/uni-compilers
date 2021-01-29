@@ -15,12 +15,13 @@ id = ({letter}|_)({letter}|{digit}|_)*
 integer = 0|[1-9][0-9]*
 real = {integer}\.[0-9]*[1-9]
 string = \"([^\\\"]|\\.)*\"
-comment = "/*"(.|[\r\n])*?"*/"
+
+%state COMMENT
 
 %%
+<YYINITIAL> {
 // Now for the actual tokens and assocated actions
 {whitespace} { /* ignore */ }
-{comment}    { /* ignore */ }
 
 // plain symbols
 "(" {return new Symbol(sym.LPAR); }
@@ -68,7 +69,6 @@ comment = "/*"(.|[\r\n])*?"*/"
 "write" {return new Symbol(sym.WRITE); }
 
 // value/id symbols
-"null" {return new Symbol(sym.NULL); }
 "true" {return new Symbol(sym.TRUE); }
 "false" {return new Symbol(sym.FALSE); }
 {integer} {return new Symbol(sym.INT_CONST, Integer.parseInt(yytext())); }
@@ -76,5 +76,14 @@ comment = "/*"(.|[\r\n])*?"*/"
 {string} {String str = yytext(); return new Symbol(sym.STRING_CONST, str.substring(1, str.length() - 1));}
 {id} {return new Symbol(sym.ID, yytext()); }
 
+"/*"         { yybegin(COMMENT); }
+
 [^]           { throw new Error("\n\nIllegal character < "+ yytext()+" >\n"); }
-// End of file
+
+}
+
+<COMMENT> {
+"*/"     { yybegin(YYINITIAL); }
+<<EOF>>  { throw new Error("Commento non chiuso."); }
+[^]      { /* Ignore */ }
+}

@@ -115,12 +115,6 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 
 	// CONSTANTS
 	@Override
-	public Void visitNull(Null aNull) {
-		// TODO: NULL type, what?
-		throw new IllegalStateException("IDK");
-	}
-
-	@Override
 	public Void visitTrue(True aTrue) {
 		aTrue.type = typeUtils.getBoolType();
 		return null;

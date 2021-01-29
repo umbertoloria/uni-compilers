@@ -23,7 +23,7 @@ terminal WHILE, DO, OD;
 terminal READLN, WRITE;
 
 // value/id symbols
-terminal         NULL, TRUE, FALSE;
+terminal         TRUE, FALSE;
 terminal Integer INT_CONST;
 terminal Float   FLOAT_CONST;
 terminal String  STRING_CONST;
@@ -69,8 +69,7 @@ IdInitList ::=                     ID:i               {: var list = new LinkedLi
              | IdInitList:is COMMA ID:i               {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), null)); RESULT = is; :}
              | IdInitList:is COMMA ID:i ASSIGN Expr:e {: ((List<IdInitOP>) is).add(new IdInitOP(new Id(i), (ExprNode) e)); RESULT = is; :};
 
-Expr ::= NULL           {: RESULT = new Null(); :}
-       | TRUE           {: RESULT = new True(); :}
+Expr ::= TRUE           {: RESULT = new True(); :}
        | FALSE          {: RESULT = new False(); :}
        | INT_CONST:i    {: RESULT = new IntConst(i); :}
        | FLOAT_CONST:f  {: RESULT = new FloatConst(f); :}

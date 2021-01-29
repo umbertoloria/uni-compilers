@@ -26,7 +26,6 @@ public interface INodeVisitor<T> {
 	T visitCallProcStatOP(CallProcStatOP callProcStatOP);
 
 	T visitId(Id id);
-	T visitNull(Null aNull);
 	T visitTrue(True aTrue);
 	T visitFalse(False aFalse);
 	T visitIntConst(IntConst intConst);
