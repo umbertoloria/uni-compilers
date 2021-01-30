@@ -51,15 +51,17 @@ proc elevaAPotenza() void:
 corp;
 
 proc calcolareSuccessioneFibonacci() void:
-    int n, i := 0;
+    int n, i;
     int a, b;
     write("Fornisci quanti numeri di Fibonacci calcolare> ");
     readln(n);
 
     if n >= 0 then
-        write("Fibonacci di 0 = 1\n");
+        write("Fibonacci di 0 = 0\n");
+        write("Fibonacci di 1 = 1\n");
         a := 0;
         b := 1;
+        i := 2;
         while i <= n do
             b := b + a;
             a := b - a;
@@ -67,13 +69,6 @@ proc calcolareSuccessioneFibonacci() void:
             i := i + 1;
         od;
     fi;
-
-/*  a := 0;
-    b := 1;
-    write(a, b);
-    a, b := b, a;
-    write(a, b);*/
-
     ->
 corp;
 

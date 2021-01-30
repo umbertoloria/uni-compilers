@@ -21,12 +21,13 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	private TypeCodifier typeCodifier = new TypeCodifier();
 	private List<VarDeclOP> globalVarDecls;
 
-	private ClangCodeEditor clangCodeEditor = new ClangCodeEditor();
+	private ClangCodeEditor clangCodeEditor;
 	private CExprGeneratorVisitor cExprGeneratorVisitor;
 	private ImmediateExprVisitor immediateExprVisitor = new ImmediateExprVisitor();
 
 	public ClangVisitor(Set<String> namesToExclude) {
 		TmpVarNameGenerator tmpVarNameGenerator = new TmpVarNameGenerator(namesToExclude);
+		clangCodeEditor = new ClangCodeEditor(tmpVarNameGenerator);
 		cExprGeneratorVisitor = new CExprGeneratorVisitor(clangCodeEditor, tmpVarNameGenerator);
 	}
 
@@ -52,7 +53,6 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	// VISITS
 	@Override
 	public Object visitProgramOP(ProgramOP programOP) {
-		clangCodeEditor.importLibraries();
 		// Strutture: prima tutte le struct necessarie alle invocazioni che restituiscono più espressioni
 		for (ProcOP proc : programOP.procs) {
 			if (!proc.id.name.equals(ConstraintsVisitor.MAIN_NAME)) {
@@ -99,7 +99,7 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 				cTypes.add(typeCodifier.codify(returnType));
 			}
 			structName.delete(structName.length() - 1, structName.length());
-			clangCodeEditor.createStruct(structName.toString(), cTypes);
+			clangCodeEditor.putStruct(structName.toString(), cTypes);
 		}
 	}
 
@@ -176,7 +176,7 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 					ExprNode expr = procBodyOP.returnExpressions.get(0);
 					List<String> cExpr = expr.accept(cExprGeneratorVisitor);
 					if (cExpr.size() == 1) {
-						clangCodeEditor.putReturn(cExpr.get(0));
+						clangCodeEditor.putSingleReturn(cExpr.get(0));
 					} else {
 						throw new IllegalStateException();
 					}

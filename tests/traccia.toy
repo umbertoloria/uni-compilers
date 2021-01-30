@@ -16,6 +16,7 @@ proc div(float x, y) float:
     float result;
 
     if y = 0 then
+        write("Impossibile dividere per zero");
         result := 0;
     else
         result := x / y;
@@ -53,7 +54,7 @@ proc main() int:
             write("Resultato: ", div(a, b));
         fi;
 
-        write("\nVuoi continuare? (1 sì, 0 no): ");
+        write("\nVuoi continuare? (1 si, 0 no): ");
         readln(yesOrNo);
 
     od;

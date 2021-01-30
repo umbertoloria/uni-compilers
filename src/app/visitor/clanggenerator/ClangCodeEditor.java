@@ -6,39 +6,35 @@ import java.util.*;
 
 public class ClangCodeEditor {
 
-	public void putCLikeExpr(String line) {
-		code.append(line);
-		code.append("\n");
-	}
+	private static final String tab = "\t";
 
-	public String getCode() {
-		return code.toString();
-	}
-
-	private String getTabbedCode() {
-		StringBuilder tabbed = new StringBuilder();
-		for (String line : code.toString().split("\n")) {
-			tabbed.append("    ");
-			tabbed.append(line);
-			tabbed.append("\n");
-		}
-		stack.pop();
-		code = stack.peek();
-		return tabbed.toString();
-	}
-
-	// BL
+	private TmpVarNameGenerator tmpVarNameGenerator;
 	private Stack<StringBuilder> stack = new Stack<>();
-	private StringBuilder code = new StringBuilder();
+	private StringBuilder code;
 	private Set<String> declaredStructs = new HashSet<>();
 
-	public ClangCodeEditor() {
+	public ClangCodeEditor(TmpVarNameGenerator tmpVarNameGenerator) {
+		this.tmpVarNameGenerator = tmpVarNameGenerator;
+		code = new StringBuilder();
+		code.append("#include <stdio.h>\n");
+		code.append("#include <string.h>\n\n");
 		stack.push(code);
 	}
 
-	public void importLibraries() {
-		code.append("#include <stdio.h>\n");
-		code.append("#include <string.h>\n\n");
+	public void closeBlock() {
+		int nlPosition = -1;
+		do {
+			code.insert(nlPosition + 1, tab);
+			nlPosition = code.indexOf("\n", nlPosition + 1);
+		} while (nlPosition >= 0);
+		int lastNlPosition = code.lastIndexOf("\n");
+		if (lastNlPosition >= 0 && lastNlPosition == code.length() - tab.length() - 1) {
+			code.delete(lastNlPosition + 1, code.length());
+		}
+		stack.pop();
+		stack.peek().append(code);
+		code = stack.peek();
+		code.append("}\n");
 	}
 
 	public void putInterface(String cRetType, String name, List<String> paramTypes) {
@@ -65,6 +61,16 @@ public class ClangCodeEditor {
 		code.append(cType).append(" ").append(varName).append(" = ").append(cExpr).append(";\n");
 	}
 
+	public void putCLikeExpr(String line) {
+		code.append(line);
+		code.append("\n");
+	}
+
+	public void putSingleReturn(String cExpr) {
+		// Es. 'return -min(a, b);'
+		code.append("return ").append(cExpr).append(";\n");
+	}
+
 	public void putMultipleReturn(String retStructName, List<String> cExprs) {
 		if (retStructName.split("_").length != cExprs.size()) {
 			throw new IllegalStateException();
@@ -81,48 +87,38 @@ public class ClangCodeEditor {
 		code.append("return res;\n");
 	}
 
-	public void putReturn(String cExpr) {
-		// Es. 'return -min(a, b);'
-		code.append("return ").append(cExpr).append(";\n");
-	}
-
-	// BLOCKS
-	public void openBlock() {
-		StringBuilder newCode = new StringBuilder();
-		stack.push(newCode);
-		code = stack.peek();
-	}
-
-	public void createStruct(String name, List<String> cTypes) {
+	public void putStruct(String name, List<String> cTypes) {
 		if (!declaredStructs.contains(name)) {
 			declaredStructs.add(name);
-			// Es. 'typedef struct int_string {'
+			// Es. 'typedef struct {'
 			//     '    int t0;'
 			//     '    char* t1;'
 			//     '} int_string;'
-			code.append("typedef struct ").append(name).append(" {\n");
-			openBlock();
+			code.append("typedef struct {\n");
+			stack.push(code = new StringBuilder());
 			int varI = 0;
 			for (String cType : cTypes) {
 				code.append(cType).append(" t").append(varI++).append(";\n");
 			}
-			String tabbed = getTabbedCode();
-			code.append(tabbed);
-			code.append("} ").append(name).append(";\n");
+			closeBlock();
+			code.delete(code.length() - 1, code.length()).append(" ").append(name).append(";\n");
 		}
 	}
 
 	public void scanf(String name, String type) {
-		code.append("scanf(\"");
-		if (type.equals(TypeNode.INT.getStringType()))
-			code.append("%d\", &");
-		else if (type.equals(TypeNode.FLOAT.getStringType()))
-			code.append("%f\", &");
-		else if (type.equals(TypeNode.BOOL.getStringType()))
-			code.append("%d\", &");
-		else if (type.equals(TypeNode.STRING.getStringType()))
-			code.append("%s\", ");
-		code.append(name).append(");\n");
+		if (type.equals(TypeNode.STRING.getStringType())) {
+			String tmpVarName = tmpVarNameGenerator.newName("in_str");
+			code.append("char ").append(tmpVarName).append("[512];\n");
+			code.append("scanf(\"%s\", ").append(tmpVarName).append(");\n");
+			code.append(name).append(" = ").append(tmpVarName).append(";\n");
+		} else {
+			code.append("scanf(\"");
+			if (type.equals(TypeNode.INT.getStringType()) || type.equals(TypeNode.BOOL.getStringType()))
+				code.append("%d");
+			else if (type.equals(TypeNode.FLOAT.getStringType()))
+				code.append("%f");
+			code.append("\", &").append(name).append(");\n");
+		}
 	}
 
 	public void printf(String cExpr, String type) {
@@ -144,7 +140,11 @@ public class ClangCodeEditor {
 		code.append(varName).append(" = ").append(cExpr).append(";\n");
 	}
 
-	public void invoke(String procName, List<String> cExprs) {
+	public void invokeWithResult(String varType, String varName, String procName, List<String> cExprs) {
+		code.append(varType);
+		code.append(" ");
+		code.append(varName);
+		code.append(" = ");
 		code.append(procName);
 		code.append("(");
 		if (cExprs != null && !cExprs.isEmpty()) {
@@ -157,38 +157,24 @@ public class ClangCodeEditor {
 		code.append(");\n");
 	}
 
-	public void invokeWithResult(String varType, String varName, String procName, List<String> cExprs) {
-		code.append(varType);
-		code.append(" ");
-		code.append(varName);
-		code.append(" = ");
-		invoke(procName, cExprs);
-	}
-
 	public void openIfBlock(String cExpr) {
 		code.append("if (").append(cExpr).append(") {\n");
-		openBlock();
+		stack.push(code = new StringBuilder());
 	}
 
 	public void openElseIfBlock(String cExpr) {
 		code.append("else if (").append(cExpr).append(") {\n");
-		openBlock();
+		stack.push(code = new StringBuilder());
 	}
 
 	public void openElseBlock() {
 		code.append("else {\n");
-		openBlock();
+		stack.push(code = new StringBuilder());
 	}
 
 	public void openWhileBlock(String cExpr) {
 		code.append("while (").append(cExpr).append(") {\n");
-		openBlock();
-	}
-
-	public void closeBlock() {
-		String tabbed = getTabbedCode();
-		code.append(tabbed);
-		code.append("}\n");
+		stack.push(code = new StringBuilder());
 	}
 
 	public void openDeclarationBlock(String cRetType, String name, List<String> cParamTypes, List<String> paramNames) {
@@ -210,7 +196,11 @@ public class ClangCodeEditor {
 			code.delete(code.length() - 2, code.length());
 		}
 		code.append(")\n{\n");
-		openBlock();
+		stack.push(code = new StringBuilder());
+	}
+
+	public String getCode() {
+		return code.toString();
 	}
 
 }

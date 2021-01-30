@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Factorial wrong" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.Driver" />
-    <module name="esercitazione4" />
+    <module name="loria_es5_scg" />
     <option name="PROGRAM_PARAMETERS" value="tests/factorial_wrong.toy" />
     <method v="2">
       <option name="Make" enabled="true" />

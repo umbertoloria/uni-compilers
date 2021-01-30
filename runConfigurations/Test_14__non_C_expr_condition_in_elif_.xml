@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test 14 (non-C-expr condition in elif)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.Driver" />
-    <module name="esercitazione4" />
+    <module name="loria_es5_scg" />
     <option name="PROGRAM_PARAMETERS" value="tests/test14.toy" />
     <method v="2">
       <option name="Make" enabled="true" />

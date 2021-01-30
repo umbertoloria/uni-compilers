@@ -1,8 +1,13 @@
 proc main() int:
     string a := "ciao", b := "tutti";
+    write("Fornisci una stringa: ");
+    readln(a);
+    write("Fornisci un'altra stringa: ");
+    readln(b);
+    write("Input: ", a, ", ", b, "\n");
     if a < b then
         write("a < b");
-    elif a <> b then
+    elif a = b then
         write("a == b");
     elif a > b then
         write("a > b");

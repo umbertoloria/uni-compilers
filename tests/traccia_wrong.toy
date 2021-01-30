@@ -53,7 +53,7 @@ proc main() int:
             write("Resultato: ", div(a, b));
         fi;
 
-        write("\nVuoi continuare? (1 sì, 0 no): ");
+        write("\nVuoi continuare? (1 si, 0 no): ");
         readln(yesOrNo);
 
     od;
