@@ -110,6 +110,9 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	@Override
 	public Void visitId(Id id) {
 		id.type = scopingTable.getTypeInCloserScopeGoingUp(id.name);
+		if (id.type.contains("->")) {
+			errorsManager.undeclaredVariable(id.name);
+		}
 		return null;
 	}
 

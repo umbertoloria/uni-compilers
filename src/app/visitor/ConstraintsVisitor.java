@@ -22,7 +22,7 @@ public class ConstraintsVisitor extends DFSBaseVisitor<Void> {
 				errorsManager.invalidMain();
 				return null;
 			}
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			errorsManager.missingMain();
 			return null;
 		}
