@@ -1,0 +1,19 @@
+proc enum(int case) int:
+    -> 0
+corp;
+
+proc continue(int case) int, string, float:
+    -> 1, "zero", enum(case)
+corp;
+
+proc main() int:
+    int break := 1;
+    int goto := 0;
+    float bool_bool := 3 + break * 2;
+    bool extern := true;
+    string int_string_float;
+    write(break, goto, bool_bool, extern, int_string_float, continue(1));
+    break, int_string_float, bool_bool := continue(1);
+    write(break, int_string_float, bool_bool);
+    -> 0
+corp;

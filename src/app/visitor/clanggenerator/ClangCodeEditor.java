@@ -2,22 +2,23 @@ package app.visitor.clanggenerator;
 
 import app.node.TypeNode;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 
 public class ClangCodeEditor {
 
 	private static final String tab = "\t";
 
-	private TmpVarNameGenerator tmpVarNameGenerator;
+	private EasyNamesManager easyNamesManager;
 	private Stack<StringBuilder> stack = new Stack<>();
 	private StringBuilder code;
-	private Set<String> declaredStructs = new HashSet<>();
 
-	public ClangCodeEditor(TmpVarNameGenerator tmpVarNameGenerator) {
-		this.tmpVarNameGenerator = tmpVarNameGenerator;
+	public ClangCodeEditor(EasyNamesManager easyNamesManager) {
+		this.easyNamesManager = easyNamesManager;
 		code = new StringBuilder();
 		code.append("#include <stdio.h>\n");
-		code.append("#include <string.h>\n\n");
+		code.append("#include <string.h>\n");
 		stack.push(code);
 	}
 
@@ -37,9 +38,9 @@ public class ClangCodeEditor {
 		code.append("}\n");
 	}
 
-	public void putInterface(String cRetType, String name, List<String> paramTypes) {
+	public void putInterface(String cRetType, String procName, List<String> paramTypes) {
 		// Es. 'int_int_int getCurDate(int zeroPaddingDay, int zeroPaddingMonth);'
-		code.append(cRetType).append(" ").append(name).append("(");
+		code.append(cRetType).append(" ").append(procName).append("(");
 		if (!paramTypes.isEmpty()) {
 			for (String paramType : paramTypes) {
 				code.append(paramType);
@@ -71,15 +72,12 @@ public class ClangCodeEditor {
 		code.append("return ").append(cExpr).append(";\n");
 	}
 
-	public void putMultipleReturn(String retStructName, List<String> cExprs) {
-		if (retStructName.split("_").length != cExprs.size()) {
-			throw new IllegalStateException();
-		}
+	public void putMultipleReturn(String structName, List<String> cExprs) {
 		// Es. 'int_int res;'
 		//     'res.t0 = 3*7;'
 		//     'res.t1 = min(a, 1);'
 		//     'return res;'
-		code.append(retStructName).append(" res;\n");
+		code.append(structName).append(" res;\n");
 		int i = 0;
 		for (String retExpr : cExprs) {
 			code.append("res.t").append(i++).append(" = ").append(retExpr).append(";\n");
@@ -87,27 +85,24 @@ public class ClangCodeEditor {
 		code.append("return res;\n");
 	}
 
-	public void putStruct(String name, List<String> cTypes) {
-		if (!declaredStructs.contains(name)) {
-			declaredStructs.add(name);
-			// Es. 'typedef struct {'
-			//     '    int t0;'
-			//     '    char* t1;'
-			//     '} int_string;'
-			code.append("typedef struct {\n");
-			stack.push(code = new StringBuilder());
-			int varI = 0;
-			for (String cType : cTypes) {
-				code.append(cType).append(" t").append(varI++).append(";\n");
-			}
-			closeBlock();
-			code.delete(code.length() - 1, code.length()).append(" ").append(name).append(";\n");
+	public void putStruct(String structName, List<String> cTypes) {
+		// Es. 'typedef struct {'
+		//     '    int t0;'
+		//     '    char* t1;'
+		//     '} int_string;'
+		code.append("typedef struct {\n");
+		stack.push(code = new StringBuilder());
+		int varI = 0;
+		for (String cType : cTypes) {
+			code.append(cType).append(" t").append(varI++).append(";\n");
 		}
+		closeBlock();
+		code.delete(code.length() - 1, code.length()).append(" ").append(structName).append(";\n");
 	}
 
 	public void scanf(String name, String type) {
 		if (type.equals(TypeNode.STRING.getStringType())) {
-			String tmpVarName = tmpVarNameGenerator.newName("in_str");
+			String tmpVarName = easyNamesManager.createName("in_str");
 			code.append("char ").append(tmpVarName).append("[512];\n");
 			code.append("scanf(\"%s\", ").append(tmpVarName).append(");\n");
 			code.append(name).append(" = ").append(tmpVarName).append(";\n");

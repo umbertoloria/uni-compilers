@@ -7,7 +7,7 @@ import app.node.binop.*;
 import app.node.expr.*;
 import app.visitor.ExclusiveNodeVisitor;
 import app.visitor.clanggenerator.ClangCodeEditor;
-import app.visitor.clanggenerator.TmpVarNameGenerator;
+import app.visitor.clanggenerator.EasyNamesManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.List;
 public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 
 	private ClangCodeEditor clangCodeEditor;
-	private TmpVarNameGenerator tmpVarNameGenerator;
+	private EasyNamesManager easyNamesManager;
 
-	public CExprGeneratorVisitor(ClangCodeEditor clangCodeEditor, TmpVarNameGenerator tmpVarNameGenerator) {
+	public CExprGeneratorVisitor(ClangCodeEditor clangCodeEditor, EasyNamesManager easyNamesManager) {
 		this.clangCodeEditor = clangCodeEditor;
-		this.tmpVarNameGenerator = tmpVarNameGenerator;
+		this.easyNamesManager = easyNamesManager;
 	}
 
 	private List<String> getSingletonList(String str) {
@@ -30,7 +30,8 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 
 	@Override
 	public List<String> visitId(Id id) {
-		return getSingletonList(id.name);
+		String usableName = easyNamesManager.safeNameUsage(id.name);
+		return getSingletonList(usableName);
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 		// procedura. Quando un'espressione Toy descrive una invocazione di procedura che restituisce più di un valore,
 		// bisogna necessariamente costruire del codice di servizio per realizzarla. Una espressione C non basta per
 		// modellare la restituzione di tutti questi valori. Ne verrà costruita una per ogni valore restituito.
+		String procName = easyNamesManager.safeNameUsage(callProcOP.procId.name);
 		if (callProcOP.type.contains(",")) {
 			List<String> cParamExprs = new LinkedList<>();
 			if (callProcOP.exprs != null) {
@@ -84,10 +86,11 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 					cParamExprs.addAll(cLocalExprs);
 				}
 			}
-			String cStructType = callProcOP.type.replace(",", "_");
-			String procName = callProcOP.procId.name;
-			String newVarName = tmpVarNameGenerator.newName(procName);
-			clangCodeEditor.invokeWithResult(cStructType, newVarName, procName, cParamExprs);
+			String structName = callProcOP.type.replace(",", "_");
+			// Per migliorare la leggibilità del codice C generato, il nome della variabile di servizio che permette
+			// la restituzione multipla di valori da un'invocazione è basato sulla procedura stessa che viene invocata.
+			String newVarName = easyNamesManager.createName(procName);
+			clangCodeEditor.invokeWithResult(structName, newVarName, procName, cParamExprs);
 			int retExprsCount = callProcOP.type.split(",").length;
 			List<String> cRetExprs = new LinkedList<>();
 			for (int i = 0; i < retExprsCount; i++) {
@@ -96,8 +99,7 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 			return cRetExprs;
 		} else {
 			StringBuilder code = new StringBuilder();
-			code.append(callProcOP.procId.name);
-			code.append("(");
+			code.append(procName).append("(");
 			if (callProcOP.exprs != null) {
 				for (ExprNode expr : callProcOP.exprs) {
 					List<String> cExprs = expr.accept(this);

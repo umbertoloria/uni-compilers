@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-
 typedef struct {
 	int t0;
 	int t1;

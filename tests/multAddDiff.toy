@@ -1,6 +1,6 @@
 /*
  * Calcolo di moltiplicazione, somma e differenza
-*/ 
+*/
 
 string nome := "Michele";
 

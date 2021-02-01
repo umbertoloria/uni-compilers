@@ -10,25 +10,23 @@ import app.visitor.clanggenerator.exprvisitor.ImmediateExprVisitor;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 
 	private TypeCodifier typeCodifier = new TypeCodifier();
-	private List<VarDeclOP> globalVarDecls;
-
+	private ImmediateExprVisitor immediateExprVisitor = new ImmediateExprVisitor();
+	private EasyNamesManager easyNamesManager;
 	private ClangCodeEditor clangCodeEditor;
 	private CExprGeneratorVisitor cExprGeneratorVisitor;
-	private ImmediateExprVisitor immediateExprVisitor = new ImmediateExprVisitor();
+	private List<VarDeclOP> globalVarDecls;
+	private Set<String> declaredStructs = new HashSet<>();
 
 	public ClangVisitor(Set<String> namesToExclude) {
-		TmpVarNameGenerator tmpVarNameGenerator = new TmpVarNameGenerator(namesToExclude);
-		clangCodeEditor = new ClangCodeEditor(tmpVarNameGenerator);
-		cExprGeneratorVisitor = new CExprGeneratorVisitor(clangCodeEditor, tmpVarNameGenerator);
+		easyNamesManager = new EasyNamesManager(namesToExclude);
+		clangCodeEditor = new ClangCodeEditor(easyNamesManager);
+		cExprGeneratorVisitor = new CExprGeneratorVisitor(clangCodeEditor, easyNamesManager);
 	}
 
 	private String getCLikeReturnType(List<TypeNode> typeNodes) {
@@ -46,11 +44,6 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 		}
 	}
 
-	private String legacySingleExpr(List<String> strs) {
-		return strs.get(0);
-	}
-
-	// VISITS
 	@Override
 	public Object visitProgramOP(ProgramOP programOP) {
 		// Strutture: prima tutte le struct necessarie alle invocazioni che restituiscono più espressioni
@@ -62,17 +55,7 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 		// Interfacce: poi vengono le interfacce delle procedure, così da permettere invocazioni prima di dichiarazioni
 		for (ProcOP proc : programOP.procs) {
 			if (!proc.id.name.equals(ConstraintsVisitor.MAIN_NAME)) {
-				String cRetType = getCLikeReturnType(proc.returnTypes);
-				List<String> cParamTypes = new LinkedList<>();
-				if (proc.parDecls != null) {
-					for (ParDeclOP parDecl : proc.parDecls) {
-						String cParamType = typeCodifier.codify(parDecl.type);
-						for (Id ignored : parDecl.ids) {
-							cParamTypes.add(cParamType);
-						}
-					}
-				}
-				clangCodeEditor.putInterface(cRetType, proc.id.name, cParamTypes);
+				publicInterface(proc);
 			}
 		}
 		// Variabili globali: si dichiarano tutte, si inizializzano solo quelle con espressioni immediate
@@ -91,19 +74,84 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 
 	private void publicStruct(ProcOP proc) {
 		if (proc.returnTypes != null && proc.returnTypes.size() > 1) {
-			StringBuilder structName = new StringBuilder();
-			List<String> cTypes = new LinkedList<>();
-			for (TypeNode returnType : proc.returnTypes) {
-				structName.append(returnType);
-				structName.append('_');
-				cTypes.add(typeCodifier.codify(returnType));
+			String structName = getCLikeReturnType(proc.returnTypes);
+			if (!declaredStructs.contains(structName)) {
+				declaredStructs.add(structName);
+				easyNamesManager.addReservedWord(structName);
+				List<String> cTypes = new LinkedList<>();
+				for (TypeNode returnType : proc.returnTypes) {
+					cTypes.add(typeCodifier.codify(returnType));
+				}
+				clangCodeEditor.putStruct(structName, cTypes);
 			}
-			structName.delete(structName.length() - 1, structName.length());
-			clangCodeEditor.putStruct(structName.toString(), cTypes);
 		}
+
 	}
 
-	private void visit_VarDeclOP(VarDeclOP varDeclOP, boolean inProcOP) {
+	private void publicInterface(ProcOP proc) {
+		String cRetType = getCLikeReturnType(proc.returnTypes);
+		List<String> cParamTypes = new LinkedList<>();
+		if (proc.parDecls != null) {
+			for (ParDeclOP parDecl : proc.parDecls) {
+				String cParamType = typeCodifier.codify(parDecl.type);
+				for (Id ignored : parDecl.ids) {
+					cParamTypes.add(cParamType);
+				}
+			}
+		}
+		String usableName = easyNamesManager.safeNameUsage(proc.id.name);
+		clangCodeEditor.putInterface(cRetType, usableName, cParamTypes);
+	}
+
+	@Override
+	public Object visitProcOP(ProcOP procOP) {
+		List<String> cParamTypes = new LinkedList<>();
+		List<String> paramNames = new LinkedList<>();
+		if (procOP.parDecls != null) {
+			for (ParDeclOP parDecl : procOP.parDecls) {
+				String cParamType = typeCodifier.codify(parDecl.type);
+				for (Id id : parDecl.ids) {
+					cParamTypes.add(cParamType);
+					String usableName = easyNamesManager.safeNameUsage(id.name);
+					paramNames.add(usableName);
+				}
+			}
+		}
+		String cRetType = getCLikeReturnType(procOP.returnTypes);
+		String usableProcName = easyNamesManager.safeNameUsage(procOP.id.name);
+		clangCodeEditor.openDeclarationBlock(cRetType, usableProcName, cParamTypes, paramNames);
+		if (procOP.id.name.equals(ConstraintsVisitor.MAIN_NAME)) {
+			// Le assegnazioni di espressioni non-immediate sono vietate nello scope globale di C
+			if (globalVarDecls != null) {
+				for (VarDeclOP main_sVarDecl : globalVarDecls) {
+					for (IdInitOP idInit : main_sVarDecl.idInits) {
+						if (idInit.expr != null && !idInit.expr.accept(immediateExprVisitor)) {
+							// Questa lista in realtà contiene una sola espressione C
+							List<String> cNotImmExprs = idInit.expr.accept(cExprGeneratorVisitor);
+							String cNotImmExpr = cNotImmExprs.get(0);
+							String usableName = easyNamesManager.safeNameUsage(idInit.id.name);
+							clangCodeEditor.assign(usableName, cNotImmExpr);
+						}
+					}
+				}
+			}
+		}
+		if (procOP.procBody.varDecls != null) {
+			for (VarDeclOP varDecl : procOP.procBody.varDecls) {
+				visit_VarDeclOP(varDecl, true);
+			}
+		}
+		if (procOP.procBody.body != null) {
+			procOP.procBody.body.accept(this);
+		}
+		if (procOP.procBody.returnExpressions != null) {
+			singleOrMultipleReturn(procOP);
+		}
+		clangCodeEditor.closeBlock();
+		return null;
+	}
+
+	public void visit_VarDeclOP(VarDeclOP varDeclOP, boolean inProcOP) {
 		String cType = typeCodifier.codify(varDeclOP.type);
 		for (IdInitOP idInit : varDeclOP.idInits) {
 			// L'inizializzazione con espressioni non-immediate (che dipendono da variabili o invocazioni) non è valida
@@ -113,77 +161,29 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 				// Se c'è una espressione da assegnare, allora si inizializza direttamente se:
 				// * siamo in una funzione, oppure;
 				// * siamo nello scope globale ma l'espressione è immediata.
-				String cExpr = legacySingleExpr(idInit.expr.accept(cExprGeneratorVisitor));
-				clangCodeEditor.putVarInitialization(cType, idInit.id.name, cExpr);
+				String usableName = easyNamesManager.safeNameUsage(idInit.id.name);
+				// Questa lista in realtà contiene una sola espressione C
+				List<String> cExprs = idInit.expr.accept(cExprGeneratorVisitor);
+				String cExpr = cExprs.get(0);
+				clangCodeEditor.putVarInitialization(cType, usableName, cExpr);
 			} else {
-				clangCodeEditor.putVarDeclaration(cType, idInit.id.name);
+				String usableName = easyNamesManager.safeNameUsage(idInit.id.name);
+				clangCodeEditor.putVarDeclaration(cType, usableName);
 			}
 		}
 	}
 
-	@Override
-	public Object visitProcOP(ProcOP procOP) {
-		String cRetType = getCLikeReturnType(procOP.returnTypes);
-		List<String> cParamTypes = new LinkedList<>();
-		List<String> paramNames = new LinkedList<>();
-		if (procOP.parDecls != null) {
-			for (ParDeclOP parDecl : procOP.parDecls) {
-				String cParamType = typeCodifier.codify(parDecl.type);
-				for (Id id : parDecl.ids) {
-					cParamTypes.add(cParamType);
-					paramNames.add(id.name);
-				}
-			}
+	public void singleOrMultipleReturn(ProcOP procOP) {
+		List<String> cExprs = new LinkedList<>();
+		for (ExprNode returnExpression : procOP.procBody.returnExpressions) {
+			List<String> cParExprs = returnExpression.accept(cExprGeneratorVisitor);
+			cExprs.addAll(cParExprs);
 		}
-		clangCodeEditor.openDeclarationBlock(cRetType, procOP.id.name, cParamTypes, paramNames);
-		if (procOP.id.name.equals(ConstraintsVisitor.MAIN_NAME)) {
-			// Le assegnazioni di espressioni non-immediate sono vietate nello scope globale di C
-			if (globalVarDecls != null) {
-				for (VarDeclOP main_sVarDecl : globalVarDecls) {
-					for (IdInitOP idInit : main_sVarDecl.idInits) {
-						if (idInit.expr != null && !idInit.expr.accept(immediateExprVisitor)) {
-							String cNotImmExpr = legacySingleExpr(idInit.expr.accept(cExprGeneratorVisitor));
-							clangCodeEditor.assign(idInit.id.name, cNotImmExpr);
-						}
-					}
-				}
-			}
-		}
-		visit_ProcBodyOP(cRetType, procOP.procBody);
-		clangCodeEditor.closeBlock();
-		return null;
-	}
-
-	public void visit_ProcBodyOP(String cRetType, ProcBodyOP procBodyOP) {
-		if (procBodyOP.varDecls != null) {
-			for (VarDeclOP varDecl : procBodyOP.varDecls) {
-				visit_VarDeclOP(varDecl, true);
-			}
-		}
-		if (procBodyOP.body != null) {
-			procBodyOP.body.accept(this);
-		}
-		if (procBodyOP.returnExpressions != null) {
-			if (cRetType.contains("_")) {
-				List<String> cExprs = new LinkedList<>();
-				for (ExprNode returnExpression : procBodyOP.returnExpressions) {
-					List<String> cLocalExpr = returnExpression.accept(cExprGeneratorVisitor);
-					cExprs.addAll(cLocalExpr);
-				}
-				clangCodeEditor.putMultipleReturn(cRetType, cExprs);
-			} else {
-				if (procBodyOP.returnExpressions.size() == 1) {
-					ExprNode expr = procBodyOP.returnExpressions.get(0);
-					List<String> cExpr = expr.accept(cExprGeneratorVisitor);
-					if (cExpr.size() == 1) {
-						clangCodeEditor.putSingleReturn(cExpr.get(0));
-					} else {
-						throw new IllegalStateException();
-					}
-				} else {
-					throw new IllegalStateException();
-				}
-			}
+		if (cExprs.size() == 1) {
+			clangCodeEditor.putSingleReturn(cExprs.get(0));
+		} else {
+			String cRetType = getCLikeReturnType(procOP.returnTypes);
+			clangCodeEditor.putMultipleReturn(cRetType, cExprs);
 		}
 	}
 
@@ -244,7 +244,8 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 			List<String> cExprs = expr.accept(cExprGeneratorVisitor);
 			for (String cExpr : cExprs) {
 				String varName = idIt.next().name;
-				clangCodeEditor.assign(varName, cExpr);
+				String usableName = easyNamesManager.safeNameUsage(varName);
+				clangCodeEditor.assign(usableName, cExpr);
 			}
 		}
 		return null;
@@ -253,7 +254,8 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	@Override
 	public Object visitReadlnOP(ReadlnOP readlnOP) {
 		for (Id id : readlnOP.ids) {
-			clangCodeEditor.scanf(id.name, id.type);
+			String usableName = easyNamesManager.safeNameUsage(id.name);
+			clangCodeEditor.scanf(usableName, id.type);
 		}
 		return null;
 	}
@@ -291,10 +293,10 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	public void saveOnFile(String filepath) {
 		try {
 			FileWriter myWriter = new FileWriter(filepath);
-			myWriter.write(clangCodeEditor.getCode());
+			myWriter.write(clangCodeEditor.getCode().replace("\n", "\r\n"));
 			myWriter.close();
 		} catch (IOException e) {
-			System.out.println("An error occurred.");
+			System.out.println("An error occurred while saving the C output code file.");
 			e.printStackTrace();
 		}
 	}

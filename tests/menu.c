@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-
 void sommaNumeri();
 void moltiplicaNumeri();
 void dividiNaturali();
