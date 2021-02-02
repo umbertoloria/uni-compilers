@@ -5,6 +5,18 @@ import java_cup.runtime.Symbol; //This is how we pass tokens to the parser
 %unicode // We wish to read text files
 %public
 %cup // Declare that we expect to use Java CUP
+%line
+%column
+
+%{
+private Symbol makeSymbol(int type) {
+    return new Symbol(type, yyline, yycolumn);
+}
+private Symbol makeSymbol(int type, Object value) {
+    return new Symbol(type, yyline, yycolumn, value);
+}
+%}
+
 // Abbreviations for regular expressions
 whitespace = [ \r\n\t\f]
 
@@ -24,61 +36,61 @@ string = \"([^\\\"]|\\.)*\"
 {whitespace} { /* ignore */ }
 
 // plain symbols
-"(" {return new Symbol(sym.LPAR); }
-"," {return new Symbol(sym.COMMA); }
-")" {return new Symbol(sym.RPAR); }
-";" {return new Symbol(sym.SEMI); }
-":" {return new Symbol(sym.COLON); }
+"(" {return makeSymbol(sym.LPAR); }
+"," {return makeSymbol(sym.COMMA); }
+")" {return makeSymbol(sym.RPAR); }
+";" {return makeSymbol(sym.SEMI); }
+":" {return makeSymbol(sym.COLON); }
 
-"!" {return new Symbol(sym.NOT); }
-"&&" {return new Symbol(sym.AND); }
-"||" {return new Symbol(sym.OR); }
+"!" {return makeSymbol(sym.NOT); }
+"&&" {return makeSymbol(sym.AND); }
+"||" {return makeSymbol(sym.OR); }
 
-"+" {return new Symbol(sym.PLUS); }
-"-" {return new Symbol(sym.MINUS); }
-"*" {return new Symbol(sym.TIMES); }
-"/" {return new Symbol(sym.DIV); }
+"+" {return makeSymbol(sym.PLUS); }
+"-" {return makeSymbol(sym.MINUS); }
+"*" {return makeSymbol(sym.TIMES); }
+"/" {return makeSymbol(sym.DIV); }
 
-"<" {return new Symbol(sym.LT); }
-"<=" {return new Symbol(sym.LE); }
-">" {return new Symbol(sym.GT); }
-">=" {return new Symbol(sym.GE); }
+"<" {return makeSymbol(sym.LT); }
+"<=" {return makeSymbol(sym.LE); }
+">" {return makeSymbol(sym.GT); }
+">=" {return makeSymbol(sym.GE); }
 
-":=" {return new Symbol(sym.ASSIGN); }
-"->" {return new Symbol(sym.RETURN); }
-"=" {return new Symbol(sym.EQ); }
-"<>" {return new Symbol(sym.NE); }
+":=" {return makeSymbol(sym.ASSIGN); }
+"->" {return makeSymbol(sym.RETURN); }
+"=" {return makeSymbol(sym.EQ); }
+"<>" {return makeSymbol(sym.NE); }
 
 // type/statment symbols
-"int" {return new Symbol(sym.INT); }
-"bool" {return new Symbol(sym.BOOL); }
-"float" {return new Symbol(sym.FLOAT); }
-"string" {return new Symbol(sym.STRING); }
-"void" {return new Symbol(sym.VOID); }
-"proc" {return new Symbol(sym.PROC); }
-"corp" {return new Symbol(sym.CORP); }
-"if" {return new Symbol(sym.IF); }
-"then" {return new Symbol(sym.THEN); }
-"elif" {return new Symbol(sym.ELIF); }
-"else" {return new Symbol(sym.ELSE); }
-"fi" {return new Symbol(sym.FI); }
-"while" {return new Symbol(sym.WHILE); }
-"do" {return new Symbol(sym.DO); }
-"od" {return new Symbol(sym.OD); }
-"readln" {return new Symbol(sym.READLN); }
-"write" {return new Symbol(sym.WRITE); }
+"int" {return makeSymbol(sym.INT); }
+"bool" {return makeSymbol(sym.BOOL); }
+"float" {return makeSymbol(sym.FLOAT); }
+"string" {return makeSymbol(sym.STRING); }
+"void" {return makeSymbol(sym.VOID); }
+"proc" {return makeSymbol(sym.PROC); }
+"corp" {return makeSymbol(sym.CORP); }
+"if" {return makeSymbol(sym.IF); }
+"then" {return makeSymbol(sym.THEN); }
+"elif" {return makeSymbol(sym.ELIF); }
+"else" {return makeSymbol(sym.ELSE); }
+"fi" {return makeSymbol(sym.FI); }
+"while" {return makeSymbol(sym.WHILE); }
+"do" {return makeSymbol(sym.DO); }
+"od" {return makeSymbol(sym.OD); }
+"readln" {return makeSymbol(sym.READLN); }
+"write" {return makeSymbol(sym.WRITE); }
 
 // value/id symbols
-"true" {return new Symbol(sym.TRUE); }
-"false" {return new Symbol(sym.FALSE); }
-{integer} {return new Symbol(sym.INT_CONST, Integer.parseInt(yytext())); }
-{real} {return new Symbol(sym.FLOAT_CONST, Float.parseFloat(yytext())); }
-{string} {String str = yytext(); return new Symbol(sym.STRING_CONST, str.substring(1, str.length() - 1));}
-{id} {return new Symbol(sym.ID, yytext()); }
+"true" {return makeSymbol(sym.TRUE); }
+"false" {return makeSymbol(sym.FALSE); }
+{integer} {return makeSymbol(sym.INT_CONST, Integer.parseInt(yytext())); }
+{real} {return makeSymbol(sym.FLOAT_CONST, Float.parseFloat(yytext())); }
+{string} {String str = yytext(); return makeSymbol(sym.STRING_CONST, str.substring(1, str.length() - 1));}
+{id} {return makeSymbol(sym.ID, yytext()); }
 
 "/*"         { yybegin(COMMENT); }
 
-[^]           { throw new Error("\n\nIllegal character < "+ yytext()+" >\n"); }
+[^]           { throw new Error("\n\nIllegal character < "+ yytext() + " >\n"); }
 
 }
 

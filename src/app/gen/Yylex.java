@@ -345,11 +345,9 @@ public class Yylex implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /** Number of newlines encountered up to the start of the matched text. */
-  @SuppressWarnings("unused")
   private int yyline;
 
   /** Number of characters from the last newline up to the start of the matched text. */
-  @SuppressWarnings("unused")
   private int yycolumn;
 
   /** Number of characters up to the start of the matched text. */
@@ -362,6 +360,14 @@ public class Yylex implements java_cup.runtime.Scanner {
 
   /** Whether the user-EOF-code has already been executed. */
   private boolean zzEOFDone;
+
+  /* user code: */
+private Symbol makeSymbol(int type) {
+    return new Symbol(type, yyline, yycolumn);
+}
+private Symbol makeSymbol(int type, Object value) {
+    return new Symbol(type, yyline, yycolumn, value);
+}
 
 
   /**
@@ -645,6 +651,63 @@ public class Yylex implements java_cup.runtime.Scanner {
     while (true) {
       zzMarkedPosL = zzMarkedPos;
 
+      boolean zzR = false;
+      int zzCh;
+      int zzCharCount;
+      for (zzCurrentPosL = zzStartRead  ;
+           zzCurrentPosL < zzMarkedPosL ;
+           zzCurrentPosL += zzCharCount ) {
+        zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
+        zzCharCount = Character.charCount(zzCh);
+        switch (zzCh) {
+        case '\u000B':  // fall through
+        case '\u000C':  // fall through
+        case '\u0085':  // fall through
+        case '\u2028':  // fall through
+        case '\u2029':
+          yyline++;
+          yycolumn = 0;
+          zzR = false;
+          break;
+        case '\r':
+          yyline++;
+          yycolumn = 0;
+          zzR = true;
+          break;
+        case '\n':
+          if (zzR)
+            zzR = false;
+          else {
+            yyline++;
+            yycolumn = 0;
+          }
+          break;
+        default:
+          zzR = false;
+          yycolumn += zzCharCount;
+        }
+      }
+
+      if (zzR) {
+        // peek one character ahead if it is
+        // (if we have counted one line too much)
+        boolean zzPeek;
+        if (zzMarkedPosL < zzEndReadL)
+          zzPeek = zzBufferL[zzMarkedPosL] == '\n';
+        else if (zzAtEOF)
+          zzPeek = false;
+        else {
+          boolean eof = zzRefill();
+          zzEndReadL = zzEndRead;
+          zzMarkedPosL = zzMarkedPos;
+          zzBufferL = zzBuffer;
+          if (eof)
+            zzPeek = false;
+          else
+            zzPeek = zzBufferL[zzMarkedPosL] == '\n';
+        }
+        if (zzPeek) yyline--;
+      }
       zzAction = -1;
 
       zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
@@ -720,7 +783,7 @@ public class Yylex implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { throw new Error("\n\nIllegal character < "+ yytext()+" >\n");
+            { throw new Error("\n\nIllegal character < "+ yytext() + " >\n");
             }
             // fall through
           case 49: break;
@@ -730,77 +793,77 @@ public class Yylex implements java_cup.runtime.Scanner {
             // fall through
           case 50: break;
           case 3:
-            { return new Symbol(sym.NOT);
+            { return makeSymbol(sym.NOT);
             }
             // fall through
           case 51: break;
           case 4:
-            { return new Symbol(sym.LPAR);
+            { return makeSymbol(sym.LPAR);
             }
             // fall through
           case 52: break;
           case 5:
-            { return new Symbol(sym.RPAR);
+            { return makeSymbol(sym.RPAR);
             }
             // fall through
           case 53: break;
           case 6:
-            { return new Symbol(sym.TIMES);
+            { return makeSymbol(sym.TIMES);
             }
             // fall through
           case 54: break;
           case 7:
-            { return new Symbol(sym.PLUS);
+            { return makeSymbol(sym.PLUS);
             }
             // fall through
           case 55: break;
           case 8:
-            { return new Symbol(sym.COMMA);
+            { return makeSymbol(sym.COMMA);
             }
             // fall through
           case 56: break;
           case 9:
-            { return new Symbol(sym.MINUS);
+            { return makeSymbol(sym.MINUS);
             }
             // fall through
           case 57: break;
           case 10:
-            { return new Symbol(sym.DIV);
+            { return makeSymbol(sym.DIV);
             }
             // fall through
           case 58: break;
           case 11:
-            { return new Symbol(sym.INT_CONST, Integer.parseInt(yytext()));
+            { return makeSymbol(sym.INT_CONST, Integer.parseInt(yytext()));
             }
             // fall through
           case 59: break;
           case 12:
-            { return new Symbol(sym.COLON);
+            { return makeSymbol(sym.COLON);
             }
             // fall through
           case 60: break;
           case 13:
-            { return new Symbol(sym.SEMI);
+            { return makeSymbol(sym.SEMI);
             }
             // fall through
           case 61: break;
           case 14:
-            { return new Symbol(sym.LT);
+            { return makeSymbol(sym.LT);
             }
             // fall through
           case 62: break;
           case 15:
-            { return new Symbol(sym.EQ);
+            { return makeSymbol(sym.EQ);
             }
             // fall through
           case 63: break;
           case 16:
-            { return new Symbol(sym.GT);
+            { return makeSymbol(sym.GT);
             }
             // fall through
           case 64: break;
           case 17:
-            { return new Symbol(sym.ID, yytext());
+            { return makeSymbol(sym.ID, yytext());
             }
             // fall through
           case 65: break;
@@ -810,17 +873,17 @@ public class Yylex implements java_cup.runtime.Scanner {
             // fall through
           case 66: break;
           case 19:
-            { String str = yytext(); return new Symbol(sym.STRING_CONST, str.substring(1, str.length() - 1));
+            { String str = yytext(); return makeSymbol(sym.STRING_CONST, str.substring(1, str.length() - 1));
             }
             // fall through
           case 67: break;
           case 20:
-            { return new Symbol(sym.AND);
+            { return makeSymbol(sym.AND);
             }
             // fall through
           case 68: break;
           case 21:
-            { return new Symbol(sym.RETURN);
+            { return makeSymbol(sym.RETURN);
             }
             // fall through
           case 69: break;
@@ -830,47 +893,47 @@ public class Yylex implements java_cup.runtime.Scanner {
             // fall through
           case 70: break;
           case 23:
-            { return new Symbol(sym.ASSIGN);
+            { return makeSymbol(sym.ASSIGN);
             }
             // fall through
           case 71: break;
           case 24:
-            { return new Symbol(sym.LE);
+            { return makeSymbol(sym.LE);
             }
             // fall through
           case 72: break;
           case 25:
-            { return new Symbol(sym.NE);
+            { return makeSymbol(sym.NE);
             }
             // fall through
           case 73: break;
           case 26:
-            { return new Symbol(sym.GE);
+            { return makeSymbol(sym.GE);
             }
             // fall through
           case 74: break;
           case 27:
-            { return new Symbol(sym.DO);
+            { return makeSymbol(sym.DO);
             }
             // fall through
           case 75: break;
           case 28:
-            { return new Symbol(sym.FI);
+            { return makeSymbol(sym.FI);
             }
             // fall through
           case 76: break;
           case 29:
-            { return new Symbol(sym.IF);
+            { return makeSymbol(sym.IF);
             }
             // fall through
           case 77: break;
           case 30:
-            { return new Symbol(sym.OD);
+            { return makeSymbol(sym.OD);
             }
             // fall through
           case 78: break;
           case 31:
-            { return new Symbol(sym.OR);
+            { return makeSymbol(sym.OR);
             }
             // fall through
           case 79: break;
@@ -880,82 +943,82 @@ public class Yylex implements java_cup.runtime.Scanner {
             // fall through
           case 80: break;
           case 33:
-            { return new Symbol(sym.FLOAT_CONST, Float.parseFloat(yytext()));
+            { return makeSymbol(sym.FLOAT_CONST, Float.parseFloat(yytext()));
             }
             // fall through
           case 81: break;
           case 34:
-            { return new Symbol(sym.INT);
+            { return makeSymbol(sym.INT);
             }
             // fall through
           case 82: break;
           case 35:
-            { return new Symbol(sym.BOOL);
+            { return makeSymbol(sym.BOOL);
             }
             // fall through
           case 83: break;
           case 36:
-            { return new Symbol(sym.CORP);
+            { return makeSymbol(sym.CORP);
             }
             // fall through
           case 84: break;
           case 37:
-            { return new Symbol(sym.ELIF);
+            { return makeSymbol(sym.ELIF);
             }
             // fall through
           case 85: break;
           case 38:
-            { return new Symbol(sym.ELSE);
+            { return makeSymbol(sym.ELSE);
             }
             // fall through
           case 86: break;
           case 39:
-            { return new Symbol(sym.PROC);
+            { return makeSymbol(sym.PROC);
             }
             // fall through
           case 87: break;
           case 40:
-            { return new Symbol(sym.THEN);
+            { return makeSymbol(sym.THEN);
             }
             // fall through
           case 88: break;
           case 41:
-            { return new Symbol(sym.TRUE);
+            { return makeSymbol(sym.TRUE);
             }
             // fall through
           case 89: break;
           case 42:
-            { return new Symbol(sym.VOID);
+            { return makeSymbol(sym.VOID);
             }
             // fall through
           case 90: break;
           case 43:
-            { return new Symbol(sym.FALSE);
+            { return makeSymbol(sym.FALSE);
             }
             // fall through
           case 91: break;
           case 44:
-            { return new Symbol(sym.FLOAT);
+            { return makeSymbol(sym.FLOAT);
             }
             // fall through
           case 92: break;
           case 45:
-            { return new Symbol(sym.WHILE);
+            { return makeSymbol(sym.WHILE);
             }
             // fall through
           case 93: break;
           case 46:
-            { return new Symbol(sym.WRITE);
+            { return makeSymbol(sym.WRITE);
             }
             // fall through
           case 94: break;
           case 47:
-            { return new Symbol(sym.READLN);
+            { return makeSymbol(sym.READLN);
             }
             // fall through
           case 95: break;
           case 48:
-            { return new Symbol(sym.STRING);
+            { return makeSymbol(sym.STRING);
             }
             // fall through
           case 96: break;
