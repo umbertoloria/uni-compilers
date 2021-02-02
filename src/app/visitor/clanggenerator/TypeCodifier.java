@@ -15,10 +15,10 @@ public class TypeCodifier {
 		typesFromAgnosticToC.put(TypeNode.INT.getStringType(), "int");
 		typesFromAgnosticToC.put(TypeNode.FLOAT.getStringType(), "float");
 		typesFromAgnosticToC.put(TypeNode.BOOL.getStringType(), "int");
-		typesFromAgnosticToC.put(TypeNode.STRING.getStringType(), "char*");
+		typesFromAgnosticToC.put(TypeNode.STRING.getStringType(), "const char*");
 		defaultValueForTypes.put("int", "0");
 		defaultValueForTypes.put("float", "0");
-		defaultValueForTypes.put("char*", "\"\"");
+		defaultValueForTypes.put("const char*", "\"\"");
 	}
 
 	public String codify(TypeNode typeNode) {

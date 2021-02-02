@@ -1,11 +1,11 @@
 proc main() int:
     int a;
     if a > 0 then
-        write("Positive");
+        a := 1;
     elif a < 0 then
-        write("Negative");
+        a := -1;
     else
-        write("Zero");
+        a := 0;
     fi;
     -> 0
 corp;

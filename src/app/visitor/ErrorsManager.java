@@ -25,14 +25,19 @@ public class ErrorsManager {
 				+ typeA + "' " + "and '" + typeB + "'");
 	}
 
+	public void typeMismatchInConcatenationOperation(String typeA, String typeB) {
+		throw new RuntimeException("Two string expressions are required for concatenation: given '" + typeA
+				+ "' and '" + typeB + "'");
+	}
+
 	public void typeMismatchInBinaryArithmeticOperation(String typeA, String typeB) {
 		throw new RuntimeException("Two number expressions are required in every binary arithmetic operation: given '"
 				+ typeA + "' and '" + typeB + "'");
 	}
 
 	public void typeMismatchInAssign(String actualTypes, String formalTypes) {
-		throw new RuntimeException("Invalid assignment: formal '" + formalTypes + "' but actual '" + actualTypes +
-				"'");
+		throw new RuntimeException("Invalid assignment: formal '" + formalTypes + "' but actual '" + actualTypes
+				+ "'");
 	}
 
 	public void invalidMain() {

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 float add(float, float);
 float sub(float, float);
 float mul(float, float);

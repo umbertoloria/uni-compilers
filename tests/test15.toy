@@ -1,9 +1,15 @@
+proc in_str() string:
+    string res;
+    readln(res);
+    -> res
+corp;
+
 proc main() int:
-    string a := "ciao", b := "tutti";
+    string a, b;
     write("Fornisci una stringa: ");
-    readln(a);
+    a := in_str();
     write("Fornisci un'altra stringa: ");
-    readln(b);
+    b := in_str();
     write("Input: ", a, ", ", b, "\n");
     if a < b then
         write("a < b");

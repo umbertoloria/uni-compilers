@@ -122,7 +122,7 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 		String cExpr2 = bon.b.accept(this).get(0);
 		if (bon.a.type.equals(TypeNode.STRING.getStringType()) && bon.b.type.equals(TypeNode.STRING.getStringType())) {
 			// confronto di stringhe
-			return getSingletonList("strcmp(" + cExpr1 + ", " + cExpr2 + ") " + bon.op + " 0");
+			return getSingletonList(clangCodeEditor.getStringComparingExpr(cExpr1, cExpr2, bon.op));
 		} else {
 			// confronto di numeri
 			return getSingletonList(cExpr1 + " " + bon.op + " " + cExpr2);
@@ -186,7 +186,14 @@ public class CExprGeneratorVisitor extends ExclusiveNodeVisitor<List<String>> {
 
 	@Override
 	public List<String> visitPlusOP(PlusOP plusOP) {
-		return visitBinaryArithmeticOperation(plusOP);
+		if (plusOP.type.equals(TypeNode.STRING.getStringType())) {
+			String cExpr1 = plusOP.a.accept(this).get(0);
+			String cExpr2 = plusOP.b.accept(this).get(0);
+			String resCExpr = clangCodeEditor.concatStrings(cExpr1, cExpr2);
+			return getSingletonList(resCExpr);
+		} else {
+			return visitBinaryArithmeticOperation(plusOP);
+		}
 	}
 
 	@Override

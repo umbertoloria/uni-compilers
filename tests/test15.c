@@ -1,17 +1,23 @@
 #include <stdio.h>
 #include <string.h>
+#include <malloc.h>
+const char* in_str();
+const char* in_str()
+{
+	const char* res = "";
+	char* _in_str_0 = (char*) malloc(512);
+	scanf("%s", _in_str_0);
+	res = _in_str_0;
+	return res;
+}
 int main()
 {
-	char* a = "ciao";
-	char* b = "tutti";
+	const char* a = "";
+	const char* b = "";
 	printf("Fornisci una stringa: ");
-	char _in_str_0[512];
-	scanf("%s", _in_str_0);
-	a = _in_str_0;
+	a = in_str();
 	printf("Fornisci un'altra stringa: ");
-	char _in_str_1[512];
-	scanf("%s", _in_str_1);
-	b = _in_str_1;
+	b = in_str();
 	printf("Input: ");
 	printf(a);
 	printf(", ");

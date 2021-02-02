@@ -1,0 +1,27 @@
+proc concat(string name; string surname) string:
+    -> name + " " + surname
+corp;
+
+proc main() int:
+    string firstname, lastname;
+    string fullname;
+    string title;
+    string merged;
+    write("Fornisci il tuo titolo (studente, professore, rockstar, ...): ");
+    readln(title);
+    write("Fornisci il tuo nome: ");
+    readln(firstname);
+    write("Fornisci il tuo cognome: ");
+    readln(lastname);
+    write("Ecco una serie di modi intercambiabili per chiamarti.\n\n");
+    write(firstname + " " + lastname, "  (concatenazione diretta tramite operatore)" + "\n");
+    fullname := concat(firstname, lastname);
+    write(fullname, "  (concatenazione assegnata e passata)" + "\n");
+    write(concat(firstname, lastname) + "  (concatenazione diretta tramite funzione)\n");
+    write(title + " " + lastname, "  (un altro modo)\n");
+    write("Fornisci il tuo nuovo nome: ");
+    readln(firstname);
+    merged := "\"" + firstname + "\"";
+    write("Ecco il tuo nuovo nome: ", merged + "  (test di riassegnazione e caratteri di escape)");
+    -> 0
+corp;

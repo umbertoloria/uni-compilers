@@ -13,7 +13,7 @@ letter = [a-zA-Z]
 digit = [0-9]
 id = ({letter}|_)({letter}|{digit}|_)*
 integer = 0|[1-9][0-9]*
-real = {integer}\.[0-9]*[1-9]
+real = {integer}\.([0-9]*[1-9]|0)
 string = \"([^\\\"]|\\.)*\"
 
 %state COMMENT

@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <string.h>
 typedef struct {
 	int t0;
-	char* t1;
+	const char* t1;
 	float t2;
 } int_string_float;
 int _enum_0(int);
@@ -25,7 +24,7 @@ int main()
 	int _goto_4 = 0;
 	float bool_bool = 3 + _break_3 * 2;
 	int _extern_5 = 1;
-	char* _int_string_float_6 = "";
+	const char* _int_string_float_6 = "";
 	printf("%d", _break_3);
 	printf("%d", _goto_4);
 	printf("%f", bool_bool);

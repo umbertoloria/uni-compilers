@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 typedef struct {
 	int t0;
 	int t1;
@@ -7,7 +6,7 @@ typedef struct {
 } int_int_int;
 int_int_int multAddDiff();
 void writeNewLines(int);
-char* nome = "Michele";
+const char* nome = "Michele";
 int_int_int multAddDiff()
 {
 	int primo = 0;

@@ -13,12 +13,13 @@ public class ClangCodeEditor {
 	private EasyNamesManager easyNamesManager;
 	private Stack<StringBuilder> stack = new Stack<>();
 	private StringBuilder code;
+	private boolean usedStdio;
+	private boolean usedString;
+	private boolean usedMalloc;
 
 	public ClangCodeEditor(EasyNamesManager easyNamesManager) {
 		this.easyNamesManager = easyNamesManager;
 		code = new StringBuilder();
-		code.append("#include <stdio.h>\n");
-		code.append("#include <string.h>\n");
 		stack.push(code);
 	}
 
@@ -101,9 +102,11 @@ public class ClangCodeEditor {
 	}
 
 	public void scanf(String name, String type) {
+		usedStdio = true;
 		if (type.equals(TypeNode.STRING.getStringType())) {
+			usedMalloc = true;
 			String tmpVarName = easyNamesManager.createName("in_str");
-			code.append("char ").append(tmpVarName).append("[512];\n");
+			code.append("char* ").append(tmpVarName).append(" = (char*) malloc(512);\n");
 			code.append("scanf(\"%s\", ").append(tmpVarName).append(");\n");
 			code.append(name).append(" = ").append(tmpVarName).append(";\n");
 		} else {
@@ -117,6 +120,7 @@ public class ClangCodeEditor {
 	}
 
 	public void printf(String cExpr, String type) {
+		usedStdio = true;
 		if (type.equals(TypeNode.STRING.getStringType())) {
 			code.append("printf(").append(cExpr).append(");\n");
 		} else {
@@ -194,7 +198,31 @@ public class ClangCodeEditor {
 		stack.push(code = new StringBuilder());
 	}
 
+	public String concatStrings(String cExpr1, String cExpr2) {
+		usedMalloc = true;
+		usedString = true;
+		String tmpVarName = easyNamesManager.createName("con_str");
+		code.append("char* ").append(tmpVarName).append(" = (char*) malloc(512);\n");
+		code.append("strcpy(").append(tmpVarName).append(", ").append(cExpr1).append(");\n");
+		code.append("strcat(").append(tmpVarName).append(", ").append(cExpr2).append(");\n");
+		return tmpVarName;
+	}
+
+	public String getStringComparingExpr(String cExpr1, String cExpr2, String op) {
+		usedString = true;
+		return "strcmp(" + cExpr1 + ", " + cExpr2 + ") " + op + " 0";
+	}
+
 	public String getCode() {
+		if (usedMalloc) {
+			code.insert(0, "#include <malloc.h>\n");
+		}
+		if (usedString) {
+			code.insert(0, "#include <string.h>\n");
+		}
+		if (usedStdio) {
+			code.insert(0, "#include <stdio.h>\n");
+		}
 		return code.toString();
 	}
 

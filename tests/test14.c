@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 typedef struct {
 	int t0;
 	int t1;
@@ -20,8 +19,8 @@ int areEquals(int a, int b)
 }
 int main()
 {
-	char* _word1 = "";
-	char* word2 = "";
+	const char* _word1 = "";
+	const char* word2 = "";
 	int_int _getTwins_0 = getTwins(glo);
 	int_int _getTwins_1 = getTwins(glo);
 	if (!(areEquals(_getTwins_0.t0, _getTwins_0.t1))) {

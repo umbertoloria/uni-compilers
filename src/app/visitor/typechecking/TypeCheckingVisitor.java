@@ -240,12 +240,16 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	private Void visitBinaryArithmeticOperation(BinaryOperationNode bon) {
 		bon.a.accept(this);
 		bon.b.accept(this);
-		if (!typeUtils.isNumber(bon.a.type) || !typeUtils.isNumber(bon.b.type)) {
-			errorsManager.typeMismatchInBinaryArithmeticOperation(bon.a.type, bon.b.type);
+		if (typeUtils.isString(bon.a.type) && typeUtils.isString(bon.b.type)) {
+			bon.type = typeUtils.getStringType();
 		} else if (typeUtils.isInt(bon.a.type) && typeUtils.isInt(bon.b.type)) {
 			bon.type = typeUtils.getIntType();
-		} else {
+		} else if (typeUtils.isNumber(bon.a.type) && typeUtils.isNumber(bon.b.type)) {
 			bon.type = typeUtils.getFloatType();
+		} else if (typeUtils.isString(bon.a.type) || typeUtils.isString(bon.b.type)) {
+			errorsManager.typeMismatchInConcatenationOperation(bon.a.type, bon.b.type);
+		} else {
+			errorsManager.typeMismatchInBinaryArithmeticOperation(bon.a.type, bon.b.type);
 		}
 		return null;
 	}

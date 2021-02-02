@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 void printPeg(int);
 void hanoi(int, int, int, int);
 void printPeg(int peg)

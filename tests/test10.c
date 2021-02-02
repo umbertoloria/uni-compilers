@@ -1,16 +1,14 @@
-#include <stdio.h>
-#include <string.h>
 int main()
 {
 	int a = 0;
 	if (a > 0) {
-		printf("Positive");
+		a = 1;
 	}
 	else if (a < 0) {
-		printf("Negative");
+		a = -(1);
 	}
 	else {
-		printf("Zero");
+		a = 0;
 	}
 	return 0;
 }
