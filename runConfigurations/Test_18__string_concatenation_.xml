@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test 18 (string concatenation)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="app.Driver" />
+    <module name="loria_es5_scg" />
+    <option name="PROGRAM_PARAMETERS" value="tests/test18.toy" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

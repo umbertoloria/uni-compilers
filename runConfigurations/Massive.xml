@@ -2,7 +2,7 @@
   <configuration default="false" name="Massive" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.Driver" />
     <module name="loria_es5_scg" />
-    <option name="PROGRAM_PARAMETERS" value="tests/factorial.toy tests/factorial_wrong.toy tests/Hanoi.toy tests/helloworld.toy tests/multAddDiff.toy tests/test10.toy tests/test11.toy tests/test12.toy tests/test12_lite.toy tests/test13.toy tests/test14.toy tests/test15.toy tests/test16.toy tests/test17.toy tests/traccia.toy tests/traccia_wrong.toy tests/menu.toy" />
+    <option name="PROGRAM_PARAMETERS" value="tests/factorial.toy tests/factorial_wrong.toy tests/Hanoi.toy tests/helloworld.toy tests/multAddDiff.toy tests/test10.toy tests/test11.toy tests/test12.toy tests/test12_lite.toy tests/test13.toy tests/test14.toy tests/test15.toy tests/test16.toy tests/test17.toy tests/test18.toy tests/traccia.toy tests/traccia_wrong.toy tests/menu.toy" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
