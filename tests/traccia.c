@@ -34,7 +34,7 @@ int main()
 	float b = 0;
 	float res = 0;
 	int kind = 0;
-	printf("pre");
+	printf("\n");
 	while (yesOrNo) {
 		printf("\n[1] Addizione\n");
 		printf("[2] Sottrazione\n");
@@ -61,8 +61,14 @@ int main()
 			printf("Resultato: ");
 			printf("%f", div(a, b));
 		}
+		else {
+			printf("Nessuna operazione associata all'input ");
+			printf("%d", kind);
+			printf("\n");
+		}
 		printf("\nVuoi continuare? (1 si, 0 no): ");
 		scanf("%d", &yesOrNo);
+		printf("\n");
 	}
 	return 0;
 }

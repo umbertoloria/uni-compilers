@@ -233,6 +233,9 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 		String cWhileExpr = whileOP.expr.accept(cExprGeneratorVisitor).get(0);
 		clangCodeEditor.openWhileBlock(cWhileExpr);
 		whileOP.iterStmts.accept(this);
+		if (whileOP.preStmts != null) {
+			whileOP.preStmts.accept(this);
+		}
 		clangCodeEditor.closeBlock();
 		return null;
 	}

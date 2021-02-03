@@ -29,7 +29,10 @@ proc main() int:
     float a, b, res;
     int kind;
 
-    while write("pre"); -> yesOrNo do
+    while
+        write("\n");
+        -> yesOrNo
+        do
 
         write("\n[1] Addizione\n");
         write("[2] Sottrazione\n");
@@ -52,6 +55,8 @@ proc main() int:
             write("Resultato: ", mul(a, b));
         elif kind = 4 then
             write("Resultato: ", div(a, b));
+        else
+            write("Nessuna operazione associata all'input ", kind, "\n");
         fi;
 
         write("\nVuoi continuare? (1 si, 0 no): ");
