@@ -6,14 +6,14 @@ import java_cup.runtime.Symbol; //This is how we pass tokens to the parser
 %public
 %cup // Declare that we expect to use Java CUP
 %line
-%column
 
 %{
+StringBuffer string = new StringBuffer();
 private Symbol makeSymbol(int type) {
-    return new Symbol(type, yyline, yycolumn);
+    return new Symbol(type, yyline);
 }
 private Symbol makeSymbol(int type, Object value) {
-    return new Symbol(type, yyline, yycolumn, value);
+    return new Symbol(type, yyline, 0, value);
 }
 %}
 
@@ -29,6 +29,7 @@ real = {integer}\.([0-9]*[1-9]|0)
 string = \"([^\\\"]|\\.)*\"
 
 %state COMMENT
+%state STRING
 
 %%
 <YYINITIAL> {
@@ -85,17 +86,26 @@ string = \"([^\\\"]|\\.)*\"
 "false" {return makeSymbol(sym.FALSE); }
 {integer} {return makeSymbol(sym.INT_CONST, Integer.parseInt(yytext())); }
 {real} {return makeSymbol(sym.FLOAT_CONST, Float.parseFloat(yytext())); }
-{string} {String str = yytext(); return makeSymbol(sym.STRING_CONST, str.substring(1, str.length() - 1));}
+      \"                             { string = new StringBuffer(); yybegin(STRING); }
 {id} {return makeSymbol(sym.ID, yytext()); }
 
 "/*"         { yybegin(COMMENT); }
-
-[^]           { throw new Error("\n\nIllegal character < "+ yytext() + " >\n"); }
 
 }
 
 <COMMENT> {
 "*/"     { yybegin(YYINITIAL); }
-<<EOF>>  { throw new Error("Commento non chiuso."); }
+<<EOF>>  { throw new Error("Commento non chiuso in linea " + yyline); }
 [^]      { /* Ignore */ }
+}
+
+<STRING> {
+\"                             { yybegin(YYINITIAL); return makeSymbol(sym.STRING_CONST, string.toString()); }
+[^\n\r\"\\]+                   { string.append( yytext() ); }
+\\t                            { string.append("\\t"); }
+\\n                            { string.append("\\n"); }
+\\r                            { string.append("\\r"); }
+\\\"                           { string.append("\\\""); }
+\\                             { string.append("\\"); }
+<<EOF>> { throw new Error("Stringa non chiusa in linea " + yyline); }
 }
