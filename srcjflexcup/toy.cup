@@ -20,6 +20,8 @@ terminal VOID;
 terminal PROC, CORP;
 terminal IF, THEN, ELIF, ELSE, FI;
 terminal WHILE, DO, OD;
+terminal Integer REPEAT;
+terminal UNTIL;
 terminal READLN, WRITE;
 
 // value/id symbols
@@ -45,6 +47,7 @@ nonterminal ReturnExprs;
 nonterminal StatList, Stat;
 nonterminal IfStat, ElifList, Elif, Else;
 nonterminal WhileStat;
+nonterminal RepeatStat;
 nonterminal ReadlnStat;
 nonterminal WriteStat;
 nonterminal AssignStat;
@@ -127,7 +130,8 @@ Stat ::= IfStat:is SEMI     {: RESULT = is; :}
        | AssignStat:as SEMI {: RESULT = as; :}
        | CallProc:cp SEMI   {: RESULT = new CallProcStatOP((CallProcOP) cp); :}
        | ReadlnStat:rs SEMI {: RESULT = rs; :}
-       | WriteStat:ws SEMI  {: RESULT = ws; :};
+       | WriteStat:ws SEMI  {: RESULT = ws; :}
+       | RepeatStat:rs SEMI  {: RESULT = rs; :};
 IfStat   ::= IF Expr:e THEN StatList:ss1 ElifList:el Else:ss2 FI {: RESULT = new IfOP((ExprNode) e, (BodyOP) ss1, (List<ElifOP>) el, (BodyOP) ss2); :};
 ElifList ::= Elif:e ElifList:es {: if (es == null) { es = new LinkedList<ElifOP>(); } ((List<ElifOP>) es).add(0, (ElifOP) e); RESULT = es; :}
            | /* empty */        {: RESULT = null; :};
@@ -136,6 +140,7 @@ Else     ::= ELSE StatList:ss {: RESULT = ss; :}
            | /* empty */      {: RESULT = null; :};
 WhileStat ::= WHILE StatList:ss1 RETURN Expr:e DO StatList:ss2 OD {: RESULT = new WhileOP((BodyOP) ss1, (ExprNode) e, (BodyOP) ss2); :}
             | WHILE                     Expr:e DO StatList:ss  OD {: RESULT = new WhileOP(null, (ExprNode) e, (BodyOP) ss); :};
+RepeatStat ::= REPEAT:rid VarDeclList:vds StatList:ss UNTIL Expr:e {: RESULT = new RepeatOP("repeat_" + rid, (List<VarDeclOP>) vds,  (BodyOP) ss, (ExprNode) e); :};
 ReadlnStat ::= READLN LPAR IdList:is RPAR {: RESULT = new ReadlnOP((List<Id>) is); :};
 WriteStat  ::= WRITE LPAR ExprList:es RPAR {: RESULT = new WriteOP((List<ExprNode>) es); :};
 AssignStat ::= IdList:is ASSIGN ExprList:es {: RESULT = new AssignOP((List<Id>) is, (List<ExprNode>) es); :};

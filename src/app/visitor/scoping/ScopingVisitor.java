@@ -3,6 +3,7 @@ package app.visitor.scoping;
 import app.node.*;
 import app.node.expr.CallProcOP;
 import app.node.expr.Id;
+import app.node.stat.RepeatOP;
 import app.visitor.DFSBaseVisitor;
 
 public class ScopingVisitor extends DFSBaseVisitor<Object> {
@@ -66,6 +67,18 @@ public class ScopingVisitor extends DFSBaseVisitor<Object> {
 		for (Id id : parDeclOP.ids) {
 			scopingTable.declareVariable(id.name, parDeclOP.type.getStringType());
 		}
+		return null;
+	}
+
+	@Override
+	public Object visitRepeatOP(RepeatOP repeatOP) {
+		scopingTable = scopingTable.createChild(repeatOP.name);
+		for (VarDeclOP varDecl : repeatOP.varDecls) {
+			varDecl.accept(this);
+		}
+		repeatOP.stmts.accept(this);
+		scopingTable = scopingTable.getParent();
+		repeatOP.expr.accept(this);
 		return null;
 	}
 

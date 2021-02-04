@@ -271,6 +271,25 @@ public class XmlNodeVisitor implements INodeVisitor<Object> {
 	}
 
 	@Override
+	public Object visitRepeatOP(RepeatOP repeatOP) {
+		// <VarDecls>
+		Element valDeclsElem = document.createElement("VarDecls");
+		for (VarDeclOP varDecl : repeatOP.varDecls) {
+			Element varDeclOpElem = (Element) varDecl.accept(this);
+			valDeclsElem.appendChild(varDeclOpElem);
+		}
+		Element bodyElem = (Element) repeatOP.stmts.accept(this);
+		Element exprElem = (Element) repeatOP.expr.accept(this);
+
+		// <RepeatOP>
+		Element repeatOpElem = document.createElement("RepeatOP");
+		repeatOpElem.appendChild(valDeclsElem);
+		repeatOpElem.appendChild(bodyElem);
+		repeatOpElem.appendChild(exprElem);
+		return repeatOpElem;
+	}
+
+	@Override
 	public Object visitAssignOP(AssignOP assignOp) {
 		// <AssignOp>
 		Element assignOpElem = document.createElement("AssignOp");

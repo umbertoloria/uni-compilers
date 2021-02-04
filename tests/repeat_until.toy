@@ -1,0 +1,10 @@
+proc main() int:
+    int i := 1;
+    repeat
+        int i := i;
+        write("i: ", i, "\n");
+        i := i - 1;
+    until i > 0;
+    /*    ^ questa i è la i esterna, per questo deve ciclare */
+    -> 0
+corp;

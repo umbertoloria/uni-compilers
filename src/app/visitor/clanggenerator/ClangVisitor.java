@@ -241,6 +241,18 @@ public class ClangVisitor extends ExclusiveNodeVisitor<Object> {
 	}
 
 	@Override
+	public Object visitRepeatOP(RepeatOP repeatOP) {
+		clangCodeEditor.openDoWhileBlock();
+		for (VarDeclOP varDecl : repeatOP.varDecls) {
+			visit_VarDeclOP(varDecl, false);
+		}
+		repeatOP.stmts.accept(this);
+		String cWhileExpr = repeatOP.expr.accept(cExprGeneratorVisitor).get(0);
+		clangCodeEditor.closeDoWhileBlock(cWhileExpr);
+		return null;
+	}
+
+	@Override
 	public Object visitAssignOP(AssignOP assignOP) {
 		Iterator<Id> idIt = assignOP.ids.iterator();
 		for (ExprNode expr : assignOP.exprs) {

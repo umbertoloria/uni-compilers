@@ -176,6 +176,16 @@ public class ClangCodeEditor {
 		stack.push(code = new StringBuilder());
 	}
 
+	public void openDoWhileBlock() {
+		code.append("do {\n");
+		stack.push(code = new StringBuilder());
+	}
+
+	public void closeDoWhileBlock(String cWhileExpr) {
+		closeBlock();
+		code.delete(code.length() - 1, code.length()).append(" while (").append(cWhileExpr).append(");\n");
+	}
+
 	public void openDeclarationBlock(String cRetType, String name, List<String> cParamTypes, List<String> paramNames) {
 		if (cParamTypes.size() != paramNames.size()) {
 			throw new IllegalStateException();

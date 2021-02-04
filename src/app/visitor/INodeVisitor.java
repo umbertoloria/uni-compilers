@@ -20,6 +20,7 @@ public interface INodeVisitor<T> {
 	T visitIfOP(IfOP ifOP);
 	T visitElifOP(ElifOP elifOP);
 	T visitWhileOP(WhileOP whileOP);
+	T visitRepeatOP(RepeatOP repeatOP);
 	T visitAssignOP(AssignOP assignOP);
 	T visitReadlnOP(ReadlnOP readlnOP);
 	T visitWriteOP(WriteOP writeOP);

@@ -120,6 +120,16 @@ public class DFSBaseVisitor<T> implements INodeVisitor<T> {
 	}
 
 	@Override
+	public T visitRepeatOP(RepeatOP repeatOP) {
+		for (VarDeclOP varDecl : repeatOP.varDecls) {
+			varDecl.accept(this);
+		}
+		repeatOP.stmts.accept(this);
+		repeatOP.expr.accept(this);
+		return null;
+	}
+
+	@Override
 	public T visitAssignOP(AssignOP assignOP) {
 		for (Id id : assignOP.ids) {
 			id.accept(this);

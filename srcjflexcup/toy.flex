@@ -8,6 +8,7 @@ import java_cup.runtime.Symbol; //This is how we pass tokens to the parser
 %line
 
 %{
+int repeatId = 0;
 StringBuffer string = new StringBuffer();
 private Symbol makeSymbol(int type) {
     return new Symbol(type, yyline);
@@ -78,6 +79,8 @@ string = \"([^\\\"]|\\.)*\"
 "while" {return makeSymbol(sym.WHILE); }
 "do" {return makeSymbol(sym.DO); }
 "od" {return makeSymbol(sym.OD); }
+"repeat" {return makeSymbol(sym.REPEAT, repeatId++); }
+"until" {return makeSymbol(sym.UNTIL); }
 "readln" {return makeSymbol(sym.READLN); }
 "write" {return makeSymbol(sym.WRITE); }
 

@@ -77,6 +77,21 @@ public class TypeCheckingVisitor extends DFSBaseVisitor<Void> {
 	}
 
 	@Override
+	public Void visitRepeatOP(RepeatOP repeatOP) {
+		scopingTable = scopingTable.getScopingTableOf(repeatOP.name);
+		for (VarDeclOP varDecl : repeatOP.varDecls) {
+			varDecl.accept(this);
+		}
+		repeatOP.stmts.accept(this);
+		scopingTable = scopingTable.getParent();
+		repeatOP.expr.accept(this);
+		if (!typeUtils.isBool(repeatOP.expr.type)) {
+			errorsManager.typeMismatchInCondition(repeatOP.expr.type);
+		}
+		return null;
+	}
+
+	@Override
 	public Void visitAssignOP(AssignOP assignOP) {
 		super.visitAssignOP(assignOP);
 		String idsType = assignOP.ids.stream().map(id -> id.type).collect(Collectors.joining(","));

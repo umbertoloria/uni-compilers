@@ -63,6 +63,11 @@ public class ExclusiveNodeVisitor<T> implements INodeVisitor<T> {
 	}
 
 	@Override
+	public T visitRepeatOP(RepeatOP repeatOP) {
+		throw new IllegalStateException();
+	}
+
+	@Override
 	public T visitAssignOP(AssignOP assignOP) {
 		throw new IllegalStateException();
 	}

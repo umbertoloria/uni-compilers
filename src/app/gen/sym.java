@@ -11,9 +11,10 @@ public class sym {
   public static final int GE = 18;
   public static final int UMINUS = 14;
   public static final int SEMI = 5;
+  public static final int REPEAT = 38;
   public static final int INT = 23;
   public static final int MINUS = 11;
-  public static final int WRITE = 39;
+  public static final int WRITE = 41;
   public static final int NOT = 7;
   public static final int AND = 8;
   public static final int LT = 15;
@@ -23,20 +24,21 @@ public class sym {
   public static final int COMMA = 3;
   public static final int FI = 34;
   public static final int DIV = 13;
-  public static final int FLOAT_CONST = 43;
+  public static final int UNTIL = 39;
+  public static final int FLOAT_CONST = 45;
   public static final int PLUS = 10;
   public static final int ASSIGN = 19;
   public static final int IF = 30;
-  public static final int ID = 45;
+  public static final int ID = 47;
   public static final int LE = 16;
   public static final int EOF = 0;
   public static final int OD = 37;
   public static final int RETURN = 20;
-  public static final int INT_CONST = 42;
-  public static final int TRUE = 40;
+  public static final int INT_CONST = 44;
+  public static final int TRUE = 42;
   public static final int error = 1;
   public static final int VOID = 27;
-  public static final int READLN = 38;
+  public static final int READLN = 40;
   public static final int EQ = 21;
   public static final int TIMES = 12;
   public static final int COLON = 6;
@@ -49,8 +51,8 @@ public class sym {
   public static final int LPAR = 2;
   public static final int PROC = 28;
   public static final int STRING = 26;
-  public static final int FALSE = 41;
-  public static final int STRING_CONST = 44;
+  public static final int FALSE = 43;
+  public static final int STRING_CONST = 46;
   public static final int GT = 17;
   public static final int ELIF = 32;
   public static final int DO = 36;
@@ -93,6 +95,8 @@ public class sym {
   "WHILE",
   "DO",
   "OD",
+  "REPEAT",
+  "UNTIL",
   "READLN",
   "WRITE",
   "TRUE",
